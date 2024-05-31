@@ -1,5 +1,9 @@
 import { Secp256k1PrivateKey } from "@libp2p/crypto";
 import { Uint8Array } from "uint8arrays";
+import { HeliaLibp2p } from "helia";
+import { Libp2p } from "libp2p";
+
+type IPFS = HeliaLibp2p<Libp2p<Record<string, unknown>>>;
 
 declare interface IdentityProvider {
   type: string;
@@ -81,6 +85,28 @@ declare function ComposedStorage(
   storage1: StorageInstance,
   storage2: StorageInstance,
 ): Promise<ComposedStorageInstance>;
+import { CID } from "multiformats/cid";
+import { TimeoutController } from "timeout-abort-controller";
+
+interface IPFSBlockStorageOptions {
+  ipfs: IPFS;
+  pin?: boolean;
+  timeout?: number;
+}
+
+interface IPFSBlockStorageInstance extends StorageInstance {
+  put: (hash: string, data: any) => Promise<void>;
+  del: (hash: string) => Promise<void>;
+  get: (hash: string) => Promise<Uint8Array | undefined>;
+  iterator: () => AsyncIterable<[string, Uint8Array]>;
+  merge: (other: StorageInstance) => Promise<void>;
+  clear: () => Promise<void>;
+  close: () => Promise<void>;
+}
+
+declare function IPFSBlockStorage(
+  options: IPFSBlockStorageOptions,
+): Promise<IPFSBlockStorageInstance>;
 
 interface KeyStoreOptions {
   storage?: ReturnType<typeof ComposedStorage>;
@@ -100,7 +126,9 @@ interface KeyStoreInstance {
   ) => Uint8Array | string;
 }
 
-declare function KeyStore(options?: KeyStoreOptions): Promise<KeyStoreInstance>;
+declare function KeyStore(
+  options?: KeyStoreInstanceOptions,
+): Promise<KeyStoreInstance>;
 
 function verifyMessage(
   signature: string,
@@ -114,10 +142,10 @@ function signMessage(
 ): Promise<string>;
 
 interface IdentitiesConstructorOptions {
-  keystore?: KeyStore;
+  keystore?: KeyStoreInstance;
   path?: string;
   storage?: StorageInstance;
-  ipfs?: any; // Replace 'any' with the appropriate type for IPFS if available
+  ipfs?: IPFS; // Replace 'any' with the appropriate type for IPFS if available
 }
 
 interface StorageInstance {
@@ -126,27 +154,13 @@ interface StorageInstance {
 }
 
 class Identities {
-  private keystore: KeyStore;
+  private keystore: KeyStoreInstance;
   private storage: StorageInstance;
   private verifiedIdentitiesCache: LRUStorage;
 
-  constructor(options: IdentitiesConstructorOptions = {}) {
-    this.keystore = options.keystore ||
-      await KeyStore({ path: options.path || "./orbitdb/identities" });
-    this.storage = options.storage || this.configureStorage(options.ipfs);
-    this.verifiedIdentitiesCache = await LRUStorage({ size: 1000 });
-  }
+  constructor(options: IdentitiesConstructorOptions);
 
-  private configureStorage(ipfs?: any): StorageInstance {
-    if (ipfs) {
-      return await ComposedStorage(
-        await LRUStorage({ size: 1000 }),
-        await IPFSBlockStorage({ ipfs, pin: true }),
-      );
-    }
-    return await MemoryStorage();
-  }
-
+  private configureStorage(ipfs?: IPFS): StorageInstance;
   async getIdentity(hash: string): Promise<Identity | undefined>;
   async createIdentity(options: any): Promise<Identity>; // Specify a more precise type for 'options'
   async verifyIdentity(identity: Identity): Promise<boolean>;
@@ -156,7 +170,7 @@ class Identities {
     publicKey: string,
     data: string,
   ): Promise<boolean>;
-  get keystore(): KeyStore;
+  get keystore(): KeyStoreInstance;
 }
 
 type Orbit = Awaited<ReturnType<typeof createOrbitDB>>;
