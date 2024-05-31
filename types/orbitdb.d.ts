@@ -2,6 +2,8 @@ import { Secp256k1PrivateKey } from "@libp2p/crypto";
 import { Uint8Array } from "uint8arrays";
 import { HeliaLibp2p } from "helia";
 import { Libp2p } from "libp2p";
+import { CID } from "multiformats/cid";
+import { TimeoutController } from "timeout-abort-controller";
 
 type IPFS = HeliaLibp2p<Libp2p<Record<string, unknown>>>;
 
@@ -85,8 +87,6 @@ declare function ComposedStorage(
   storage1: StorageInstance,
   storage2: StorageInstance,
 ): Promise<ComposedStorageInstance>;
-import { CID } from "multiformats/cid";
-import { TimeoutController } from "timeout-abort-controller";
 
 interface IPFSBlockStorageOptions {
   ipfs: IPFS;
@@ -109,7 +109,7 @@ declare function IPFSBlockStorage(
 ): Promise<IPFSBlockStorageInstance>;
 
 interface KeyStoreOptions {
-  storage?: ReturnType<typeof ComposedStorage>;
+  storage?: StorageInstance;
   path?: string;
 }
 
@@ -148,12 +148,12 @@ interface IdentitiesConstructorOptions {
   ipfs?: IPFS; // Replace 'any' with the appropriate type for IPFS if available
 }
 
-interface StorageInstance {
-  get<T>(key: string): Promise<T | undefined>;
-  put<T>(key: string, value: T): Promise<void>;
-}
+// interface StorageInstance {
+//   get<T>(key: string): Promise<T | undefined>;
+//   put<T>(key: string, value: T): Promise<void>;
+// }
 
-class Identities {
+declare class Identities {
   private keystore: KeyStoreInstance;
   private storage: StorageInstance;
   private verifiedIdentitiesCache: LRUStorage;
@@ -173,8 +173,8 @@ class Identities {
   get keystore(): KeyStoreInstance;
 }
 
-type Orbit = Awaited<ReturnType<typeof createOrbitDB>>;
-type OrbitOptions = {
+declare type Orbit = Awaited<ReturnType<typeof createOrbitDB>>;
+declare type OrbitOptions = {
   id?: string;
   identity?: Identity | { provider: IdentityProvider };
   identities?: Identities;

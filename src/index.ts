@@ -26,10 +26,12 @@ console.log(
 // });
 
 for (let i = 0; i < 1000; i++) {
-  const promises = Array.from({ length: 1000 }).map((_, index) => {
-    return db.add({ value: i * 1000 + index }).then((key) => {
+  const promises = Array.from({ length: 100 }).map((_, index) => {
+    const value = i * 100 + index;
+    return db.add({ value }).then((key) => {
       console.log(
-        "\n--- db add - " + new Date().toISOString() + "\n" + i + " - " + key,
+        "\n--- db add - " + new Date().toISOString() + "\n" + value + " - " +
+          key,
       );
     });
   });
