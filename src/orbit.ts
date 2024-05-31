@@ -7,12 +7,16 @@ import { DefaultLibp2pBrowserOptions, DefaultLibp2pOptions } from "./config";
 
 import type { Orbit, OrbitOptions } from "../types/orbitdb";
 
-export async function startOrbitDB(
-  { id, identity, identities, directory = "." }: OrbitOptions,
-): Promise<Orbit> {
-  const options = typeof window !== "undefined"
-    ? DefaultLibp2pBrowserOptions
-    : DefaultLibp2pOptions;
+export async function startOrbitDB({
+  id,
+  identity,
+  identities,
+  directory = ".",
+}: OrbitOptions): Promise<Orbit> {
+  const options =
+    typeof window !== "undefined"
+      ? DefaultLibp2pBrowserOptions
+      : DefaultLibp2pOptions;
 
   return createOrbitDB({
     id,
@@ -22,9 +26,7 @@ export async function startOrbitDB(
     ipfs: await createHelia({
       libp2p: await createLibp2p({ ...options }),
       blockstore: new LevelBlockstore(`${directory}/ipfs/blocks`),
-      blockBrokers: [
-        bitswap(),
-      ],
+      blockBrokers: [bitswap()],
     }),
   });
 }

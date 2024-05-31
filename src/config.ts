@@ -18,12 +18,8 @@ export const DefaultLibp2pOptions: Libp2pOptions = {
     webSockets({ filter: all }),
     circuitRelayTransport({ discoverRelays: 1 }),
   ],
-  connectionEncryption: [
-    noise(),
-  ],
-  streamMuxers: [
-    yamux(),
-  ],
+  connectionEncryption: [noise()],
+  streamMuxers: [yamux()],
   connectionGater: {
     denyDialMultiaddr: () => false,
   },
@@ -42,12 +38,8 @@ export const DefaultLibp2pBrowserOptions: Libp2pOptions = {
     webSockets({ filter: all }),
     circuitRelayTransport({ discoverRelays: 1 }),
   ],
-  connectionEncryption: [
-    noise(),
-  ],
-  streamMuxers: [
-    yamux(),
-  ],
+  connectionEncryption: [noise()],
+  streamMuxers: [yamux()],
   connectionGater: {
     denyDialMultiaddr: () => false,
   },

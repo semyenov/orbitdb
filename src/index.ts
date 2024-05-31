@@ -10,27 +10,32 @@ const orbitdb: Orbit = await startOrbitDB({
 
 const db = await orbitdb.open("my-database");
 console.log(
-  "\n--- db address - " + new Date().toISOString() + "\n" +
-    db.address,
+  "\n--- db address - " + new Date().toISOString() + "\n" + db.address,
 );
 
-// db.events.on("update", async (entry) => {
-//   console.log(
-//     "\n--- on update - " + new Date().toISOString() + "\n" +
-//       inspect(entry, {
-//         showHidden: false,
-//         colors: true,
-//         depth: 1,
-//       }),
-//   );
-// });
+db.events.on("update", async (entry) => {
+  console.log(
+    "\n--- on update - " +
+      new Date().toISOString() +
+      "\n" +
+      inspect(entry, {
+        showHidden: false,
+        colors: true,
+        depth: 1,
+      }),
+  );
+});
 
 for (let i = 0; i < 1000; i++) {
   const promises = Array.from({ length: 100 }).map((_, index) => {
     const value = i * 100 + index;
     return db.add({ value }).then((key) => {
       console.log(
-        "\n--- db add - " + new Date().toISOString() + "\n" + value + " - " +
+        "\n--- db add - " +
+          new Date().toISOString() +
+          "\n" +
+          value +
+          " - " +
           key,
       );
     });

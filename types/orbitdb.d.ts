@@ -68,9 +68,10 @@ interface StorageInstance {
   put: (hash: string, data: any) => Promise<void>;
   get: (hash: string) => Promise<any | undefined>;
   del: (hash: string) => Promise<void>;
-  iterator: (
-    options?: { amount?: number; reverse?: boolean },
-  ) => AsyncIterable<[string, string]>;
+  iterator: (options?: {
+    amount?: number;
+    reverse?: boolean;
+  }) => AsyncIterable<[string, string]>;
   merge: (other: StorageInstance) => Promise<void>;
   clear: () => Promise<void>;
   close: () => Promise<void>;
@@ -181,14 +182,3 @@ declare type OrbitOptions = {
   directory?: string;
 };
 
-// // Declareing everything for external use
-// declare {
-//   Identities,
-//   Identity,
-//   Identity,
-//   IdentityOptions,
-//   IdentityProvider,
-//   OrbitDB,
-//   OrbitDBOptions,
-//   Signatures,
-// };
