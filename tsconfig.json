@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+
+    "skipLibCheck": true,
+
+    "allowJs": true,
+    "checkJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "allowUnreachableCode": false,
+    "noImplicitAny": false,
+
+    // "lib": ["ESNext", "DOM"],
+
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "types": ["node"],
+
+    // only necessary for the example linting check, your project may not need
+    // these settings
+    "strictNullChecks": true
+  },
+
+  "include": ["src", "types"],
+  "exclude": ["scripts", "node_modules"]
+}
