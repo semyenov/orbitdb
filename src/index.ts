@@ -1,58 +1,62 @@
-import { inspect } from "util";
+import { fakerRU as faker } from "@faker-js/faker";
+
 import { startOrbitDB, stopOrbitDB } from "./orbit";
+import { logger } from "./logger";
 
 import type { Orbit } from "../types/orbitdb";
 
+const dbName = process.argv[2] || "my-database";
+
+// Create OrbitDB instance
 const orbitdb: Orbit = await startOrbitDB({
   id: "zdpuAsxVFKAoY6z8LnLsUtTKkGB4deEcXmhyAEbwkefaLsXR6",
   directory: "./orbitdb",
 });
 
-const db = await orbitdb.open("my-database");
-console.log(
-  "\n--- db address - " + new Date().toISOString() + "\n" + db.address,
+// Open a database
+const db = await orbitdb.open(dbName, { type: "documents" });
+logger.log("address", db.address);
+
+// Listen for updates
+db.events.on(
+  "update",
+  ({ id, hash, payload: { key, op } }) =>
+    logger.log("onupdate", { id, op, key, hash }),
 );
 
-db.events.on("update", async (entry) => {
-  console.log(
-    "\n--- on update - " +
-      new Date().toISOString() +
-      "\n" +
-      inspect(entry, {
-        showHidden: false,
-        colors: true,
-        depth: 1,
-      }),
-  );
-});
+// Add some data
+await generate(10000, 1000);
 
-for (let i = 0; i < 1000; i++) {
-  const promises = Array.from({ length: 100 }).map((_, index) => {
-    const value = i * 100 + index;
-    return db.add({ value }).then((key) => {
-      console.log(
-        "\n--- db add - " +
-          new Date().toISOString() +
-          "\n" +
-          value +
-          " - " +
-          key,
-      );
-    });
-  });
+// Get some data
+const value = await db.get("12");
+logger.log("value", value);
 
-  await Promise.all(promises);
-
-  // db.get(key).then((value) => {
-  //   console.log(
-  //     "\n--- db get - " + new Date().toISOString() + "\n" +
-  //       inspect(value, {
-  //         showHidden: false,
-  //         colors: true,
-  //         depth: 1,
-  //       }),
-  //   );
-  // });
+// Iterate over records
+for await (const record of db.iterator({ amount: 10 })) {
+  logger.log("record", record);
 }
 
+// Stop OrbitDB
 await stopOrbitDB(orbitdb);
+
+async function generate(size: number, chunkSize: number = 1000) {
+  let time = 0;
+  for (let i = 0; i < size; i += chunkSize) {
+    const length = Math.min(chunkSize, size - i);
+    const chunk = Array.from({ length }, (_, j) => ({
+      _id: (i + (j + 1)).toString(),
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      email: faker.internet.email(),
+      company: faker.company.name(),
+      phone: faker.phone.number(),
+      value: faker.lorem.paragraphs({ min: 2, max: 5 }),
+    }));
+
+    const startTime = performance.now();
+    await Promise.all(chunk.map(db.put));
+    time += performance.now() - startTime;
+  }
+
+  logger.log("time", `took ${(time / size).toFixed(2)}ms/op average`);
+}

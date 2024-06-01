@@ -49,7 +49,6 @@ declare namespace Identity {
   function isEqual(a: Identity, b: Identity): boolean;
 }
 
-// import { KeyStore, signMessage, verifyMessage } from "../key-store";
 // import {
 //   ComposedStorage,
 //   IPFSBlockStorage,
@@ -58,36 +57,34 @@ declare namespace Identity {
 // } from "../storage/index";
 // import { PathJoin } from "../utils/path-join"; // Assuming PathJoin is a utility for joining paths
 
-// key-store.d.ts
-
 interface StorageOptions {
   size?: number;
 }
 
-interface StorageInstance {
+interface StorageInstance<T = any> {
   put: (hash: string, data: any) => Promise<void>;
-  get: (hash: string) => Promise<any | undefined>;
+  get: (hash: string) => Promise<T | undefined>;
   del: (hash: string) => Promise<void>;
   iterator: (options?: {
     amount?: number;
     reverse?: boolean;
-  }) => AsyncIterable<[string, string]>;
+  }) => AsyncIterable<[string, T]>;
   merge: (other: StorageInstance) => Promise<void>;
   clear: () => Promise<void>;
   close: () => Promise<void>;
 }
 
-interface ComposedStorageOptions {
-  storage1: StorageInstance;
-  storage2: StorageInstance;
+interface ComposedStorageOptions<T> {
+  storage1: StorageInstance<T>;
+  storage2: StorageInstance<T>;
 }
 
-interface ComposedStorageInstance extends StorageInstance {}
+interface ComposedStorageInstance<T = any> extends StorageInstance<T> {}
 
-declare function ComposedStorage(
-  storage1: StorageInstance,
-  storage2: StorageInstance,
-): Promise<ComposedStorageInstance>;
+declare function ComposedStorage<T = any>(
+  storage1: StorageInstance<T>,
+  storage2: StorageInstance<T>,
+): Promise<ComposedStorageInstance<T>>;
 
 interface IPFSBlockStorageOptions {
   ipfs: IPFS;
@@ -95,22 +92,14 @@ interface IPFSBlockStorageOptions {
   timeout?: number;
 }
 
-interface IPFSBlockStorageInstance extends StorageInstance {
-  put: (hash: string, data: any) => Promise<void>;
-  del: (hash: string) => Promise<void>;
-  get: (hash: string) => Promise<Uint8Array | undefined>;
-  iterator: () => AsyncIterable<[string, Uint8Array]>;
-  merge: (other: StorageInstance) => Promise<void>;
-  clear: () => Promise<void>;
-  close: () => Promise<void>;
-}
+interface IPFSBlockStorageInstance extends StorageInstance<Uint8Array> {}
 
 declare function IPFSBlockStorage(
   options: IPFSBlockStorageOptions,
 ): Promise<IPFSBlockStorageInstance>;
 
 interface KeyStoreOptions {
-  storage?: StorageInstance;
+  storage?: StorageInstance<Secp256k1PrivateKey>;
   path?: string;
 }
 
@@ -149,11 +138,6 @@ interface IdentitiesConstructorOptions {
   ipfs?: IPFS; // Replace 'any' with the appropriate type for IPFS if available
 }
 
-// interface StorageInstance {
-//   get<T>(key: string): Promise<T | undefined>;
-//   put<T>(key: string, value: T): Promise<void>;
-// }
-
 declare class Identities {
   private keystore: KeyStoreInstance;
   private storage: StorageInstance;
@@ -161,7 +145,7 @@ declare class Identities {
 
   constructor(options: IdentitiesConstructorOptions);
 
-  private configureStorage(ipfs?: IPFS): StorageInstance;
+  private configureStorage(ipfs?: IPFS): IPFSBlockStorageInstance;
   async getIdentity(hash: string): Promise<Identity | undefined>;
   async createIdentity(options: any): Promise<Identity>; // Specify a more precise type for 'options'
   async verifyIdentity(identity: Identity): Promise<boolean>;
@@ -174,6 +158,7 @@ declare class Identities {
   get keystore(): KeyStoreInstance;
 }
 
+declare type OrbitDatabase = any;
 declare type Orbit = Awaited<ReturnType<typeof createOrbitDB>>;
 declare type OrbitOptions = {
   id?: string;
@@ -181,4 +166,3 @@ declare type OrbitOptions = {
   identities?: Identities;
   directory?: string;
 };
-

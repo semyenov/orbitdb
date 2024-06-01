@@ -489,6 +489,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@faker-js/faker@npm:^8.4.1":
+  version: 8.4.1
+  resolution: "@faker-js/faker@npm:8.4.1"
+  checksum: 10c0/4f2aecddcfdc2cc8b50b2d15d1e37302a7c7a5bbd184ae910a9d271bc11248533ca74dcdd4a9ccbe20410553e7af0f6a4d334c5b955635e09a32ddf4a64942d4
+  languageName: node
+  linkType: hard
+
 "@helia/bitswap@npm:^1.1.2":
   version: 1.1.2
   resolution: "@helia/bitswap@npm:1.1.2"
@@ -1795,6 +1802,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chalk@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "chalk@npm:5.3.0"
+  checksum: 10c0/8297d436b2c0f95801103ff2ef67268d362021b8210daf8ddbe349695333eb3610a71122172ff3b0272f1ef2cf7cc2c41fdaa4715f52e49ffe04c56340feed09
+  languageName: node
+  linkType: hard
+
 "chownr@npm:^1.1.1":
   version: 1.1.4
   resolution: "chownr@npm:1.1.4"
@@ -1859,6 +1873,13 @@ __metadata:
   version: 0.0.1
   resolution: "concat-map@npm:0.0.1"
   checksum: 10c0/c996b1cfdf95b6c90fee4dae37e332c8b6eb7d106430c17d538034c0ad9a1630cb194d2ab37293b1bdd4d779494beee7786d586a50bd9376fd6f7bcc2bd4c98f
+  languageName: node
+  linkType: hard
+
+"consola@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "consola@npm:3.2.3"
+  checksum: 10c0/c606220524ec88a05bb1baf557e9e0e04a0c08a9c35d7a08652d99de195c4ddcb6572040a7df57a18ff38bbc13ce9880ad032d56630cef27bef72768ef0ac078
   languageName: node
   linkType: hard
 
@@ -3864,15 +3885,19 @@ __metadata:
   resolution: "orbitdb@workspace:."
   dependencies:
     "@chainsafe/libp2p-gossipsub": "npm:^13.0.0"
+    "@faker-js/faker": "npm:^8.4.1"
     "@orbitdb/core": "npm:^2.2.0"
     "@types/events": "npm:^3"
     "@types/node": "npm:^20.12.13"
     blockstore-level: "npm:^1.1.8"
+    chalk: "npm:^5.3.0"
+    consola: "npm:^3.2.3"
     esbuild: "npm:^0.21.4"
     eslint: "npm:^9.3.0"
     events: "npm:^3.3.0"
     helia: "npm:^4.2.3"
     libp2p: "npm:^1.6.0"
+    tinyspy: "npm:^3.0.0"
     tsx: "npm:^4.11.0"
     typescript: "npm:^5.4.5"
     util: "npm:^0.12.5"
@@ -4539,6 +4564,13 @@ __metadata:
   version: 1.0.1
   resolution: "timestamp-nano@npm:1.0.1"
   checksum: 10c0/a9fb134d92702e28e97d55d59ea49c69ded35a7f305cae6934cd398d7b81aef7913f521929bbb20866f0a2447270eb3f549e9ad2a5718c5374a659e02e3c1037
+  languageName: node
+  linkType: hard
+
+"tinyspy@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "tinyspy@npm:3.0.0"
+  checksum: 10c0/eb0dec264aa5370efd3d29743825eb115ed7f1ef8a72a431e9a75d5c9e7d67e99d04b0d61d86b8cd70c79ec27863f241ad0317bc453f78762e0cbd76d2c332d0
   languageName: node
   linkType: hard
 
