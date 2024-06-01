@@ -24,7 +24,8 @@ const reporter: ConsolaReporter = {
     const [message, ...args] = obj.args;
     const accent = accentColorMap[obj.type];
 
-    // stdout.cork();
+    stdout.cork();
+
     stdout.write(c.dim("\n┌── "));
     stdout.write(
       accent.bold(` ${obj.tag.toUpperCase()} `),
@@ -50,7 +51,8 @@ const reporter: ConsolaReporter = {
     }
     stdout.write("\n");
     stdout.write("\n");
-    // nextTick(() => stdout.uncork());
+
+    nextTick(() => stdout.uncork());
   },
 };
 
