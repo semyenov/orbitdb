@@ -25,7 +25,7 @@ db.events.on(
 );
 
 // Add some data
-await generate(1000, 1000);
+await generate(10000, 100);
 
 // Get some data
 const value = await db.get("12");
@@ -33,7 +33,7 @@ logger.debug("value", value);
 
 // Iterate over records
 for await (const record of db.iterator({ amount: 5 })) {
-  logger.error("record", record);
+  logger.warn("record", record);
 }
 
 // Stop OrbitDB

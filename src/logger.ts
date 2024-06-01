@@ -11,46 +11,47 @@ inspect.defaultOptions = {
 };
 
 const accentMap = {
-  log: c.bgWhite,
-  debug: c.bgBlackBright,
-  info: c.bgCyan,
-  warn: c.bgYellow,
-  error: c.bgRedBright,
-  success: c.bgGreen,
+  log: c.bgWhite.black,
+  debug: c.bgBlackBright.whiteBright,
+  info: c.bgCyan.black,
+  warn: c.bgYellow.black,
+  error: c.bgRed.white,
+  success: c.bgGreen.white,
 } as const;
 
 const reporter: ConsolaReporter = {
   log(obj, { options: { formatOptions } }) {
     const [message, ...args] = obj.args;
+    const compact = args.length === 0 || formatOptions.compact;
     const accent = accentMap[obj.type];
 
     stdout.cork();
 
-    stdout.write(c.dim("\n┌── "));
     stdout.write(
-      accent.bold(` ${obj.tag.toUpperCase()} `),
+      c.dim("\n┌── ").concat(
+        accent.bold(` ${obj.tag.toUpperCase()} `),
+        c.dim(" ─ "),
+        c.italic(message),
+        "\n",
+      ),
     );
-    stdout.write(c.dim(" ─ "));
-    stdout.write(c.italic(`${message}`));
-    stdout.write("\n");
 
-    (typeof args[0] !== "object" ||
-      formatOptions.compact) &&
+    if (compact || typeof args[0] !== "object") {
       stdout.write("\n");
-    args.forEach((arg) => {
-      stdout.write(inspect(arg, formatOptions));
-      stdout.write("\n");
-    });
-    (typeof args[args.length - 1] !== "object" ||
-      formatOptions.compact) &&
-      stdout.write("\n");
-
-    stdout.write(c.dim("└── "));
-    if (formatOptions.date) {
-      stdout.write(c.dim(`${obj.date.getTime()}`));
     }
-    stdout.write("\n");
-    stdout.write("\n");
+    for (let i = 0; i < args.length; i++) {
+      stdout.write(`${inspect(args[i], formatOptions)}\n`);
+    }
+    if (compact || typeof args[args.length - 1] !== "object") {
+      stdout.write("\n");
+    }
+
+    stdout.write(
+      c.dim("└── ").concat(
+        formatOptions.date ? c.dim(obj.date.getTime().toString()) : "",
+        "\n\n",
+      ),
+    );
 
     nextTick(() => stdout.uncork());
   },
