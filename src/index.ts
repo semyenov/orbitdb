@@ -21,19 +21,19 @@ logger.log("address", db.address);
 db.events.on(
   "update",
   ({ id, hash, payload: { key, op } }) =>
-    logger.log("onupdate", { id, op, key, hash }),
+    logger.log("onupdate", { id, hash, op, key }),
 );
 
 // Add some data
-await generate(10000, 1000);
+await generate(1000, 1000);
 
 // Get some data
 const value = await db.get("12");
-logger.log("value", value);
+logger.debug("value", value);
 
 // Iterate over records
-for await (const record of db.iterator({ amount: 10 })) {
-  logger.log("record", record);
+for await (const record of db.iterator({ amount: 5 })) {
+  logger.error("record", record);
 }
 
 // Stop OrbitDB
@@ -58,5 +58,5 @@ async function generate(size: number, chunkSize: number = 1000) {
     time += performance.now() - startTime;
   }
 
-  logger.log("time", `took ${(time / size).toFixed(2)}ms/op average`);
+  logger.info("time", `took ${(time / size).toFixed(2)}ms/op average`);
 }

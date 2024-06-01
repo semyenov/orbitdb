@@ -1,12 +1,15 @@
 import { bitswap } from "@helia/block-brokers";
 import { createOrbitDB } from "@orbitdb/core";
 import { LevelBlockstore } from "blockstore-level";
+import { spyOn } from "tinyspy";
 
 import { createHelia } from "helia";
 import { createLibp2p } from "libp2p";
 import { DefaultLibp2pBrowserOptions, DefaultLibp2pOptions } from "./config";
 
 import type { Orbit, OrbitOptions } from "../types/orbitdb";
+import { logger } from "./logger";
+let spied;
 
 export async function startOrbitDB({
   id,
@@ -24,6 +27,9 @@ export async function startOrbitDB({
     blockBrokers: [bitswap()],
   });
 
+  spied = spyOn(ipfs, "start");
+  await ipfs.start();
+
   return createOrbitDB({
     id,
     identity,
@@ -37,4 +43,6 @@ export async function stopOrbitDB(orbitdb: Orbit): Promise<void> {
   await orbitdb.stop();
   await orbitdb.ipfs.stop();
   await orbitdb.ipfs.blockstore.unwrap().unwrap().child.db.close();
+
+  logger.log("orbitdb stopped", spied.calls, spied.returns);
 }

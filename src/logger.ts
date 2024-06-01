@@ -1,19 +1,51 @@
 import c from "chalk";
 import { inspect } from "util";
 import { ConsolaReporter, createConsola } from "consola";
+import { nextTick, stdout } from "process";
+
+inspect.defaultOptions = {
+  numericSeparator: true,
+  breakLength: 80,
+  getters: true,
+  depth: 3,
+};
+
+const accentColorMap = {
+  log: c.bgWhite.black,
+  debug: c.bgBlack.white,
+  info: c.bgCyan.black,
+  warn: c.bgYellow.black,
+  error: c.bgRedBright.black,
+  success: c.bgGreen.black,
+};
 
 const reporter: ConsolaReporter = {
-  log(logObj, { options: { formatOptions } }) {
-    const [message, ...args] = logObj.args;
-    const formatted = args.map((args) =>
-      typeof args === "object" ? inspect(args, formatOptions) : "\n" + args
+  log(obj, { options: { formatOptions } }) {
+    const [message, ...args] = obj.args;
+    const accent = accentColorMap[obj.type];
+
+    stdout.cork();
+    stdout.write(c.dim("\n┌── "));
+    stdout.write(
+      accent.bold(` ${obj.tag.toUpperCase()} `),
     );
-    console.log(
-      c.gray(`[${logObj.tag}]`) +
-        c.cyan.bold(` ─── ${message} `) +
-        formatted.join("\n") +
-        "\n",
-    );
+    stdout.write(c.dim(" ─ "));
+    stdout.write(c.italic(`${message} \n`));
+
+    (typeof args[0] !== "object" || formatOptions.compact) &&
+      stdout.write("\n");
+    args.forEach((arg) => {
+      stdout.write(inspect(arg, formatOptions));
+      stdout.write("\n");
+    });
+    (typeof args[args.length - 1] !== "object" ||
+      formatOptions.compact) && stdout.write("\n");
+    stdout.write(c.dim("└── "));
+    if (formatOptions.date) {
+      stdout.write(c.dim(`${obj.date.getTime()}`));
+    }
+    stdout.write("\n");
+    nextTick(() => stdout.uncork());
   },
 };
 
@@ -25,8 +57,8 @@ export const logger = createConsola({
   formatOptions: {
     columns: 1,
     colors: true,
-    date: false,
-    compact: false,
+    date: true,
+    compact: true,
   },
 
   defaults: {
