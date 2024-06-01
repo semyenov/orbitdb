@@ -11,12 +11,12 @@ inspect.defaultOptions = {
 };
 
 const accentColorMap = {
-  log: c.bgWhite.black,
-  debug: c.bgBlack.white,
-  info: c.bgCyan.black,
-  warn: c.bgYellow.black,
-  error: c.bgRedBright.black,
-  success: c.bgGreen.black,
+  log: c.bgWhite,
+  debug: c.bgBlackBright,
+  info: c.bgCyan,
+  warn: c.bgYellow,
+  error: c.bgRedBright,
+  success: c.bgGreen,
 };
 
 const reporter: ConsolaReporter = {
@@ -24,28 +24,33 @@ const reporter: ConsolaReporter = {
     const [message, ...args] = obj.args;
     const accent = accentColorMap[obj.type];
 
-    stdout.cork();
+    // stdout.cork();
     stdout.write(c.dim("\n┌── "));
     stdout.write(
       accent.bold(` ${obj.tag.toUpperCase()} `),
     );
     stdout.write(c.dim(" ─ "));
-    stdout.write(c.italic(`${message} \n`));
-
-    (typeof args[0] !== "object" || formatOptions.compact) &&
+    stdout.write(c.italic(`${message}`));
+    stdout.write("\n");
+    (typeof args[0] !== "object" ||
+      formatOptions.compact) &&
       stdout.write("\n");
+
     args.forEach((arg) => {
       stdout.write(inspect(arg, formatOptions));
       stdout.write("\n");
     });
+
     (typeof args[args.length - 1] !== "object" ||
-      formatOptions.compact) && stdout.write("\n");
+      formatOptions.compact) &&
+      stdout.write("\n");
     stdout.write(c.dim("└── "));
     if (formatOptions.date) {
       stdout.write(c.dim(`${obj.date.getTime()}`));
     }
     stdout.write("\n");
-    nextTick(() => stdout.uncork());
+    stdout.write("\n");
+    // nextTick(() => stdout.uncork());
   },
 };
 

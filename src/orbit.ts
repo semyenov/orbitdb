@@ -20,6 +20,7 @@ export async function startOrbitDB({
   const options = typeof window !== "undefined"
     ? DefaultLibp2pBrowserOptions
     : DefaultLibp2pOptions;
+  ``;
 
   const ipfs = await createHelia({
     libp2p: await createLibp2p({ ...options }),
@@ -28,7 +29,6 @@ export async function startOrbitDB({
   });
 
   spied = spyOn(ipfs, "start");
-  await ipfs.start();
 
   return createOrbitDB({
     id,
@@ -44,5 +44,5 @@ export async function stopOrbitDB(orbitdb: Orbit): Promise<void> {
   await orbitdb.ipfs.stop();
   await orbitdb.ipfs.blockstore.unwrap().unwrap().child.db.close();
 
-  logger.log("orbitdb stopped", spied.calls, spied.returns);
+  logger.debug("orbitdb stopped", spied.calls, spied.returns);
 }
