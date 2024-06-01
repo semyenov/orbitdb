@@ -10,19 +10,19 @@ inspect.defaultOptions = {
   depth: 3,
 };
 
-const accentColorMap = {
+const accentMap = {
   log: c.bgWhite,
   debug: c.bgBlackBright,
   info: c.bgCyan,
   warn: c.bgYellow,
   error: c.bgRedBright,
   success: c.bgGreen,
-};
+} as const;
 
 const reporter: ConsolaReporter = {
   log(obj, { options: { formatOptions } }) {
     const [message, ...args] = obj.args;
-    const accent = accentColorMap[obj.type];
+    const accent = accentMap[obj.type];
 
     stdout.cork();
 
@@ -33,18 +33,18 @@ const reporter: ConsolaReporter = {
     stdout.write(c.dim(" ─ "));
     stdout.write(c.italic(`${message}`));
     stdout.write("\n");
+
     (typeof args[0] !== "object" ||
       formatOptions.compact) &&
       stdout.write("\n");
-
     args.forEach((arg) => {
       stdout.write(inspect(arg, formatOptions));
       stdout.write("\n");
     });
-
     (typeof args[args.length - 1] !== "object" ||
       formatOptions.compact) &&
       stdout.write("\n");
+
     stdout.write(c.dim("└── "));
     if (formatOptions.date) {
       stdout.write(c.dim(`${obj.date.getTime()}`));
