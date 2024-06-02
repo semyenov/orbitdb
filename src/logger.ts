@@ -46,12 +46,15 @@ const reporter: ConsolaReporter = {
       stdout.write("\n");
     }
 
-    stdout.write(
-      c.dim("└── ").concat(
-        formatOptions.date ? c.dim(obj.date.getTime().toString()) : "",
-        "\n\n",
-      ),
-    );
+    if (!formatOptions.compact) {
+      stdout.write(
+        c.dim("└── ").concat(
+          formatOptions.date ? c.dim(obj.date.getTime().toString()) : "",
+          "\n",
+        ),
+      );
+    }
+    stdout.write("\n");
 
     nextTick(() => stdout.uncork());
   },
@@ -70,6 +73,13 @@ export const logger = createConsola({
   },
 
   defaults: {
-    tag: "orbitdb",
+    tag: "cool:logger",
   },
 });
+
+logger.debug("debug", { a: 1, b: 2 });
+logger.success("success", { test: true, test2: false });
+logger.info("info", { lorem: "ipsum", a: 1, b: 2 });
+logger.warn("warn", { foo: "bar", a: 1, b: 2 });
+logger.error("error", { test: "huest" });
+logger.log("log", { a: 1, b: 2 });

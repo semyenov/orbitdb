@@ -5,12 +5,14 @@ import { logger } from "./logger";
 
 import type { Orbit } from "../types/orbitdb";
 
+// Get DB name and directory from command line
 const dbName = process.argv[2] || "my-database";
+const dbDir = process.argv[3] || "./orbitdb";
 
 // Create OrbitDB instance
 const orbitdb: Orbit = await startOrbitDB({
   id: "zdpuAsxVFKAoY6z8LnLsUtTKkGB4deEcXmhyAEbwkefaLsXR6",
-  directory: "./orbitdb",
+  directory: dbDir,
 });
 
 // Open a database
@@ -25,7 +27,7 @@ db.events.on(
 );
 
 // Add some data
-await generate(10000, 100);
+await generate(1000000);
 
 // Get some data
 const value = await db.get("12");
@@ -58,5 +60,5 @@ async function generate(size: number, chunkSize: number = 1000) {
     time += performance.now() - startTime;
   }
 
-  logger.info("time", `took ${(time / size).toFixed(2)}ms/op average`);
+  logger.info("time", `took ${(1000 / time / size).toFixed(2)}op/sec average`);
 }
