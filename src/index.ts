@@ -3,7 +3,6 @@ import { fakerRU as faker } from "@faker-js/faker";
 import { startOrbitDB, stopOrbitDB } from "./orbit";
 import { logger } from "./logger";
 
-import type { Orbit } from "../types/orbitdb";
 
 // Get DB name and directory from command line
 const dbName = process.argv[2] || "my-database";
@@ -12,7 +11,7 @@ const dbDir = process.argv[3] || "./orbitdb";
 const dbId = process.argv[4] || "zdpuAsxVFKAoY6z8LnLsUtTKkGB4deEcXmhyAEbwkefaLsXR6";
 
 // Create OrbitDB instance
-const orbitdb: Orbit = await startOrbitDB({
+const orbitdb = await startOrbitDB({
   id: dbId,
   directory: dbDir,
 });

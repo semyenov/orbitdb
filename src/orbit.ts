@@ -1,5 +1,5 @@
 import { bitswap } from "@helia/block-brokers";
-import { createOrbitDB } from "@orbitdb/core";
+import {createOrbitDB, CreateOrbitDBParams} from "@orbitdb/core";
 import { LevelBlockstore } from "blockstore-level";
 import { spyOn } from "tinyspy";
 
@@ -16,7 +16,7 @@ export async function startOrbitDB({
   identity,
   identities,
   directory = ".",
-}: OrbitOptions): Promise<Orbit> {
+}: CreateOrbitDBParams) {
   const options = typeof window !== "undefined"
     ? DefaultLibp2pBrowserOptions
     : DefaultLibp2pOptions;
