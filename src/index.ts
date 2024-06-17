@@ -9,9 +9,11 @@ import type { Orbit } from "../types/orbitdb";
 const dbName = process.argv[2] || "my-database";
 const dbDir = process.argv[3] || "./orbitdb";
 
+const dbId = process.argv[4] || "zdpuAsxVFKAoY6z8LnLsUtTKkGB4deEcXmhyAEbwkefaLsXR6";
+
 // Create OrbitDB instance
 const orbitdb: Orbit = await startOrbitDB({
-  id: "zdpuAsxVFKAoY6z8LnLsUtTKkGB4deEcXmhyAEbwkefaLsXR6",
+  id: dbId,
   directory: dbDir,
 });
 
@@ -25,9 +27,9 @@ db.events.on(
   ({ id, hash, payload: { key, op } }) =>
     logger.log("onupdate", { id, hash, op, key }),
 );
-
+db.events.on('')
 // Add some data
-await generate(1000000);
+// await generate(1000000);
 
 // Get some data
 const value = await db.get("12");
@@ -39,7 +41,7 @@ for await (const record of db.iterator({ amount: 5 })) {
 }
 
 // Stop OrbitDB
-await stopOrbitDB(orbitdb);
+// await stopOrbitDB(orbitdb);
 
 async function generate(size: number, chunkSize: number = 1000) {
   let time = 0;

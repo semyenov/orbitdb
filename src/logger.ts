@@ -77,9 +77,9 @@ export const logger = createConsola({
   },
 });
 
-logger.debug("debug", { a: 1, b: 2 });
-logger.success("success", { test: true, test2: false });
-logger.info("info", { lorem: "ipsum", a: 1, b: 2 });
-logger.warn("warn", { foo: "bar", a: 1, b: 2 });
-logger.error("error", { test: "huest" });
-logger.log("log", { a: 1, b: 2 });
+// logger.debug("debug", { a: 1, b: 2 });
+// logger.success("success", { test: true, test2: false });
+// logger.info("info", { lorem: "ipsum", a: 1, b: 2 });
+// logger.warn("warn", { foo: "bar", a: 1, b: 2 });
+// logger.error("error", { test: "huest" });
+// logger.log("log", { a: 1, b: 2 });
