@@ -32,6 +32,7 @@ interface DocumentsDatabase extends DatabaseInstance {
 
 function Documents(options?: DatabaseOptions): DocumentsDatabase;
 
+
 interface EventsDoc {
     hash: string;
     value: any;
@@ -59,6 +60,7 @@ interface EventsDatabase extends DatabaseInstance {
     iterator(options?: EventsIteratorOptions): AsyncGenerator<any>;
 }
 
+
 function KeyValue(): KeyValueDatabase;
 
 interface KeyValueDatabase extends DatabaseInstance {
@@ -73,6 +75,19 @@ interface KeyValueDatabase extends DatabaseInstance {
     put(key: string, value: any): Promise<string>;
 }
 
+
+interface DatabaseType {
+    documents: DocumentsDatabase;
+    events: EventsDatabase;
+    keyvalue: KeyValueDatabase;
+}
+
+interface FunctionDatabaseType {
+    documents: Documents;
+    events: Events;
+    keyvalue: KeyValue;
+}
+
 function KeyValueIndexed(storage?: Storage): KeyValueIndexedDatabase;
 
 type KeyValueIndexedDatabase = {
@@ -80,9 +95,7 @@ type KeyValueIndexedDatabase = {
     iterator(filters?: IteratorOptions): AsyncGenerator<DatabaseDoc>;
 };
 
-type DatabaseType = Function & { type: string };
-
-function useDatabaseType(database: DatabaseType): void;
+function useDatabaseType<T extends keyof FunctionDatabaseType>(database: FunctionDatabaseType<T> & { type: T }): void;
 
 export {
     DatabaseDoc,
@@ -98,5 +111,7 @@ export {
     KeyValueIndexed,
     KeyValueIndexedDatabase,
     IteratorOptions,
-    useDatabaseType
+    useDatabaseType,
+    DatabaseType,
+    FunctionDatabaseType
 }

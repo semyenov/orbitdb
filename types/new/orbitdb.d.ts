@@ -3,12 +3,13 @@ declare module '@orbitdb/core' {
     import { Identity, Identities, IdentityProvider } from './identity';
     import {AccessController} from "./access-controller";
     import {DatabaseInstance} from "./database";
+    import {DatabaseType} from "./databases";
 
-    type openOptions = {
-        type?: string;
+    type OrbitDBOpenOptions<T extends keyof DatabaseType> = {
+        type?: T;
         meta?: any;
         sync?: boolean;
-        Database?: DatabaseInstance;
+        Database?: DatabaseType[T];
         AccessController?: AccessController;
         headsStorage?: Storage;
         entryStorage?: Storage;
@@ -16,7 +17,7 @@ declare module '@orbitdb/core' {
         referencesCount?: number;
     }
     interface OrbitDB {
-        open(address: string, options?: openOptions): Promise<DatabaseInstance>;
+        open<T extends keyof DatabaseType>(address: string, options?: OrbitDBOpenOptions<T>): Promise<DatabaseType[T]>;
         stop(): Promise<void>;
     }
 
@@ -30,5 +31,5 @@ declare module '@orbitdb/core' {
 
     function createOrbitDB(params: CreateOrbitDBParams): OrbitDB;
 
-    export { createOrbitDB, OrbitDB, CreateOrbitDBParams };
+    export { createOrbitDB, OrbitDB, CreateOrbitDBParams, OrbitDBOpenOptions };
 }
