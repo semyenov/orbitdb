@@ -87,6 +87,14 @@ function LevelStorage(params?: LevelStorageParams): Promise<StorageLevel>
 function MemoryStorage(): Promise<StorageMemory>
 
 type Storage = StorageComposed | StorageIPFS | StorageLRU | StorageLevel | StorageMemory
+interface StorageMap {
+    composed: StorageComposed;
+    ipfs: StorageIPFS;
+    lru: StorageLRU;
+    level: StorageLevel;
+    memory: StorageMemory;
+}
+type StorageType = keyof StorageMap;
 
 export {
     Storage,
@@ -99,5 +107,7 @@ export {
     LevelStorage,
     LRUStorage,
     IPFSBlockStorage,
-    ComposedStorage
+    ComposedStorage,
+    StorageType,
+    StorageMap
 }

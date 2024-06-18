@@ -1,4 +1,4 @@
-import {Events} from "./events";
+import {SyncEvents} from "./events";
 import {IPFS} from "./ipfs";
 import {Entry, Log} from "./log";
 import {PeerId} from "libp2p";
@@ -6,13 +6,13 @@ import {PeerId} from "libp2p";
 interface SyncParams {
     ipfs: IPFS;
     log: Log;
-    events?: Events;
+    events?: SyncEvents;
     onSynced?: (peerId: PeerId, heads: Entry[]) => void;
     start?: boolean;
 }
 
 interface SyncInstance {
-    events: Events;
+    events: SyncEvents;
     peers: Set<PeerId>;
     start: () => Promise<void>;
     stop: () => Promise<void>;

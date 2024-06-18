@@ -1,12 +1,12 @@
 import {Storage} from "./storage";
 import {IPFS} from "./ipfs";
 import {Identity} from "./identity";
-import {AccessController} from "./access-controller";
+import {AccessController, AccessControllerType} from "./access-controller";
 
-export interface LogOptions {
+export interface LogOptions<A extends AccessControllerType = 'ipfs'> {
     logId?: string;
     logHeads?: Entry[];
-    access?: AccessController;
+    access?: AccessController<A>;
     entries?: Entry[];
     entryStorage?: Storage;
     headsStorage?: Storage;

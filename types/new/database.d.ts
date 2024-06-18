@@ -3,14 +3,14 @@
 
 import {IPFS} from './ipfs';
 import {Identity} from './identity';
-import {AccessController} from './access-controller';
+import {AccessController, AccessControllerType} from './access-controller';
 import {Storage} from './storage';
 import {PeerId} from 'libp2p'
 import {EventsDatabase} from "./events";
 import {Entry, LogInstance} from "./log";
 import {SyncInstance} from "./sync";
 
-interface DatabaseParams {
+interface DatabaseParams<A extends keyof AccessController = 'ipfs'> {
     ipfs: IPFS;
     identity?: Identity;
     address?: string;
@@ -26,19 +26,11 @@ interface DatabaseParams {
     onUpdate?: (entry: Entry) => void;
 }
 
-// interface IteratorFilters {
-//     gt?: string;
-//     gte?: string;
-//     lt?: string;
-//     lte?: string;
-//     amount?: number;
-// }
-
 function Database(params: DatabaseParams): DatabaseInstance;
 
 
-interface DatabaseInstance {
-    access?: AccessController;
+interface DatabaseInstance<A extends AccessControllerType = 'ipfs'> {
+    access?: AccessController[A];
     address?: string;
     events: EventsDatabase;
     log: LogInstance;

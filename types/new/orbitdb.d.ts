@@ -1,24 +1,34 @@
 declare module '@orbitdb/core' {
     import { IPFS } from './ipfs';
-    import { Identity, Identities, IdentityProvider } from './identity';
-    import {AccessController} from "./access-controller";
-    import {DatabaseInstance} from "./database";
-    import {DatabaseType} from "./databases";
+    import { Identity, Identities } from './identity';
+    import {AccessController, AccessControllerType} from "./access-controller";
+    import {DatabaseType, DatabaseTypeKey} from "./databases";
+    import {Storage, StorageType} from "./storage";
+    import {KeyStoreInstance} from "./key-store";
+    import {PeerId} from "libp2p";
 
-    type OrbitDBOpenOptions<T extends keyof DatabaseType> = {
+    import {OrbitDBAddress, parseAddress, isValidAddress} from './utils';
+
+    type OrbitDBOpenOptions<V,T extends DatabaseTypeKey, A extends AccessControllerType, S extends StorageType = StorageType> = {
         type?: T;
         meta?: any;
         sync?: boolean;
-        Database?: DatabaseType[T];
-        AccessController?: AccessController;
+        Database?: DatabaseType<V>[T];
+        AccessController?: AccessController[A];
         headsStorage?: Storage;
         entryStorage?: Storage;
         indexStorage?: Storage;
         referencesCount?: number;
     }
     interface OrbitDB {
-        open<T extends keyof DatabaseType>(address: string, options?: OrbitDBOpenOptions<T>): Promise<DatabaseType[T]>;
+        open<V = unknown, T extends DatabaseTypeKey = DatabaseTypeKey, A extends AccessControllerType = 'ipfs'>(address: string, options?: OrbitDBOpenOptions<V,T, A>): Promise<DatabaseType<V, A>[T]>;
         stop(): Promise<void>;
+        id: string;
+        ipfs: IPFS;
+        directory: string;
+        keystore: KeyStoreInstance;
+        identity: Identity;
+        peerId: PeerId;
     }
 
     interface CreateOrbitDBParams {
@@ -30,6 +40,6 @@ declare module '@orbitdb/core' {
     }
 
     function createOrbitDB(params: CreateOrbitDBParams): OrbitDB;
-
-    export { createOrbitDB, OrbitDB, CreateOrbitDBParams, OrbitDBOpenOptions };
+    export type {OrbitDBAddress}
+    export { createOrbitDB, OrbitDB, CreateOrbitDBParams, OrbitDBOpenOptions, parseAddress, isValidAddress};
 }

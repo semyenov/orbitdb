@@ -1,15 +1,22 @@
 import {Entry} from "./log";
 import {Storage} from "./storage";
 
+// TODO: types
 interface AccessControllerOptions {
     write?: string[];
     storage?: Storage;
 }
 
-interface AccessController {
+interface IPFSAccessController {
+    canAppend(entry: Entry): Promise<boolean>;
+}
+
+function createIPFSAccessController(options: AccessControllerOptions): Promise<IPFSAccessController>;
+
+interface OrbitDBAccessController {
     canAppend(entry: Entry): Promise<boolean>;
 
-    get capabilities(): Promise<string[]>;
+    capabilities(): Promise<string[]>;
 
     close(): Promise<void>;
 
@@ -24,17 +31,15 @@ interface AccessController {
     revoke(capability: string, key: string): Promise<void>;
 }
 
-interface IPFSAccessController implements AccessController {
-}
-
-function createIPFSAccessController(options: AccessControllerOptions): Promise<IPFSAccessController>;
-
-interface OrbitDBAccessController implements AccessController {
-}
-
 function createOrbitDBAccessController(options: Omit<AccessControllerOptions, 'write'>): Promise<OrbitDBAccessController>;
 
 function useAccessController(accessController: { type: string }): void;
 
-export {createIPFSAccessController, createOrbitDBAccessController, useAccessController, AccessController};
+interface AccessController {
+    ipfs: IPFSAccessController,
+    orbitdb: OrbitDBAccessController
+}
+type AccessControllerType = keyof AccessController;
+
+export {createIPFSAccessController, createOrbitDBAccessController, useAccessController, AccessController, AccessControllerType};
 
