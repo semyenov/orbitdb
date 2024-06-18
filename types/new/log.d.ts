@@ -45,17 +45,29 @@ type OptionsIterator = {
     lte?: string;
     amount?: number;
 };
+
 export interface LogInstance {
-    append(payload: any, options?: {referencesCount: number}): Promise<Entry>;
+    append(payload: any, options?: { referencesCount: number }): Promise<Entry>;
+
     join(log: LogInstance): Promise<void>;
+
     clear(): Promise<void>;
+
     close(): Promise<void>;
+
     clock(): Promise<Clock>;
-    iterator( options?: OptionsIterator): AsyncIterable<Entry>;
+
+    iterator(options?: OptionsIterator): AsyncIterable<Entry>;
+
     get(hash: string): Entry | undefined;
+
     heads(): Promise<Entry[]>;
+
     isLog(obj: LogInstance | object): boolean;
+
     joinEntry(entry: Entry): Promise<void>;
+
     traverse(): AsyncGenerator<Entry>;
+
     values(): Promise<Entry[]>;
 }

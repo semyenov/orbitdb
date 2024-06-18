@@ -27,7 +27,7 @@ interface IdentitiesOptions {
 }
 
 
-type IdentitiesModule =  {
+type IdentitiesModule = {
     createIdentity: (options?: any) => Promise<Identity>;
     getIdentity: (id: string) => Promise<Identity>;
     signIdentity: (identity: Identity) => Promise<string>;

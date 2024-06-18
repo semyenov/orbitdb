@@ -16,7 +16,7 @@ export async function startOrbitDB({
   identity,
   identities,
   directory = ".",
-}: CreateOrbitDBParams) {
+}: Omit<CreateOrbitDBParams, 'ipfs'>) {
   const options = typeof window !== "undefined"
     ? DefaultLibp2pBrowserOptions
     : DefaultLibp2pOptions;

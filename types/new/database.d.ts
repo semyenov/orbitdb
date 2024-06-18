@@ -1,10 +1,10 @@
 // Type definitions for OrbitDB Database Module
 // Project: https://api.orbitdb.org/module-Database.html
 
-import { IPFS } from './ipfs';
-import { Identity } from './identity';
-import { AccessController } from './access-controller';
-import { Storage } from './storage';
+import {IPFS} from './ipfs';
+import {Identity} from './identity';
+import {AccessController} from './access-controller';
+import {Storage} from './storage';
 import {PeerId} from 'libp2p'
 import {EventsDatabase} from "./events";
 import {Entry, LogInstance} from "./log";
@@ -49,16 +49,13 @@ interface DatabaseInstance {
     identity?: Identity;
 
     addOperation(op: any): Promise<string>;
-    close(): Promise<void>;
-    drop(): Promise<void>;
 
-    // add(value: any): Promise<string>;
-    // all(): Promise<[string, string][]>;
-    // get(hash: string): Promise<any>;
-    // iterator(filters?: IteratorFilters): AsyncGenerator<[string, string], void, undefined>;
-    // stop(): Promise<void>;
+    close(): Promise<void>;
+
+    drop(): Promise<void>;
 }
 
-export = {
-    Database
+export {
+    Database,
+    DatabaseInstance
 };

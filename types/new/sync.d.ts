@@ -3,7 +3,7 @@ import {IPFS} from "./ipfs";
 import {Entry, Log} from "./log";
 import {PeerId} from "libp2p";
 
- interface SyncParams {
+interface SyncParams {
     ipfs: IPFS;
     log: Log;
     events?: Events;
@@ -11,11 +11,12 @@ import {PeerId} from "libp2p";
     start?: boolean;
 }
 
- interface SyncInstance {
+interface SyncInstance {
     events: Events;
     peers: Set<PeerId>;
     start: () => Promise<void>;
     stop: () => Promise<void>;
+
     add(entry: Entry): void;
 }
 
