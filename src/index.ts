@@ -26,7 +26,6 @@ db.events.on(
   ({ id, hash, payload: { key, op } }) =>
     logger.log("onupdate", { id, hash, op, key }),
 );
-db.events.on('')
 // Add some data
 // await generate(1000000);
 

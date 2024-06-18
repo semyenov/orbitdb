@@ -16,26 +16,26 @@ type IteratorOptions = {
     amount?: string;
 }
 
-interface DocumentsDatabase extends DatabaseInstance {
-    all(): Promise<DatabaseDoc[]>;
+interface DocumentsDatabase<T extends unknown> extends DatabaseInstance {
+    all(): Promise<DatabaseDoc<T>[]>;
 
     del(key: string): Promise<string>;
 
-    get(key: string): Promise<DatabaseDoc | null>;
+    get(key: string): Promise<DatabaseDoc<T> | null>;
 
     iterator(filters?: IteratorOptions): AsyncGenerator<DatabaseDoc>;
 
-    put(doc: Object): Promise<string>;
+    put(doc: DatabaseDoc<T>): Promise<string>;
 
-    query<T>(findFn: (doc: T) => boolean): Promise<T[]>;
-};
+    query(findFn: (doc: T) => boolean): Promise<T[]>;
+}
 
 function Documents(options?: DatabaseOptions): DocumentsDatabase;
 
 
-interface EventsDoc {
+interface EventsDoc<T extends unknown> {
     hash: string;
-    value: any;
+    value: T;
 }
 
 // Events Database
@@ -50,29 +50,29 @@ type EventsIteratorOptions = {
     reverse?: boolean;
 };
 
-interface EventsDatabase extends DatabaseInstance {
-    add(value: any): Promise<string>;
+interface EventsDatabase<T extends unknown> extends DatabaseInstance {
+    add(value: T): Promise<string>;
 
     all(): Promise<EventsDoc[]>;
 
-    get(hash: string): Promise<any>;
+    get(hash: string): Promise<T | null>;
 
-    iterator(options?: EventsIteratorOptions): AsyncGenerator<any>;
+    iterator(options?: EventsIteratorOptions): AsyncGenerator<EventsDoc<T>>;
 }
 
 
 function KeyValue(): KeyValueDatabase;
 
-interface KeyValueDatabase extends DatabaseInstance {
-    all(): Promise<DatabaseDoc[]>;
+interface KeyValueDatabase<T extends unknown> extends DatabaseInstance {
+    all(): Promise<DatabaseDoc<T>[]>;
 
     del(key: string): Promise<void>;
 
-    get(key: string): Promise<any | null>;
+    get(key: string): Promise<T | null>;
 
-    iterator(filters?: IteratorOptions): AsyncGenerator<DatabaseDoc>;
+    iterator(filters?: IteratorOptions): AsyncGenerator<DatabaseDoc<T>>;
 
-    put(key: string, value: any): Promise<string>;
+    put(key: string, value: T): Promise<string>;
 }
 
 
@@ -85,15 +85,15 @@ interface DatabaseType {
 interface FunctionDatabaseType {
     documents: Documents;
     events: Events;
-    keyvalue: KeyValue;
+    keyvalue: KeyValue | KeyValueIndexedDatabase;
 }
 
 function KeyValueIndexed(storage?: Storage): KeyValueIndexedDatabase;
 
-type KeyValueIndexedDatabase = {
-    get(key: string): Promise<any>;
-    iterator(filters?: IteratorOptions): AsyncGenerator<DatabaseDoc>;
-};
+interface KeyValueIndexedDatabase<T extends unknown> extends KeyValue {
+    get(key: string): Promise<T | null>;
+    iterator(filters?: IteratorOptions): AsyncGenerator<DatabaseDoc<T>>;
+}
 
 function useDatabaseType<T extends keyof FunctionDatabaseType>(database: FunctionDatabaseType<T> & { type: T }): void;
 
