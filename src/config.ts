@@ -12,7 +12,7 @@ import {mdns} from '@libp2p/mdns'
 
 export const DefaultLibp2pOptions: Libp2pOptions = {
     addresses: {
-        listen: ["/ip4/127.0.0.1/tcp/5003"],
+        listen: ["/ip4/127.0.0.1/tcp/0/ws"],
     },
     peerDiscovery: [mdns()],
     transports: [

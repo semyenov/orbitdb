@@ -26,7 +26,7 @@ interface IdentitiesOptions {
     ipfs?: IPFS;
 }
 
-
+// TODO: Complete the IdentitiesModule interface
 type IdentitiesModule = {
     createIdentity: (options?: any) => Promise<Identity>;
     getIdentity: (id: string) => Promise<Identity>;
@@ -34,7 +34,7 @@ type IdentitiesModule = {
     verifyIdentity: (identity: Identity) => Promise<boolean>;
 }
 
-function Identities(options: IdentitiesOptions): IdentitiesModule;
+function Identities(options?: IdentitiesOptions): IdentitiesModule;
 
 function useIdentityProvider(identityProvider: IdentityProvider): void;
 

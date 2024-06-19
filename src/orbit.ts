@@ -11,16 +11,16 @@ import type { Orbit, OrbitOptions } from "../types/orbitdb";
 import { logger } from "./logger";
 let spied;
 
+const isBrowser = () =>  typeof window !== "undefined";
 export async function startOrbitDB({
   id,
   identity,
   identities,
   directory = ".",
 }: Omit<CreateOrbitDBParams, 'ipfs'>) {
-  const options = typeof window !== "undefined"
+  const options = isBrowser()
     ? DefaultLibp2pBrowserOptions
     : DefaultLibp2pOptions;
-  ``;
 
   const ipfs = await createHelia({
     libp2p: await createLibp2p({ ...options }),

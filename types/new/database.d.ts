@@ -6,7 +6,7 @@ import {Identity} from './identity';
 import {AccessController, AccessControllerType} from './access-controller';
 import {Storage} from './storage';
 import {PeerId} from 'libp2p'
-import {EventsDatabase} from "./events";
+import {DatabaseEvents} from "./events";
 import {Entry, LogInstance} from "./log";
 import {SyncInstance} from "./sync";
 
@@ -32,7 +32,7 @@ function Database(params: DatabaseParams): DatabaseInstance;
 interface DatabaseInstance<A extends AccessControllerType = 'ipfs'> {
     access?: AccessController[A];
     address?: string;
-    events: EventsDatabase;
+    events: DatabaseEvents;
     log: LogInstance;
     name?: string;
     peers: Set<PeerId>;

@@ -8,7 +8,6 @@ const dbName = process.argv[2] || "my-database";
 const dbDir = process.argv[3] || "./orbitdb";
 
 const dbId = process.argv[4] || "zdpuAsxVFKAoY6z8LnLsUtTKkGB4deEcXmhyAEbwkefaLsXR6";
-const isServer = !process.argv[3];
 
 // Create OrbitDB instance
 const orbitdb = await startOrbitDB({
@@ -18,7 +17,7 @@ const orbitdb = await startOrbitDB({
 orbitdb.ipfs.libp2p.logger = logger
 // logger.log('orbitDb',orbitdb.ipfs.libp2p.logger)
 // Open a database
-const db = await orbitdb.open<{test: string}, 'documents'>(dbName, isServer ? { type: "documents" } : {});
+const db = await orbitdb.open<{test: string}, 'documents'>(dbName,  { type: "documents" });
 logger.log("address", db.address);
 
 // Listen for updates

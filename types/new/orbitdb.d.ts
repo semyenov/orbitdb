@@ -1,14 +1,14 @@
 declare module '@orbitdb/core' {
     import { IPFS } from './ipfs';
     import { Identity, Identities } from './identity';
-    import {AccessController, AccessControllerType} from "./access-controller";
+    import {AccessController, AccessControllerType, OrbitDBAccessController} from "./access-controller";
     import {DatabaseType, DatabaseTypeKey} from "./databases";
     import {Storage, StorageType} from "./storage";
     import {KeyStoreInstance} from "./key-store";
     import {PeerId} from "libp2p";
-
+    import {IPFSAccessController} from './access-controller'
     import {OrbitDBAddress, parseAddress, isValidAddress} from './utils';
-
+    import {Identities} from './identity'
     type OrbitDBOpenOptions<V,T extends DatabaseTypeKey, A extends AccessControllerType, S extends StorageType = StorageType> = {
         type?: T;
         meta?: any;
@@ -41,5 +41,5 @@ declare module '@orbitdb/core' {
 
     function createOrbitDB(params: CreateOrbitDBParams): OrbitDB;
     export type {OrbitDBAddress}
-    export { createOrbitDB, OrbitDB, CreateOrbitDBParams, OrbitDBOpenOptions, parseAddress, isValidAddress};
+    export { createOrbitDB, OrbitDB, CreateOrbitDBParams, OrbitDBOpenOptions, parseAddress, isValidAddress, Identities, IPFSAccessController, OrbitDBAccessController};
 }

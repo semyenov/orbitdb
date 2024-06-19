@@ -10,7 +10,7 @@ export interface SyncEvents extends EventEmitter {
     on(event: 'error', listener: (error: Error) => void): void;
 }
 
-export interface EventsDatabase extends EventEmitter {
+export interface DatabaseEvents extends EventEmitter {
     on(event: 'join', listener: (peerId: PeerId, heads: Entry[]) => void): void;
 
     on(event: 'leave', listener: (peerId: PeerId) => void): void;
