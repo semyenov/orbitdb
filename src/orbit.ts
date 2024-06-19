@@ -1,5 +1,5 @@
 import { bitswap } from "@helia/block-brokers";
-import { createOrbitDB } from "@orbitdb/core";
+import {createOrbitDB, CreateOrbitDBParams} from "@orbitdb/core";
 import { LevelBlockstore } from "blockstore-level";
 import { spyOn } from "tinyspy";
 
@@ -11,16 +11,16 @@ import type { Orbit, OrbitOptions } from "../types/orbitdb";
 import { logger } from "./logger";
 let spied;
 
+const isBrowser = () =>  typeof window !== "undefined";
 export async function startOrbitDB({
   id,
   identity,
   identities,
   directory = ".",
-}: OrbitOptions): Promise<Orbit> {
-  const options = typeof window !== "undefined"
+}: Omit<CreateOrbitDBParams, 'ipfs'>) {
+  const options = isBrowser()
     ? DefaultLibp2pBrowserOptions
     : DefaultLibp2pOptions;
-  ``;
 
   const ipfs = await createHelia({
     libp2p: await createLibp2p({ ...options }),
