@@ -1,120 +1,117 @@
-import {Storage} from './storage';
-import {Entry} from "./log";
-import {DatabaseInstance} from "./database";
+import { Storage } from './storage';
+import { DatabaseInstance } from "./database";
+import { AccessControllerType } from './access-controller';
 
-interface DatabaseOptions {
-    indexBy?: string;
+interface DocumentsOptions<T extends { _id: string }> {
+  indexBy?: keyof T;
 }
 
-interface DatabaseDoc<T = unknown> {
-    hash: string;
-    key: string;
-    value: T;
+type DocumentsIteratorOptions = {
+  amount?: string;
 }
 
-type IteratorOptions = {
-    amount?: string;
+interface DocumentsDoc<T extends { _id: string }> {
+  hash: string;
+  key: string;
+  value: T;
 }
 
-interface DocumentsDatabase<T = unknown, A> extends DatabaseInstance<A> {
-    all(): Promise<DatabaseDoc<T>[]>;
-
-    del(key: string): Promise<string>;
-
-    get(key: string): Promise<DatabaseDoc<T> | null>;
-
-    iterator(filters?: IteratorOptions): AsyncGenerator<DatabaseDoc>;
-
-    put(doc: DatabaseDoc<T>): Promise<string>;
-
-    query(findFn: (doc: T) => boolean): Promise<T[]>;
+interface DocumentsInstance<T extends { _id: string }, A extends AccessControllerType = 'ipfs'> extends DatabaseInstance<A> {
+  all(): Promise<DocumentsDoc<T>[]>;
+  del(key: string): Promise<string>;
+  get(key: string): Promise<DocumentsDoc<T> | null>;
+  iterator(filters?: DocumentsIteratorOptions): AsyncGenerator<DocumentsDoc<T>, string>;
+  put(doc: DocumentsDoc<T>): Promise<string>;
+  query(findFn: (doc: T) => boolean): Promise<T[]>;
 }
 
-function Documents<T>(options?: DatabaseOptions): DocumentsDatabase<T>;
-
+declare function Documents<T extends { _id: string }, A extends AccessControllerType = 'ipfs'>(options?: DocumentsOptions<T>): DocumentsInstance<T, A>;
 
 interface EventsDoc<T = unknown> {
-    hash: string;
-    value: T;
+  key: string;
+  value: T;
 }
-
-// Events Database
-function Events<T>(): EventsDatabase<T>;
 
 type EventsIteratorOptions = {
-    gt?: string;
-    gte?: string;
-    lt?: string;
-    lte?: string;
-    limit?: number;
-    reverse?: boolean;
+  gt?: string;
+  gte?: string;
+  lt?: string;
+  lte?: string;
+  limit?: number;
+  reverse?: boolean;
 };
 
-interface EventsDatabase<T = unknown, A> extends DatabaseInstance<A> {
-    add(value: T): Promise<string>;
 
-    all(): Promise<EventsDoc[]>;
-
-    get(hash: string): Promise<T | null>;
-
-    iterator(options?: EventsIteratorOptions): AsyncGenerator<EventsDoc<T>>;
+interface EventsInstance<T = unknown, A extends AccessControllerType = 'ipfs'> extends DatabaseInstance<A> {
+  add(value: T): Promise<string>;
+  all(): Promise<Omit<KeyValueDoc<T>, 'key'>[]>;
+  get(hash: string): Promise<T | null>;
+  iterator(options?: EventsIteratorOptions): AsyncGenerator<EventsDoc<T>>;
 }
 
+declare function Events<T = unknown, A extends AccessControllerType = 'ipfs'>(): EventsInstance<T, A>;
 
-function KeyValue<T>(): KeyValueDatabase<T>;
-
-interface KeyValueDatabase<T = unknown, A> extends DatabaseInstance<A> {
-    all(): Promise<DatabaseDoc<T>[]>;
-
-    del(key: string): Promise<void>;
-
-    get(key: string): Promise<T | null>;
-
-    iterator(filters?: IteratorOptions): AsyncGenerator<DatabaseDoc<T>>;
-
-    put(key: string, value: T): Promise<string>;
+interface KeyValueDoc<T = unknown> {
+  hash: string;
+  key: string;
+  value: T;
 }
 
-
-interface DatabaseType<T, A> {
-    documents: DocumentsDatabase<T, A>;
-    events: EventsDatabase<T, A>;
-    keyvalue: KeyValueDatabase<T, A> | KeyValueIndexedDatabase<T, A>;
+type KeyValueIteratorOptions = {
+  amount?: string;
 }
 
-type DatabaseTypeKey = keyof DatabaseType;
+interface KeyValueInstance<T, A extends AccessControllerType = 'ipfs'> extends DatabaseInstance<A> {
+  all(): Promise<KeyValueDoc<T>[]>;
+  del(key: string): Promise<void>;
+  get(key: string): Promise<T | null>;
+  iterator(filters?: KeyValueIteratorOptions): AsyncGenerator<KeyValueDoc<T>, string>;
+  put(key: string, value: T): Promise<string>;
+}
+declare function KeyValue<T, A extends AccessControllerType = 'ipfs'>(): KeyValueInstance<T, A>;
 
-interface FunctionDatabaseType {
-    documents: Documents;
-    events: Events;
-    keyvalue: KeyValue | KeyValueIndexedDatabase;
+interface DatabaseTypeMap<T extends { _id: string }, A extends AccessControllerType = 'ipfs'> {
+  documents: DocumentsInstance<T, A>;
+  events: EventsInstance<T, A>;
+  keyvalue: KeyValueInstance<T, A> | KeyValueIndexedInstance<T, A>;
 }
 
-function KeyValueIndexed(storage?: Storage): KeyValueIndexedDatabase;
+type DatabaseType = keyof DatabaseTypeMap<any, any>;
 
-interface KeyValueIndexedDatabase<T = unknown, A> extends KeyValueDatabase<T, A> {
-    get(key: string): Promise<T | null>;
-    iterator(filters?: IteratorOptions): AsyncGenerator<DatabaseDoc<T>>;
+interface KeyValueIndexedInstance<T = unknown, A extends AccessControllerType = 'ipfs'> extends KeyValueInstance<T, A> { }
+declare function KeyValueIndexed(storage?: Storage): KeyValueIndexedInstance;
+
+interface DatabasesFunctionTypeMap {
+  documents: typeof Documents;
+  events: typeof Events;
+  keyvalue: typeof KeyValue | typeof KeyValueIndexed;
 }
-
-function useDatabaseType<T extends keyof FunctionDatabaseType>(database: FunctionDatabaseType[T] & { type: T }): void;
+type DatabaseFunctionType = keyof DatabasesFunctionTypeMap
+declare function useDatabaseType<T extends DatabaseFunctionType>(database: DatabasesFunctionTypeMap[T] & { type: T }): void;
 
 export {
-    DatabaseDoc,
-    DatabaseOptions,
-    Documents,
-    DocumentsDatabase,
-    Events,
-    EventsDatabase,
-    EventsDoc,
-    EventsIteratorOptions,
-    KeyValue,
-    KeyValueDatabase,
-    KeyValueIndexed,
-    KeyValueIndexedDatabase,
-    IteratorOptions,
-    useDatabaseType,
-    DatabaseType,
-    FunctionDatabaseType,
-    DatabaseTypeKey
+  DocumentsDoc,
+  DocumentsOptions,
+  DocumentsIteratorOptions,
+  DocumentsInstance,
+  Documents,
+
+  KeyValueDoc,
+  KeyValueIteratorOptions,
+  KeyValueInstance,
+  KeyValue,
+
+  KeyValueIndexedInstance,
+  KeyValueIndexed,
+
+  EventsDoc,
+  EventsIteratorOptions,
+  EventsInstance,
+  Events,
+
+  DatabaseType,
+  DatabaseTypeMap,
+  DatabaseFunctionType,
+  DatabasesFunctionTypeMap,
+  useDatabaseType,
 }
