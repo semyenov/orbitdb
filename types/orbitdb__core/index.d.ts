@@ -1,12 +1,17 @@
 import { IPFS } from './ipfs';
-import { Identity, Identities, IdentityInstance, IdentitiesInstance } from './identities';
+import { Identities, IdentityInstance, IdentitiesInstance, useIdentityProvider } from './identities';
 import { AccessControllerTypeMap, AccessControllerType, OrbitDBAccessController } from "./access-controller";
-import { DatabaseFunctionType, DatabaseType, DatabaseTypeMap, DatabasesFunctionTypeMap } from "./databases";
-import { Storage, StorageType } from "./storage";
+import { Database, DatabaseInstance } from "./database";
+import { ComposedStorage, Storage } from "./storage";
 import { KeyStoreInstance } from "./key-store";
 import { PeerId } from "@libp2p/interface";
 import { IPFSAccessController } from './access-controller'
 import { OrbitDBAddress, parseAddress, isValidAddress } from './utils';
+import { DatabaseType, DatabaseTypeMap, DatabasesFunctionTypeMap, Documents, Events, KeyValue, KeyValueIndexed, useDatabaseType } from './databases';
+import { Entry, Log } from './log';
+import { IPFSBlockStorage, LRUStorage, LevelStorage, MemoryStorage } from './storage';
+import { KeyStore } from './key-store';
+import { useAccessController } from './access-controller';
 
 type OrbitDBOpenOptions<D extends DatabaseType, T, A extends AccessControllerType> = {
     type?: D;
@@ -46,10 +51,32 @@ export {
     OrbitDBOpenOptions,
     OrbitDBInstance,
     OrbitDBAddress,
-    createOrbitDB,
-    parseAddress,
-    isValidAddress,
-    Identities,
+    IdentitiesInstance,
+    DatabaseInstance,
+    Entry,
+
+    ComposedStorage,
+    Database,
+    IPFSAccessController as DefaultAccessController,
+    Documents,
+    Events,
     IPFSAccessController,
-    OrbitDBAccessController
+    IPFSBlockStorage,
+    Identities,
+    KeyStore,
+    KeyValue,
+    KeyValueIndexed,
+    LRUStorage,
+    LevelStorage,
+    Log,
+    MemoryStorage,
+    OrbitDBAccessController,
+    // PublicKeyIdentityProvider,
+    // isIdentity,
+    createOrbitDB,
+    isValidAddress,
+    parseAddress,
+    useAccessController,
+    useDatabaseType,
+    useIdentityProvider,
 };

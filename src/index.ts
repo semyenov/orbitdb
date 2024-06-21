@@ -1,7 +1,7 @@
 import { fakerRU as faker } from "@faker-js/faker";
 import { startOrbitDB, stopOrbitDB, } from "./orbit";
 import { logger } from "./logger";
-import { IPFSAccessController, OrbitDBAccessController } from '@orbitdb/core'
+import { IPFSAccessController, OrbitDBAccessController } from '../types/orbitdb__core'
 // import {userA, userB, identities} from './create-users'
 
 // const users = [userA, userB]

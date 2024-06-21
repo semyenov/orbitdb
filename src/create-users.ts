@@ -1,12 +1,12 @@
-import {Identities} from "@orbitdb/core";
-import {logger} from "./logger";
+import { Identities } from "../types/orbitdb__core";
+import { logger } from "./logger";
 
 export const identities = await Identities({
     path: './identities'
 })
 
-export const userA = await identities.createIdentity({id: 'userA'})
-export const userB = await identities.createIdentity({id: 'userB'})
+export const userA = await identities.createIdentity({ id: 'userA' })
+export const userB = await identities.createIdentity({ id: 'userB' })
 
 logger.log('userA', userA.id)
 logger.log('userB', userB.id)

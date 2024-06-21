@@ -16,7 +16,7 @@ interface DatabaseOptions<T, A extends keyof AccessControllerTypeMap = 'ipfs'> {
   identity?: IdentityInstance;
   address?: string;
   name?: string;
-  access?: AccessControllerTypeMap[A];
+  accessController?: AccessControllerTypeMap[A];
   directory?: string;
   meta?: any;
   headsStorage?: Storage;
@@ -27,7 +27,7 @@ interface DatabaseOptions<T, A extends keyof AccessControllerTypeMap = 'ipfs'> {
   onUpdate?: (entry: Entry<T>) => void;
 }
 
-declare function Database<T, A extends AccessControllerType = 'ipfs'>(options: DatabaseOptions<T, A>): DatabaseInstance<T, A>;
+declare function Database<T, A extends AccessControllerType = 'ipfs'>(options: DatabaseOptions<T, A>): Promise<DatabaseInstance<T, A>>;
 
 interface DatabaseInstance<T, A extends AccessControllerType = 'ipfs'> {
   access?: AccessControllerTypeMap[A];
