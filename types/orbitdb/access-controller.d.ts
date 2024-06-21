@@ -14,7 +14,7 @@ interface AccessControllerOptions {
 }
 
 interface IPFSAccessControllerInstance {
-  canAppend(entry: Entry): Promise<boolean>;
+  canAppend(entry: Entry<unknown>): Promise<boolean>;
 }
 
 interface OrbitDBAccessControllerInstance extends IPFSAccessControllerInstance {

@@ -1,16 +1,17 @@
 // Type definitions for OrbitDB Database Module
 // Project: https://api.orbitdb.org/module-Database.html
 
-import { IPFS } from './ipfs';
-import { IdentityInstance } from './identities';
-import { AccessControllerTypeMap, AccessControllerType } from './access-controller';
-import { Storage } from './storage';
 import { PeerId } from '@libp2p/interface'
-import { DatabaseEvents } from "./events";
-import { Entry, LogInstance } from "./log";
-import { SyncInstance } from "./sync";
 
-interface DatabaseParams<A extends keyof AccessControllerTypeMap = 'ipfs'> {
+import { AccessControllerTypeMap, AccessControllerType } from './access-controller';
+import { IdentityInstance } from './identities';
+import { Entry, LogInstance } from "./log";
+import { DatabaseEvents } from "./events";
+import { SyncInstance } from "./sync";
+import { Storage } from './storage';
+import { IPFS } from './ipfs';
+
+interface DatabaseOptions<T, A extends keyof AccessControllerTypeMap = 'ipfs'> {
   ipfs: IPFS;
   identity?: IdentityInstance;
   address?: string;
@@ -23,19 +24,19 @@ interface DatabaseParams<A extends keyof AccessControllerTypeMap = 'ipfs'> {
   indexStorage?: Storage;
   referencesCount?: number;
   syncAutomatically?: boolean;
-  onUpdate?: (entry: Entry) => void;
+  onUpdate?: (entry: Entry<T>) => void;
 }
 
-declare function Database(params: DatabaseParams): DatabaseInstance;
+declare function Database<T, A extends AccessControllerType = 'ipfs'>(options: DatabaseOptions<T, A>): DatabaseInstance<T, A>;
 
-interface DatabaseInstance<A extends AccessControllerType = 'ipfs'> {
+interface DatabaseInstance<T, A extends AccessControllerType = 'ipfs'> {
   access?: AccessControllerTypeMap[A];
   address?: string;
-  events: DatabaseEvents;
-  log: LogInstance;
+  events: DatabaseEvents<T>;
+  log: LogInstance<T, A>;
   name?: string;
   peers: Set<PeerId>;
-  sync: SyncInstance;
+  sync: SyncInstance<T>;
   meta: any;
   identity?: IdentityInstance;
 
