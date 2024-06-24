@@ -1,3 +1,5 @@
+import {IdentityProviderInstance} from "@orbitdb/core";
+
 const type = 'custom'
 
 const verifyIdentity = async (data) => { return true }
@@ -11,7 +13,7 @@ const CustomIdentityProvider = () => async () => {
     getId,
     signIdentity,
     type
-  }
+  } as IdentityProviderInstance
 }
 
 CustomIdentityProvider.verifyIdentity = verifyIdentity

@@ -1,5 +1,5 @@
 import { bitswap } from "@helia/block-brokers";
-import { createOrbitDB, CreateOrbitDBOptions, OrbitDBInstance } from "../packages/orbitdb__core";
+import { createOrbitDB, CreateOrbitDBOptions, OrbitDBInstance } from "../packages/orbitdb";
 import { LevelBlockstore } from "blockstore-level";
 import { spyOn } from "tinyspy";
 

@@ -3,7 +3,7 @@ import { IPFS } from "./ipfs";
 import { Identity, IdentityInstance } from "./identities";
 import { AccessControllerTypeMap, AccessControllerType } from "./access-controller";
 
-interface LogOptions<T, A extends AccessControllerType = 'ipfs'> {
+export interface LogOptions<T, A extends AccessControllerType = 'ipfs'> {
   logId?: string;
   logHeads?: LogEntry<T>[];
   access?: AccessControllerTypeMap[A];
@@ -14,7 +14,7 @@ interface LogOptions<T, A extends AccessControllerType = 'ipfs'> {
   sortFn?: (a: LogEntry<T>, b: LogEntry<T>) => number;
 }
 
-interface LogEntry<T = unknown> {
+export interface LogEntry<T = unknown> {
   id: string;
   payload: T;
   hash: string;
@@ -27,7 +27,7 @@ interface LogEntry<T = unknown> {
   sig: string;
 }
 
-declare namespace Entry {
+export namespace Entry {
   function create<T>(
     identity: any,
     id: string,
@@ -41,15 +41,15 @@ declare namespace Entry {
   function isEntry(obj: unknown): boolean
   function isEqual<T>(a: LogEntry<T>, b: LogEntry<T>): boolean
   function decode<T>(bytes: Uint8Array): Promise<LogEntry<T>>
-  function encode<T>(entry: LogEntry<T>): Promise<Uint8Array>
+  function encode<T>(entry: LogEntry<T>): Promise<LogEntry<T>>
 }
 
-interface Clock {
+export interface Clock {
   id: string;
   time: number;
 }
 
-declare function Log<T, A extends AccessControllerType = 'ipfs'>(
+export function Log<T, A extends AccessControllerType = 'ipfs'>(
   ipfs: IPFS,
   identity: IdentityInstance,
   options?: LogOptions<T, A>
@@ -63,7 +63,7 @@ type OptionsIterator = {
   amount?: number;
 };
 
-interface LogInstance<T, A extends AccessControllerType = 'ipfs'> {
+export interface LogInstance<T, A extends AccessControllerType = 'ipfs'> {
   id: string;
   access?: AccessControllerTypeMap[A];
   identity: IdentityInstance;
@@ -82,13 +82,4 @@ interface LogInstance<T, A extends AccessControllerType = 'ipfs'> {
   iterator(options?: OptionsIterator): AsyncIterable<LogEntry<T>>;
   clear(): Promise<void>;
   close(): Promise<void>;
-}
-
-export {
-  Clock,
-  Entry,
-  LogEntry,
-  LogOptions,
-  LogInstance,
-  Log,
 }

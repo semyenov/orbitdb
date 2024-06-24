@@ -11,12 +11,6 @@ import { SyncInstance } from "./sync";
 import { Storage } from './storage';
 import { IPFS } from './ipfs';
 
-interface DatabaseOp<T> {
-  key: string | number;
-  op: string;
-  value: T;
-}
-
 interface DatabaseOptions<T, A extends keyof AccessControllerTypeMap = 'ipfs'> {
   ipfs: IPFS;
   identity?: IdentityInstance;
@@ -33,6 +27,8 @@ interface DatabaseOptions<T, A extends keyof AccessControllerTypeMap = 'ipfs'> {
   onUpdate?: (entry: LogEntry<T>) => void;
 }
 
+declare function Database<T, A extends AccessControllerType = 'ipfs'>(options: DatabaseOptions<T, A>): Promise<DatabaseInstance<T, A>>;
+
 interface DatabaseInstance<T, A extends AccessControllerType = 'ipfs'> {
   access?: AccessControllerTypeMap[A];
   address?: string;
@@ -44,13 +40,12 @@ interface DatabaseInstance<T, A extends AccessControllerType = 'ipfs'> {
   meta: any;
   identity?: IdentityInstance;
 
-  addOperation(op: DatabaseOp<unknown>): Promise<string>;
+  addOperation(op: any): Promise<string>;
   close(): Promise<void>;
   drop(): Promise<void>;
 }
-declare function Database<T, A extends AccessControllerType = 'ipfs'>(options: DatabaseOptions<T, A>): Promise<DatabaseInstance<T, A>>;
 
 export {
-  DatabaseInstance,
   Database,
+  DatabaseInstance
 };
