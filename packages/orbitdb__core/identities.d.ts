@@ -29,6 +29,7 @@ interface IdentitiesOptions {
 }
 
 interface IdentityOptions {
+  id?: string;
   provider?: Function;
   keystore?: typeof KeyStore;
 }

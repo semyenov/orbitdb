@@ -7,7 +7,7 @@ interface DocumentsOptions<T> {
 }
 
 type DocumentsIteratorOptions = {
-  amount?: string;
+  amount?: number;
 }
 
 interface DocumentsDoc<T> {

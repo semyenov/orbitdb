@@ -9,7 +9,7 @@ import { KeyStoreInstance } from "./key-store";
 import { IPFSAccessController } from './access-controller'
 import { OrbitDBAddress, parseAddress, isValidAddress } from './utils';
 import { DatabaseType, DatabaseTypeMap, DatabasesFunctionTypeMap, Documents, Events, KeyValue, KeyValueIndexed, useDatabaseType } from './databases';
-import { LogEntry, Log } from './log';
+import { LogEntry, Log, Entry } from './log';
 import { IPFSBlockStorage, LRUStorage, LevelStorage, MemoryStorage } from './storage';
 import { KeyStore } from './key-store';
 import { useAccessController } from './access-controller';
@@ -54,7 +54,8 @@ export {
   OrbitDBAddress,
   IdentitiesInstance,
   DatabaseInstance,
-  LogEntry as Entry,
+  LogEntry,
+  Entry,
 
   ComposedStorage,
   Database,
