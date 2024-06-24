@@ -1,6 +1,6 @@
-import {PeerId} from "@libp2p/interface";
+import { PeerId } from "@libp2p/interface";
 
-import {IPFS} from './ipfs';
+import { IPFS } from './ipfs';
 
 import {
 	Identities,
@@ -34,10 +34,10 @@ import {
 	verifyMessage
 } from "./key-store";
 
-import {Database, DatabaseInstance} from "./database";
-import {ComposedStorage, Storage} from "./storage";
-import {IPFSAccessController} from './access-controller'
-import {OrbitDBAddress, parseAddress, isValidAddress} from './utils';
+import { Database, DatabaseInstance } from "./database";
+import { ComposedStorage, Storage } from "./storage";
+import { IPFSAccessController } from './access-controller'
+import { OrbitDBAddress, parseAddress, isValidAddress } from './utils';
 
 import {
 	DatabaseType,
@@ -50,9 +50,9 @@ import {
 	useDatabaseType
 } from './databases';
 
-import {LogEntry, Log, Entry} from './log';
-import {IPFSBlockStorage, LRUStorage, LevelStorage, MemoryStorage} from './storage';
-import {useAccessController} from './access-controller';
+import { LogEntry, Log, Entry } from './log';
+import { IPFSBlockStorage, LRUStorage, LevelStorage, MemoryStorage } from './storage';
+import { useAccessController } from './access-controller';
 
 type OrbitDBOpenOptions<D extends DatabaseType, T, A extends AccessControllerType> = {
 	type?: D;
@@ -105,7 +105,7 @@ export {
 	IPFSAccessController,
 	IPFSBlockStorage,
 
-	// Identity,
+	// Identity
 	Identities,
 	Identity,
 	isEqual,
@@ -118,7 +118,7 @@ export {
 	IdentityOptions,
 	IdentityInstance,
 
-	// KeyStore,
+	// KeyStore
 	KeyStore,
 	signMessage,
 	verifyMessage,
@@ -130,8 +130,8 @@ export {
 	KeyValueIndexed,
 
 	// Log
-	Entry,
 	Log,
+	Entry,
 	LogEntry,
 
 	// IPFS

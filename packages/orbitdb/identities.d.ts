@@ -1,6 +1,6 @@
-import {KeyStore, KeyStoreInstance} from "./key-store";
-import {Storage} from "./storage";
-import {IPFS} from "./ipfs";
+import { KeyStore, KeyStoreInstance } from "./key-store";
+import { Storage } from "./storage";
+import { IPFS } from "./ipfs";
 
 interface IdentityInstance {
 	id: string;
@@ -35,8 +35,6 @@ interface IdentityProvider {
 	type: string;
 }
 
-
-
 interface IdentitiesOptions {
 	keystore?: KeyStoreInstance;
 	path?: string;
@@ -47,7 +45,7 @@ interface IdentitiesOptions {
 declare function PublicKeyIdentityProvider(options: Pick<IdentityOptions, 'keystore'>): () => Promise<IdentityProviderInstance>;
 
 interface IdentityOptions {
-	id: string;
+	id?: string;
 	provider?: ReturnType<typeof PublicKeyIdentityProvider>;
 	keystore?: KeyStoreInstance;
 }
@@ -60,14 +58,10 @@ interface IdentitiesInstance {
 	sign: (identities: IdentityInstance, data: string, keystore: KeyStoreInstance) => Promise<string>;
 	verify: (signature: string, publickey: string, data: string) => Promise<boolean>;
 }
-
 declare function Identities(options?: IdentitiesOptions): Promise<IdentitiesInstance>;
 
 declare function getIdentityProvider(type: string): IdentityProviderInstance;
-
 declare function useIdentityProvider(identityProvider: IdentityProvider): void;
-
-
 declare function isEqual(identity1: IdentityInstance, identity2: IdentityInstance): boolean;
 declare function isIdentity(identity: any): boolean;
 declare function decodeIdentity(bytes: Uint8Array): Promise<IdentityInstance>;
@@ -87,8 +81,6 @@ export {
 	getIdentityProvider,
 	IdentityProviderInstance,
 	IdentityProvider,
-
-
 	decodeIdentity,
 	isEqual,
 	isIdentity,
