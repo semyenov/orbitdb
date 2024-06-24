@@ -1,9 +1,0 @@
-{
-  "private": true,
-  "name": "@types/orbitdb__core",
-  "version": "2.2.0",
-  "dependencies": {},
-  "devDependencies": {
-    "@types/orbitdb__core": "workspace:."
-  }
-}

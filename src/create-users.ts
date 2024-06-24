@@ -1,4 +1,4 @@
-import { Identities } from "../types/orbitdb__core";
+import { Identities } from "../packages/orbitdb__core";
 import { logger } from "./logger";
 
 export const identities = await Identities({

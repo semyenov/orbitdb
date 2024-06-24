@@ -14,7 +14,6 @@
 
     // "lib": ["ESNext", "DOM"],
 
-    "typeRoots": ["./node_modules/@types", "./types"],
     "types": ["node"],
 
     // only necessary for the example linting check, your project may not need
@@ -23,6 +22,6 @@
     "skipLibCheck": false                                 /* Skip type checking all .d.ts files. */
   },
 
-  "include": ["src", "types"],
+  "include": ["src", "packages"],
   "exclude": ["scripts", "node_modules"]
 }

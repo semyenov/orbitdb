@@ -14,7 +14,7 @@ interface LevelStorageOptions {
 	valueEncoding?: string;
 }
 
-interface StorageComposed {
+interface ComposedStorageInstance {
 	put(hash: string, data: any): Promise<void>;
 	get(hash: string): Promise<any>;
 	del(hash: string): Promise<void>;
@@ -22,13 +22,15 @@ interface StorageComposed {
 	clear(): Promise<void>;
 	merge(other: Storage): Promise<void>;
 }
+declare function ComposedStorage(storage1: Storage, storage2: Storage): Promise<ComposedStorageInstance>
 
-interface StorageIPFS {
+interface IPFSBlockStorageInstance {
 	get(hash: string): Promise<Uint8Array>;
 	put(hash: string, value: any): Promise<void>;
 }
+declare function IPFSBlockStorage(options: IPFSBlockStorageOptions): Promise<IPFSBlockStorageInstance>
 
-interface StorageLRU {
+interface LRUStorageInstance {
 	put(hash: string, data: any): Promise<void>;
 	get(hash: string): Promise<any>;
 	del(hash: string): Promise<void>;
@@ -36,8 +38,9 @@ interface StorageLRU {
 	merge(other: Storage): Promise<void>;
 	clear(): Promise<void>;
 }
+declare function LRUStorage(options?: LRUStorageOptions): Promise<LRUStorageInstance>
 
-interface StorageLevel {
+interface LevelStorageInstance {
 	put(hash: string, data: any): Promise<void>;
 	get(hash: string): Promise<any>;
 	del(hash: string, data: any): Promise<void>;
@@ -45,8 +48,9 @@ interface StorageLevel {
 	clear(): Promise<void>;
 	iterator(): AsyncGenerator<[string, any]>;
 }
+declare function LevelStorage(options?: LevelStorageOptions): Promise<LevelStorageInstance>
 
-interface StorageMemory {
+interface MemoryStorageInstance {
 	put(hash: string, data: any): Promise<void>;
 	get(hash: string): Promise<any>;
 	del(hash: string): Promise<void>;
@@ -54,35 +58,32 @@ interface StorageMemory {
 	iterator(): AsyncGenerator<[string, any]>;
 	clear(): Promise<void>;
 }
+declare function MemoryStorage(): Promise<MemoryStorageInstance>
 
-declare function ComposedStorage(storage1: Storage, storage2: Storage): Promise<StorageComposed>
-declare function IPFSBlockStorage(options: IPFSBlockStorageOptions): Promise<StorageIPFS>
-declare function LRUStorage(options?: LRUStorageOptions): Promise<StorageLRU>
-declare function LevelStorage(options?: LevelStorageOptions): Promise<StorageLevel>
-declare function MemoryStorage(): Promise<StorageMemory>
+type Storage = ComposedStorageInstance | IPFSBlockStorageInstance | LRUStorageInstance | LevelStorageInstance | MemoryStorageInstance
 
-type Storage = StorageComposed | StorageIPFS | StorageLRU | StorageLevel | StorageMemory
 interface StorageTypeMap {
-	composed: StorageComposed;
-	ipfs: StorageIPFS;
-	lru: StorageLRU;
-	level: StorageLevel;
-	memory: StorageMemory;
+	composed: ComposedStorageInstance;
+	ipfs: IPFSBlockStorageInstance;
+	lru: LRUStorageInstance;
+	level: LevelStorageInstance;
+	memory: MemoryStorageInstance;
 }
 type StorageType = keyof StorageTypeMap;
 
 export {
 	Storage,
-	StorageComposed,
-	StorageIPFS,
-	StorageLRU,
-	StorageLevel,
-	StorageMemory,
+	ComposedStorageInstance as StorageComposed,
+	IPFSBlockStorageInstance as StorageIPFS,
+	LRUStorageInstance as StorageLRU,
+	LevelStorageInstance as StorageLevel,
+	MemoryStorageInstance as StorageMemory,
+	StorageType,
+	StorageTypeMap,
+
 	MemoryStorage,
 	LevelStorage,
 	LRUStorage,
 	IPFSBlockStorage,
 	ComposedStorage,
-	StorageType,
-	StorageTypeMap
 }

@@ -5,18 +5,19 @@ import { AccessControllerTypeMap, AccessControllerType } from "./access-controll
 
 export interface LogOptions<T, A extends AccessControllerType = 'ipfs'> {
   logId?: string;
-  logHeads?: Entry<T>[];
+  logHeads?: LogEntry<T>[];
   access?: AccessControllerTypeMap[A];
-  entries?: Entry<T>[];
+  entries?: LogEntry<T>[];
   entryStorage?: Storage;
   headsStorage?: Storage;
   indexStorage?: Storage;
-  sortFn?: (a: Entry<T>, b: Entry<T>) => number;
+  sortFn?: (a: LogEntry<T>, b: LogEntry<T>) => number;
 }
 
-export interface Entry<T> {
+export interface LogEntry<T = unknown> {
   id: string;
   payload: T;
+  hash: string;
   next: string[];
   refs: string[];
   clock: Clock;
@@ -24,6 +25,23 @@ export interface Entry<T> {
   key: string;
   identity: string;
   sig: string;
+}
+
+export namespace Entry {
+  function create<T>(
+    identity: any,
+    id: string,
+    payload: any,
+    clock?: any,
+    next?: Array<string | LogEntry<T>>,
+    refs?: Array<string | LogEntry<T>>
+  ): Promise<LogEntry<T>>
+
+  function verify<T>(identities: any, entry: LogEntry<T>): Promise<boolean>
+  function isEntry(obj: unknown): boolean
+  function isEqual<T>(a: LogEntry<T>, b: LogEntry<T>): boolean
+  function decode<T>(bytes: Uint8Array): Promise<LogEntry<T>>
+  function encode<T>(entry: LogEntry<T>): Promise<LogEntry<T>>
 }
 
 export interface Clock {
@@ -52,16 +70,16 @@ export interface LogInstance<T, A extends AccessControllerType = 'ipfs'> {
   storage: Storage;
 
   clock(): Promise<Clock>;
-  heads(): Promise<Entry<T>[]>;
-  values(): Promise<Entry<T>[]>;
-  all(): Promise<Entry<T>[]>;
-  get(hash: string): Promise<Entry<T> | undefined>;
+  heads(): Promise<LogEntry<T>[]>;
+  values(): Promise<LogEntry<T>[]>;
+  all(): Promise<LogEntry<T>[]>;
+  get(hash: string): Promise<LogEntry<T> | undefined>;
   has: (hash: string) => Promise<boolean>
-  append(payload: T, options?: { referencesCount: number }): Promise<Entry<T>>;
+  append(payload: T, options?: { referencesCount: number }): Promise<LogEntry<T>>;
   join(log: LogInstance<unknown>): Promise<void>;
-  joinEntry(entry: Entry<T>): Promise<void>;
-  traverse(): AsyncGenerator<Entry<T>>;
-  iterator(options?: OptionsIterator): AsyncIterable<Entry<T>>;
+  joinEntry(entry: LogEntry<T>): Promise<void>;
+  traverse(): AsyncGenerator<LogEntry<T>>;
+  iterator(options?: OptionsIterator): AsyncIterable<LogEntry<T>>;
   clear(): Promise<void>;
   close(): Promise<void>;
 }

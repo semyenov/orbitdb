@@ -3,25 +3,21 @@ import { rimraf } from 'rimraf'
 import { existsSync } from 'fs'
 import { copy } from 'fs-extra'
 import Path from 'path'
-import { Database, Entry, KeyStore, Identities } from '@orbitdb/core'
-import LevelStorage from '../src/storage/level.js'
-import MemoryStorage from '../src/storage/memory.js'
+import { Database, Entry, KeyStore, Identities, LevelStorage, MemoryStorage } from '@orbitdb/core'
 import testKeysPath from './fixtures/test-keys-path.js'
 import createHelia from './utils/create-helia.js'
-import { IPFS } from '@orbitdb/core/'
-import { IdentitiesInstance, IdentityInstance } from '@orbitdb/core/identities.js'
-import { Documents, OrbitDBInstance } from '@orbitdb/core'
+import { after, afterEach, before, beforeEach, describe, it } from 'node:test'
 
 const keysPath = './testkeys'
 
 describe('Database', function () {
   this.timeout(30000)
 
-  let ipfs: IPFS
-  let keystore: KeyStore
-  let identities: IdentitiesInstance
-  let testIdentity: IdentityInstance
-  let db: Documents
+  let ipfs
+  let keystore
+  let identities
+  let testIdentity
+  let db
 
   const databaseId = 'database-AAA'
 

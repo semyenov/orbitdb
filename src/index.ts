@@ -1,7 +1,7 @@
 import { fakerRU as faker } from "@faker-js/faker";
 import { startOrbitDB, stopOrbitDB, } from "./orbit";
 import { logger } from "./logger";
-import { IPFSAccessController, OrbitDBAccessController } from '../types/orbitdb__core'
+import { IPFSAccessController, OrbitDBAccessController } from '@orbitdb/core'
 // import {userA, userB, identities} from './create-users'
 
 // const users = [userA, userB]
@@ -19,13 +19,11 @@ const orbitdb = await startOrbitDB({
     directory: dbDir,
 })
 
-const accessController = OrbitDBAccessController({
-    write: ['*']
-})
+const accessController = await OrbitDBAccessController({ write: ['*'] })
 orbitdb.ipfs.libp2p.logger = logger
 // logger.log('orbitDb',orbitdb.ipfs.libp2p.logger)
 // Open a database
-const db = await orbitdb.open<{ test: string }, 'documents', 'orbitdb'>(dbName, { type: "documents", AccessController: accessController });
+const db = await orbitdb.open<'documents', { _id: string; test: string }, 'orbitdb'>(dbName, { type: "documents", AccessController: accessController });
 logger.log("address", db.address);
 
 // Listen for updates
@@ -37,9 +35,8 @@ db.events.on(
 db.events.on('join', (peerId, heads) => {
     // db.access?.grant('write', peerId.)
     logger.log('join', peerId)
-
 });
-db.events.on("drop", (peerId, heads) => logger.log("drop", peerId));
+db.events.on("drop", () => logger.log("drop"));
 
 while (true) {
     const opt = await logger.prompt('Enter a command: ', {
@@ -63,7 +60,7 @@ while (true) {
         case 'put':
             const _id = await logger.prompt('Enter key: ', { type: 'text' })
             const value = await logger.prompt('Enter value: ', { type: 'text' })
-            await db.put({ _id, value });
+            await db.put({ _id, test: value });
             break;
         case 'all':
             const all = await db.all();
@@ -119,53 +116,3 @@ async function generate(size: number, chunkSize: number = 1000) {
     logger.info("time", `took ${(1000 / time / size).toFixed(2)}op/sec average`);
 }
 
-
-import * as crypto from '@libp2p/crypto';
-const unmarshal = crypto.keys.supportedKeys.secp256k1.unmarshalSecp256k1PrivateKey
-const unmarshalPubKey = crypto.keys.supportedKeys.secp256k1.unmarshalSecp256k1PublicKey
-
-const createKey = async (id: string) => {
-    if (!id) {
-        throw new Error('id needed to create a key')
-    }
-    // Generate a private key
-    const keyPair = await crypto.keys.generateKeyPair('secp256k1')
-    const keys = await crypto.keys.unmarshalPrivateKey(keyPair.bytes)
-    keys.public.marshal()
-    const key = {
-        publicKey: keys.public.marshal(),
-        privateKey: keys.marshal()
-    }
-    await addKey(id, key)
-    return keys
-}
-
-const addKey = async (id, key) => {
-    const { privateKey } = key
-    await storage.put('private_' + id, privateKey)
-    // Unmarshal the key and add it to the cache
-    const unmarshaledPrivateKey = unmarshal(privateKey)
-    await keyCache.put(id, unmarshaledPrivateKey)
-}
-
-const getKey = async (id) => {
-    if (!id) {
-        throw new Error('id needed to get a key')
-    }
-    let key = await keyCache.get(id)
-    if (!key) {
-        let storedKey
-        try {
-            storedKey = await storage.get('private_' + id)
-        } catch (e) {
-            // ignore ENOENT error
-        }
-        if (!storedKey) {
-            return
-        }
-        const key = unmarshal(storedKey)
-        key.
-        await keyCache.put(id, key)
-    }
-    return key
-}

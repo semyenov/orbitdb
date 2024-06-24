@@ -1,4 +1,4 @@
-import { Entry } from "./log";
+import { LogEntry } from "./log";
 import { Storage } from "./storage";
 
 interface AccessControllerTypeMap {
@@ -14,7 +14,7 @@ interface AccessControllerOptions {
 }
 
 interface IPFSAccessControllerInstance {
-  canAppend(entry: Entry<unknown>): Promise<boolean>;
+  canAppend(entry: LogEntry<unknown>): Promise<boolean>;
 }
 
 interface OrbitDBAccessControllerInstance extends IPFSAccessControllerInstance {

@@ -1,5 +1,5 @@
 import { bitswap } from "@helia/block-brokers";
-import { createOrbitDB, CreateOrbitDBOptions, OrbitDBInstance } from "../types/orbitdb__core";
+import { createOrbitDB, CreateOrbitDBOptions, OrbitDBInstance } from "../packages/orbitdb__core";
 import { LevelBlockstore } from "blockstore-level";
 import { spyOn } from "tinyspy";
 
@@ -38,10 +38,9 @@ export async function startOrbitDB({
   });
 }
 
-export async function stopOrbitDB(orbitdb: OrbitDBInstance<any, any, any>): Promise<void> {
+export async function stopOrbitDB(orbitdb: OrbitDBInstance): Promise<void> {
   await orbitdb.stop();
   await orbitdb.ipfs.stop();
-  await orbitdb.ipfs.blockstore.unwrap().unwrap().child.db.close();
 
   logger.debug("orbitdb stopped", spied.calls, spied.returns);
 }
