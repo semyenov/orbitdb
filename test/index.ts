@@ -3,7 +3,7 @@ import { rimraf } from 'rimraf'
 import { existsSync } from 'fs'
 import { copy } from 'fs-extra'
 import Path from 'path'
-import { Database, Entry, Keystore, Identities, LevelStorage, MemoryStorage } from '@orbitdb/core'
+import { Database, Entry, KeyStore, Identities, LevelStorage, MemoryStorage } from '@orbitdb/core'
 import testKeysPath from './fixtures/test-keys-path.js'
 import createHelia from './utils/create-helia.js'
 import { after, afterEach, before, beforeEach, describe, it } from 'node:test'
@@ -31,7 +31,7 @@ describe('Database', function () {
   before(async () => {
     ipfs = await createHelia()
     await copy(testKeysPath, keysPath)
-    keystore = await Keystore({ path: keysPath })
+    keystore = await KeyStore({ path: keysPath })
     identities = await Identities({ keystore })
     testIdentity = await identities.createIdentity({ id: 'userA' })
   })

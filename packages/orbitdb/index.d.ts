@@ -21,12 +21,16 @@ import {
 import {
 	AccessControllerTypeMap,
 	AccessControllerType,
-	OrbitDBAccessController
+	OrbitDBAccessController,
+	IPFSAccessControllerInstance,
+	OrbitDBAccessControllerInstance,
+	IPFSAccessController,
+	useAccessController
 } from "./access-controller";
 
 import {
 	KeyStoreInstance,
-	Keystore,
+	KeyStore,
 	Secp256k1PrivateKey,
 	PrivateKeys,
 
@@ -36,7 +40,6 @@ import {
 
 import {Database, DatabaseInstance} from "./database";
 import {ComposedStorage, Storage} from "./storage";
-import {IPFSAccessController} from './access-controller'
 import {OrbitDBAddress, parseAddress, isValidAddress} from './utils';
 
 import {
@@ -52,7 +55,6 @@ import {
 
 import {LogEntry, Log, Entry} from './log';
 import {IPFSBlockStorage, LRUStorage, LevelStorage, MemoryStorage} from './storage';
-import {useAccessController} from './access-controller';
 
 type OrbitDBOpenOptions<D extends DatabaseType, T, A extends AccessControllerType> = {
 	type?: D;
@@ -99,13 +101,16 @@ export {
 
 	ComposedStorage,
 	Database,
-	IPFSAccessController as DefaultAccessController,
 	Documents,
 	Events,
+
+	// Access Controller
+	IPFSAccessControllerInstance,
+	OrbitDBAccessControllerInstance,
 	IPFSAccessController,
 	IPFSBlockStorage,
 
-	// Identity,
+	// Identity
 	Identities,
 	Identity,
 	isEqual,
@@ -118,8 +123,8 @@ export {
 	IdentityOptions,
 	IdentityInstance,
 
-	// KeyStore,
-	Keystore,
+	// KeyStore
+	KeyStore,
 	signMessage,
 	verifyMessage,
 	KeyStoreInstance,
@@ -130,8 +135,8 @@ export {
 	KeyValueIndexed,
 
 	// Log
-	Entry,
 	Log,
+	Entry,
 	LogEntry,
 
 	// IPFS

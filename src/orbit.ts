@@ -12,35 +12,35 @@ let spied;
 
 const isBrowser = () => typeof window !== "undefined";
 export async function startOrbitDB({
-  id,
-  identity,
-  identities,
-  directory = ".",
+	id,
+	identity,
+	identities,
+	directory = ".",
 }: Omit<CreateOrbitDBOptions, 'ipfs'>) {
-  const options = isBrowser()
-    ? DefaultLibp2pBrowserOptions
-    : DefaultLibp2pOptions;
+	const options = isBrowser()
+		? DefaultLibp2pBrowserOptions
+		: DefaultLibp2pOptions;
 
-  const ipfs = await createHelia({
-    libp2p: await createLibp2p({ ...options }),
-    blockstore: new LevelBlockstore(`${directory}/ipfs/blocks`),
-    blockBrokers: [bitswap()],
-  });
+	const ipfs = await createHelia({
+		libp2p: await createLibp2p({ ...options }),
+		blockstore: new LevelBlockstore(`${directory}/ipfs/blocks`),
+		blockBrokers: [bitswap()],
+	});
 
-  spied = spyOn(ipfs, "start");
+	spied = spyOn(ipfs, "start");
 
-  return createOrbitDB({
-    id,
-    identity,
-    identities,
-    directory,
-    ipfs,
-  });
+	return createOrbitDB({
+		id,
+		identity,
+		identities,
+		directory,
+		ipfs,
+	});
 }
 
 export async function stopOrbitDB(orbitdb: OrbitDBInstance): Promise<void> {
-  await orbitdb.stop();
-  await orbitdb.ipfs.stop();
+	await orbitdb.stop();
+	await orbitdb.ipfs.stop();
 
-  logger.debug("orbitdb stopped", spied.calls, spied.returns);
+	logger.debug("orbitdb stopped", spied.calls, spied.returns);
 }

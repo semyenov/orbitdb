@@ -1,9 +1,25 @@
 import { strictEqual, deepStrictEqual, notStrictEqual } from 'assert'
 import { rimraf } from 'rimraf'
-import OrbitDB from '../../src/orbitdb.js'
-import Keystore from '../../src/key-store.js'
-import Identities from '../../src/identities/identities.js'
-import OrbitDBAccessController from '../../src/access-controllers/orbitdb.js'
+
+
+import {
+	after,
+	afterEach,
+	before,
+	beforeEach,
+	describe,
+	it
+} from "node:test";
+
+import {
+	OrbitDBAccessControllerInstance,
+	OrbitDBAccessController,
+	IdentityInstance,
+	Identities,
+	KeyStore,
+	createOrbitDB as OrbitDB, IPFS, OrbitDBInstance, IdentitiesInstance, LogEntry,
+} from "@orbitdb/core"
+
 import connectPeers from '../utils/connect-nodes.js'
 import createHelia from '../utils/create-helia.js'
 
@@ -11,16 +27,16 @@ const dbPath1 = './orbitdb/tests/orbitdb-access-controller/1'
 const dbPath2 = './orbitdb/tests/orbitdb-access-controller/2'
 
 describe('OrbitDBAccessController', function () {
-  let ipfs1, ipfs2
-  let orbitdb1, orbitdb2
-  let identities1, identities2, testIdentity1, testIdentity2
+  let ipfs1: IPFS, ipfs2: IPFS
+  let orbitdb1: OrbitDBInstance, orbitdb2: OrbitDBInstance
+  let identities1: IdentitiesInstance, identities2: IdentitiesInstance, testIdentity1: IdentityInstance, testIdentity2: IdentityInstance
 
   before(async () => {
     [ipfs1, ipfs2] = await Promise.all([createHelia(), createHelia()])
     await connectPeers(ipfs1, ipfs2)
 
-    const keystore1 = await Keystore({ path: dbPath1 + '/keys' })
-    const keystore2 = await Keystore({ path: dbPath2 + '/keys' })
+    const keystore1 = await KeyStore({ path: dbPath1 + '/keys' })
+    const keystore2 = await KeyStore({ path: dbPath2 + '/keys' })
 
     identities1 = await Identities({ ipfs: ipfs1, keystore: keystore1 })
     identities2 = await Identities({ ipfs: ipfs2, keystore: keystore2 })
@@ -71,7 +87,7 @@ describe('OrbitDBAccessController', function () {
     })
 
     it('sets default capabilities', async () => {
-      const expected = []
+      const expected : Record<string, any> = []
       expected.admin = new Set([testIdentity1.id])
 
       deepStrictEqual(await accessController.capabilities(), expected)
@@ -89,7 +105,7 @@ describe('OrbitDBAccessController', function () {
   })
 
   describe('grant', function () {
-    let accessController
+    let accessController: OrbitDBAccessControllerInstance
 
     before(async () => {
       accessController = await OrbitDBAccessController()({ orbitdb: orbitdb1, identities: identities1, address: 'testdb/add' })
@@ -97,12 +113,12 @@ describe('OrbitDBAccessController', function () {
 
     it('adds a capability', async () => {
       try {
-        await accessController.grant('write', testIdentity1.id)
+				await accessController.grant('write', testIdentity1.id)
       } catch (e) {
         strictEqual(e, null)
       }
 
-      const expected = []
+      const expected : Record<string, any> = []
       expected.admin = new Set([testIdentity1.id])
       expected.write = new Set([testIdentity1.id])
       deepStrictEqual(await accessController.capabilities(), expected)
@@ -116,12 +132,12 @@ describe('OrbitDBAccessController', function () {
         strictEqual(e, null)
       }
 
-      const expected = []
+      const expected : Record<string, any> = []
       expected.admin = new Set([testIdentity1.id])
       expected.write = new Set([testIdentity1.id])
       expected.read = new Set(['ABCD'])
       expected.delete = new Set(['ABCD'])
-
+			console.log('capabilities', await accessController.capabilities())
       deepStrictEqual(await accessController.capabilities(), expected)
     })
 
@@ -148,11 +164,11 @@ describe('OrbitDBAccessController', function () {
 
       const mockEntry1 = {
         identity: testIdentity1.hash
-      }
+      } as LogEntry
 
       const mockEntry2 = {
         identity: testIdentity2.hash
-      }
+      } as LogEntry
 
       const canAppend1 = await accessController.canAppend(mockEntry1)
 
@@ -180,7 +196,7 @@ describe('OrbitDBAccessController', function () {
         strictEqual(e, null)
       }
 
-      const expected = []
+      const expected : Record<string, any> = []
       expected.admin = new Set([testIdentity1.id])
       expected.write = new Set([testIdentity1.id])
 
@@ -194,7 +210,7 @@ describe('OrbitDBAccessController', function () {
         strictEqual(e, null)
       }
 
-      const expected = []
+      const expected : Record<string, any> = []
       expected.admin = new Set([testIdentity1.id])
 
       deepStrictEqual(await accessController.capabilities(), expected)
@@ -207,7 +223,7 @@ describe('OrbitDBAccessController', function () {
         strictEqual(e, null)
       }
 
-      const expected = []
+      const expected : Record<string, any> = []
       expected.admin = new Set([testIdentity1.id])
 
       deepStrictEqual(await accessController.capabilities(), expected)
@@ -224,11 +240,12 @@ describe('OrbitDBAccessController', function () {
         strictEqual(e, null)
       }
 
-      const expected = []
+      const expected : Record<string, any> = []
       expected.admin = new Set([testIdentity1.id])
       expected.write = new Set([testIdentity1.id])
       expected.read = new Set(['ABCD'])
       expected.delete = new Set(['ABCD'])
+			console.log("expected!!", expected)
 
       deepStrictEqual(await accessController.capabilities(), expected)
     })

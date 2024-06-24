@@ -28,13 +28,13 @@ interface KeyStoreInstance {
 }
 
 
-declare function Keystore(options?: KeyStoreOptions): Promise<KeyStoreInstance>;
+declare function KeyStore(options?: KeyStoreOptions): Promise<KeyStoreInstance>;
 
 declare function verifyMessage(signature: string, publicKey: string, data: string | Uint8Array): Promise<boolean>;
 declare function signMessage(key: Secp256k1PrivateKey, data: string | Uint8Array): Promise<string>;
 
 export {
-  Keystore,
+  KeyStore,
   KeyStoreOptions,
   KeyObject,
   KeyStoreInstance,

@@ -12,7 +12,7 @@ import {
 import { rimraf } from 'rimraf'
 
 import {
-	Keystore,
+	KeyStore,
 	Identities,
 	IPFSAccessController,
 	IPFS,
@@ -37,8 +37,8 @@ describe('IPFSAccessController', function () {
     [ipfs1, ipfs2] = await Promise.all([createHelia(), createHelia()])
     await connectPeers(ipfs1, ipfs2)
 
-    keystore1 = await Keystore({ path: dbPath1 + '/keys' })
-    keystore2 = await Keystore({ path: dbPath2 + '/keys' })
+    keystore1 = await KeyStore({ path: dbPath1 + '/keys' })
+    keystore2 = await KeyStore({ path: dbPath2 + '/keys' })
 
     identities1 = await Identities({ keystore: keystore1 })
     identities2 = await Identities({ keystore: keystore2 })

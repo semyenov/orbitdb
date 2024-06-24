@@ -11,7 +11,7 @@ import {
 	getIdentityProvider,
 	Identity,
 	PublicKeyIdentityProvider,
-	Keystore,
+	KeyStore,
 	signMessage,
 	verifyMessage,
 	IdentitiesInstance,
@@ -87,7 +87,7 @@ describe('Identities', function () {
 		})
 
 		it('Passes in an identity provider', async () => {
-			const keystore = await Keystore({ path: keysPath })
+			const keystore = await KeyStore({ path: keysPath })
 			identities = await Identities({ keystore })
 			const provider = PublicKeyIdentityProvider({ keystore })
 			identity = await identities.createIdentity({ id, provider })
@@ -110,7 +110,7 @@ describe('Identities', function () {
 		let keystore: KeyStoreInstance
 
 		before(async () => {
-			keystore = await Keystore({ path: keysPath })
+			keystore = await KeyStore({ path: keysPath })
 			identities = await Identities({ keystore })
 		})
 
@@ -175,7 +175,7 @@ describe('Identities', function () {
 		let savedKeysKeyStore: KeyStoreInstance
 
 		before(async () => {
-			savedKeysKeyStore = await Keystore({ path: keysPath })
+			savedKeysKeyStore = await KeyStore({ path: keysPath })
 
 			identities = await Identities({ keystore: savedKeysKeyStore })
 			identity = await identities.createIdentity({ id })
@@ -226,7 +226,7 @@ describe('Identities', function () {
 		let keystore: KeyStoreInstance
 
 		before(async () => {
-			keystore = await Keystore({ path: keysPath })
+			keystore = await KeyStore({ path: keysPath })
 		})
 
 		after(async () => {
@@ -265,7 +265,7 @@ describe('Identities', function () {
 		let keystore: KeyStoreInstance
 
 		before(async () => {
-			keystore = await Keystore({ path: keysPath })
+			keystore = await KeyStore({ path: keysPath })
 			identities = await Identities({ keystore })
 		})
 
@@ -291,7 +291,7 @@ describe('Identities', function () {
 		let keystore: KeyStoreInstance
 
 		before(async () => {
-			keystore = await Keystore({ path: keysPath })
+			keystore = await KeyStore({ path: keysPath })
 			identities = await Identities({ keystore })
 			identity = await identities.createIdentity({ id })
 		})
@@ -334,7 +334,7 @@ describe('Identities', function () {
 		let signature: string
 
 		before(async () => {
-			keystore = await Keystore({ path: keysPath })
+			keystore = await KeyStore({ path: keysPath })
 		})
 
 		after(async () => {
