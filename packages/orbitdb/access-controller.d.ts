@@ -27,7 +27,7 @@ interface OrbitDBAccessControllerInstance extends IPFSAccessControllerInstance {
   revoke(capability: string, key: string): Promise<void>;
 }
 
-declare function IPFSAccessController(options: AccessControllerOptions): Promise<IPFSAccessControllerInstance>;
+declare function IPFSAccessController(options?: AccessControllerOptions): Promise<IPFSAccessControllerInstance>;
 declare function OrbitDBAccessController(options: Pick<AccessControllerOptions, 'write'>): Promise<OrbitDBAccessControllerInstance>;
 
 declare function useAccessController(accessController: { type: AccessControllerType }): void;

@@ -26,7 +26,7 @@ import {
 
 import {
 	KeyStoreInstance,
-	KeyStore,
+	Keystore,
 	Secp256k1PrivateKey,
 	PrivateKeys,
 
@@ -119,7 +119,7 @@ export {
 	IdentityInstance,
 
 	// KeyStore,
-	KeyStore,
+	Keystore,
 	signMessage,
 	verifyMessage,
 	KeyStoreInstance,

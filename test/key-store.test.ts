@@ -8,7 +8,7 @@ import {
 	signMessage,
 	verifyMessage,
 	LevelStorage,
-	KeyStore,
+	Keystore,
 	Secp256k1PrivateKey,
 	KeyStoreInstance,
 	PrivateKeys
@@ -33,7 +33,7 @@ describe('KeyStore', () => {
     let id
 
     beforeEach(async () => {
-      keystore = await KeyStore()
+      keystore = await Keystore()
 
       id = 'key1'
       await keystore.createKey(id)
@@ -178,7 +178,7 @@ describe('KeyStore', () => {
         await storage.put('public_key1', publicKeyBuffer)
         await storage.close()
 
-        keystore = await KeyStore()
+        keystore = await Keystore()
       })
 
       afterEach(async () => {
@@ -201,7 +201,7 @@ describe('KeyStore', () => {
         await storage.put('private_key2', privateKeyBuffer)
         await storage.put('public_key2', publicKeyBuffer)
 
-        keystore = await KeyStore({ storage })
+        keystore = await Keystore({ storage })
       })
 
       afterEach(async () => {
@@ -225,7 +225,7 @@ describe('KeyStore', () => {
         await storage.put('public_key3', publicKeyBuffer)
         await storage.close()
 
-        keystore = await KeyStore({ path: keysPath })
+        keystore = await Keystore({ path: keysPath })
       })
 
       afterEach(async () => {
@@ -245,7 +245,7 @@ describe('KeyStore', () => {
   describe('Using keys for signing and verifying', () => {
     beforeEach(async () => {
       await copy(testKeysPath, keysPath)
-      keystore = await KeyStore({ path: keysPath })
+      keystore = await Keystore({ path: keysPath })
       // For creating test keys fixtures (level) database
       // const identities = await Identities({ keystore })
       // const a = await identities.createIdentity({ id: 'userA' })

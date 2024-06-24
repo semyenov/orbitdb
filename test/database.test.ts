@@ -16,7 +16,7 @@ import {
 import {
 	Database,
 	Entry,
-	KeyStore,
+	Keystore,
 	Identities,
 	LevelStorage,
 	MemoryStorage,
@@ -54,7 +54,7 @@ describe('Database', function () {
   before(async () => {
     ipfs = await createHelia()
     await copy(testKeysPath, keysPath)
-    keystore = await KeyStore({ path: keysPath })
+    keystore = await Keystore({ path: keysPath })
     identities = await Identities({ keystore })
     testIdentity = await identities.createIdentity({ id: 'userA' })
   })

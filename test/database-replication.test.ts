@@ -4,7 +4,7 @@ import { copy } from 'fs-extra'
 
 import {
 	Database,
-	KeyStore,
+	Keystore,
 	Identities,
 	ComposedStorage,
 	IPFSBlockStorage,
@@ -48,7 +48,7 @@ describe('Database - Replication', function () {
     await connectPeers(ipfs1, ipfs2)
 
     await copy(testKeysPath, keysPath)
-    keystore = await KeyStore({ path: keysPath })
+    keystore = await Keystore({ path: keysPath })
     identities = await Identities({ keystore })
     testIdentity1 = await identities.createIdentity({ id: 'userA' })
     testIdentity2 = await identities.createIdentity({ id: 'userB' })
