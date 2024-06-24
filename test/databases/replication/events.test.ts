@@ -1,8 +1,19 @@
 import { deepStrictEqual } from 'assert'
 import { rimraf } from 'rimraf'
 import { copy } from 'fs-extra'
-import { KeyStore, Identities } from '../../../src/index.js'
-import Events from '../../../src/databases/events.js'
+
+import {
+	KeyStore,
+	Identities,
+	Events,
+	IPFS,
+	KeyStoreInstance,
+	IdentitiesInstance,
+	IdentityInstance,
+	DocumentsDoc,
+	DocumentsInstance, EventsInstance, EventsDoc
+} from '@orbitdb/core'
+
 import testKeysPath from '../../fixtures/test-keys-path.js'
 import connectPeers from '../../utils/connect-nodes.js'
 import waitFor from '../../utils/wait-for.js'
@@ -21,11 +32,11 @@ const keysPath = './testkeys'
 describe('Events Database Replication', function () {
   this.timeout(30000)
 
-  let ipfs1, ipfs2
-  let keystore
-  let identities
-  let testIdentity1, testIdentity2
-  let db1, db2
+  let ipfs1: IPFS, ipfs2: IPFS
+  let keystore: KeyStoreInstance
+  let identities: IdentitiesInstance
+  let testIdentity1: IdentityInstance, testIdentity2: IdentityInstance
+  let db1: EventsInstance, db2: EventsInstance
 
   const databaseId = 'events-AAA'
 
@@ -82,18 +93,18 @@ describe('Events Database Replication', function () {
     if (db1) {
       await db1.drop()
       await db1.close()
-      db1 = null
+      db1 = null as unknown as EventsInstance
     }
     if (db2) {
       await db2.drop()
       await db2.close()
-      db2 = null
+      db2 = null as unknown as EventsInstance
     }
   })
 
   it('replicates a database', async () => {
     let replicated = false
-    let expectedEntryHash = null
+    let expectedEntryHash: string | null = null
 
     const onConnected = (peerId, heads) => {
       replicated = expectedEntryHash !== null && heads.map(e => e.hash).includes(expectedEntryHash)
@@ -127,7 +138,7 @@ describe('Events Database Replication', function () {
 
     await waitFor(() => replicated, () => true)
 
-    const all2 = []
+    const all2: EventsDoc[] = []
     for await (const event of db2.iterator()) {
       all2.unshift(event)
     }
@@ -139,7 +150,7 @@ describe('Events Database Replication', function () {
 
   it('loads the database after replication', async () => {
     let replicated = false
-    let expectedEntryHash = null
+    let expectedEntryHash: string | null = null
 
     const onConnected = (peerId, heads) => {
       replicated = expectedEntryHash !== null && heads.map(e => e.hash).includes(expectedEntryHash)
@@ -175,13 +186,13 @@ describe('Events Database Replication', function () {
 
     await db1.drop()
     await db1.close()
-    db1 = null
+    db1 = null as unknown as EventsInstance
 
     await db2.close()
 
     db2 = await Events()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
 
-    const all2 = []
+    const all2: EventsDoc[] = []
     for await (const event of db2.iterator()) {
       all2.unshift(event)
     }

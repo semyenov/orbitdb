@@ -17,9 +17,9 @@ interface CreateAccessControllerOptions {
 
 interface IPFSAccessControllerInstance {
 	canAppend(entry: LogEntry<unknown>): Promise<boolean>;
-	type: AccessControllerType;
-	address: string;
-	write: string[];
+	type?: AccessControllerType;
+	address?: string;
+	write?: string[];
 }
 
 interface OrbitDBAccessControllerInstance extends IPFSAccessControllerInstance {
@@ -45,9 +45,11 @@ interface AccessControllerOptions {
 	address?: string,
 }
 
-declare function IPFSAccessController(options?: CreateAccessControllerOptions): (options: AccessControllerOptions) => Promise<IPFSAccessControllerInstance>;
+declare function IPFSAccessController(options?: CreateAccessControllerOptions):
+	(options: AccessControllerOptions) => Promise<IPFSAccessControllerInstance>;
 
-declare function OrbitDBAccessController(options?: Pick<CreateAccessControllerOptions, 'write'>):(options: AccessControllerOptions) =>  Promise<OrbitDBAccessControllerInstance>;
+declare function OrbitDBAccessController(options?: Pick<CreateAccessControllerOptions, 'write'>):
+	(options: AccessControllerOptions) =>  Promise<OrbitDBAccessControllerInstance>;
 
 declare function useAccessController(accessController: { type: AccessControllerType }): void;
 

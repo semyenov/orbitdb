@@ -18,7 +18,9 @@ import {
 	IPFS,
 	KeyStoreInstance,
 	IdentitiesInstance,
-	IdentityInstance, DatabaseInstance
+	IdentityInstance,
+	DocumentsDoc,
+	DocumentsInstance
 } from '@orbitdb/core'
 
 import testKeysPath from '../../fixtures/test-keys-path.js'
@@ -35,7 +37,7 @@ describe('Documents Database Replication', function () {
   let keystore: KeyStoreInstance
   let identities: IdentitiesInstance
   let testIdentity1: IdentityInstance, testIdentity2: IdentityInstance
-  let db1: DatabaseInstance<any>, db2: DatabaseInstance<any>
+  let db1: DocumentsInstance, db2: DocumentsInstance
 
   const databaseId = 'documents-AAA'
 
@@ -117,12 +119,12 @@ describe('Documents Database Replication', function () {
     await waitFor(() => connected1, () => true)
     await waitFor(() => connected2, () => true)
 
-    const all1 = []
+    const all1: DocumentsDoc[] = []
     for await (const item of db1.iterator()) {
       all1.unshift(item)
     }
 
-    const all2 = []
+    const all2: DocumentsDoc[] = []
     for await (const item of db2.iterator()) {
       all2.unshift(item)
     }

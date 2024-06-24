@@ -1,8 +1,17 @@
 import { deepStrictEqual } from 'assert'
 import { rimraf } from 'rimraf'
 import { copy } from 'fs-extra'
-import { KeyStore, Identities } from '../../../src/index.js'
-import KeyValue from '../../../src/databases/keyvalue.js'
+import {
+	KeyStore,
+	Identities,
+	KeyValue,
+	IPFS,
+	KeyStoreInstance,
+	IdentitiesInstance,
+	IdentityInstance,
+	DocumentsDoc,
+	DocumentsInstance, KeyValueInstance, KeyValueDoc
+} from '@orbitdb/core'
 import testKeysPath from '../../fixtures/test-keys-path.js'
 import connectPeers from '../../utils/connect-nodes.js'
 import waitFor from '../../utils/wait-for.js'
@@ -21,11 +30,11 @@ import {
 describe('KeyValue Database Replication', function () {
   this.timeout(30000)
 
-  let ipfs1, ipfs2
-  let keystore
-  let identities
-  let testIdentity1, testIdentity2
-  let kv1, kv2
+  let ipfs1: IPFS, ipfs2: IPFS
+  let keystore: KeyStoreInstance
+  let identities: IdentitiesInstance
+  let testIdentity1: IdentityInstance, testIdentity2: IdentityInstance
+  let kv1: KeyValueInstance, kv2: KeyValueInstance
 
   const databaseId = 'kv-AAA'
 
@@ -80,7 +89,7 @@ describe('KeyValue Database Replication', function () {
 
   it('replicates a database', async () => {
     let replicated = false
-    let expectedEntryHash = null
+    let expectedEntryHash: string | null = null
 
     const onConnected = (peerId, heads) => {
       replicated = expectedEntryHash !== null && heads.map(e => e.hash).includes(expectedEntryHash)
@@ -126,7 +135,7 @@ describe('KeyValue Database Replication', function () {
     const value9 = await kv1.get('empty')
     deepStrictEqual(value9, undefined)
 
-    const all2 = []
+    const all2: KeyValueDoc[] = []
     for await (const keyValue of kv2.iterator()) {
       all2.push(keyValue)
     }
@@ -135,7 +144,7 @@ describe('KeyValue Database Replication', function () {
       { key: 'init', value: true }
     ])
 
-    const all1 = []
+    const all1: KeyValueDoc[] = []
     for await (const keyValue of kv1.iterator()) {
       all1.push(keyValue)
     }
@@ -147,7 +156,7 @@ describe('KeyValue Database Replication', function () {
 
   it('loads the database after replication', async () => {
     let replicated = false
-    let expectedEntryHash = null
+    let expectedEntryHash: string | null = null
 
     const onConnected = (peerId, heads) => {
       replicated = expectedEntryHash !== null && heads.map(e => e.hash).includes(expectedEntryHash)
@@ -199,7 +208,7 @@ describe('KeyValue Database Replication', function () {
     const value9 = await kv1.get('empty')
     deepStrictEqual(value9, undefined)
 
-    const all2 = []
+    const all2: KeyValueDoc[]  = []
     for await (const keyValue of kv2.iterator()) {
       all2.push(keyValue)
     }
@@ -208,7 +217,7 @@ describe('KeyValue Database Replication', function () {
       { key: 'init', value: true }
     ])
 
-    const all1 = []
+    const all1: KeyValueDoc[] = []
     for await (const keyValue of kv1.iterator()) {
       all1.push(keyValue)
     }

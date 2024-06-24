@@ -50,7 +50,15 @@ import {
 	Events,
 	KeyValue,
 	KeyValueIndexed,
-	useDatabaseType
+	useDatabaseType,
+	DocumentsInstance,
+	DocumentsDoc,
+	EventsInstance,
+	EventsDoc,
+	KeyValueIndexedInstance,
+	KeyValueInstance,
+	KeyValueDoc,
+
 } from './databases';
 
 import {LogEntry, Log, Entry} from './log';
@@ -101,8 +109,17 @@ export {
 
 	ComposedStorage,
 	Database,
+
+	// Databases
 	Documents,
 	Events,
+	DocumentsInstance,
+	DocumentsDoc,
+	EventsInstance,
+	EventsDoc,
+	KeyValueIndexedInstance,
+	KeyValueInstance,
+	KeyValueDoc,
 
 	// Access Controller
 	IPFSAccessControllerInstance,
