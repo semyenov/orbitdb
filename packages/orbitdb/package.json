@@ -1,7 +1,6 @@
 {
   "private": true,
   "name": "@types/orbitdb__core",
-  "packageManager": "yarn@4.2.2",
-  "types": "orbitdb.d.ts",
-  "main": "",
+  "types": "index.d.ts",
+  "version": "2.2.0"
 }

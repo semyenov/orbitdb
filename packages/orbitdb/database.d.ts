@@ -5,7 +5,7 @@ import { PeerId } from '@libp2p/interface'
 
 import { AccessControllerTypeMap, AccessControllerType } from './access-controller';
 import { IdentityInstance } from './identities';
-import { Entry, LogInstance } from "./log";
+import { LogEntry, LogInstance } from "./log";
 import { DatabaseEvents } from "./events";
 import { SyncInstance } from "./sync";
 import { Storage } from './storage';
@@ -16,7 +16,7 @@ interface DatabaseOptions<T, A extends keyof AccessControllerTypeMap = 'ipfs'> {
   identity?: IdentityInstance;
   address?: string;
   name?: string;
-  access?: AccessControllerTypeMap[A];
+  accessController?: AccessControllerTypeMap[A];
   directory?: string;
   meta?: any;
   headsStorage?: Storage;
@@ -24,10 +24,10 @@ interface DatabaseOptions<T, A extends keyof AccessControllerTypeMap = 'ipfs'> {
   indexStorage?: Storage;
   referencesCount?: number;
   syncAutomatically?: boolean;
-  onUpdate?: (entry: Entry<T>) => void;
+  onUpdate?: (entry: LogEntry<T>) => void;
 }
 
-declare function Database<T, A extends AccessControllerType = 'ipfs'>(options: DatabaseOptions<T, A>): DatabaseInstance<T, A>;
+declare function Database<T, A extends AccessControllerType = 'ipfs'>(options: DatabaseOptions<T, A>): Promise<DatabaseInstance<T, A>>;
 
 interface DatabaseInstance<T, A extends AccessControllerType = 'ipfs'> {
   access?: AccessControllerTypeMap[A];

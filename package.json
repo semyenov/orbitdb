@@ -21,8 +21,10 @@
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
     "@types/events": "^3",
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.12.13",
     "@types/orbitdb__core": "workspace:^",
+    "@types/rimraf": "^4.0.5",
     "esbuild": "^0.21.4",
     "eslint": "^9.3.0",
     "events": "^3.3.0",
@@ -39,8 +41,5 @@
     "consola": "^3.2.3",
     "helia": "^4.2.3",
     "libp2p": "^1.6.0"
-  },
-  "workspaces": [
-    "packages/*"
-  ]
+  }
 }
