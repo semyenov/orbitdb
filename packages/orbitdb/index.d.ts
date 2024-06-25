@@ -1,14 +1,12 @@
-import { PeerId } from "@libp2p/interface";
-
-import { IPFS } from "./ipfs";
-import { IdentitiesInstance, IdentityInstance } from "./identities";
-import {
+import type { IPFS, PeerId } from "./ipfs";
+import type { IdentitiesInstance, IdentityInstance } from "./identities";
+import type {
   AccessController,
   AccessControllerInstance,
 } from "./access-controller";
-import { KeyStoreInstance } from "./key-store";
-import { StorageInstance } from "./storage";
-import { DatabaseType, DatabaseTypeMap } from "./databases";
+import type { KeyStoreInstance } from "./key-store";
+import type { StorageInstance } from "./storage";
+import type { DatabaseType, DatabaseTypeMap } from "./databases";
 
 interface OrbitDBOpenOptions<T, D extends DatabaseType> {
   type?: D;
@@ -52,6 +50,8 @@ declare function OrbitDB(options: CreateOrbitDBOptions): OrbitDBInstance;
 export type { CreateOrbitDBOptions, OrbitDBInstance, OrbitDBOpenOptions };
 
 export { OrbitDB as createOrbitDB };
+
+export type { IPFS, PeerId } from "./ipfs";
 
 export {
   KeyStore,

@@ -1,10 +1,10 @@
-import * as crypto from "@libp2p/crypto";
+import type { keys } from "@libp2p/crypto";
 import type { PrivateKey } from "@libp2p/interface";
 
 import type { StorageInstance } from "./storage";
 
-type PrivateKeys = PrivateKey<crypto.keys.KeyTypes>;
-type Secp256k1PrivateKey = crypto.keys.Secp256k1PrivateKey;
+type PrivateKeys = PrivateKey<keys.KeyTypes>;
+type Secp256k1PrivateKey = keys.Secp256k1PrivateKey;
 
 interface KeyStoreOptions {
   storage?: StorageInstance;

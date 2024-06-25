@@ -1,7 +1,7 @@
-import { LogEntry } from "./log";
-import { StorageInstance } from "./storage";
-import { IdentitiesInstance, OrbitDBInstance } from "./index";
-import { DatabaseEvents } from "./events";
+import type { LogEntry } from "./log";
+import type { StorageInstance } from "./storage";
+import type { IdentitiesInstance, OrbitDBInstance } from "./index";
+import type { DatabaseEvents } from "./events";
 
 interface CreateAccessControllerOptions {
   write?: string[];

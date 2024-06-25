@@ -25,7 +25,7 @@ interface LogEntry<T = unknown> {
   sig: string;
 }
 
-declare namespace Entry {
+export namespace Entry {
   function create<T>(
     identity: IdentityInstance,
     id: string,
@@ -100,7 +100,6 @@ declare function Log<T>(
 
 export type {
   Clock,
-  Entry,
   LogAppendOptions,
   LogEntry,
   LogInstance,

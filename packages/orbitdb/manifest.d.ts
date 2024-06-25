@@ -1,6 +1,6 @@
-import { StorageInstance } from "./storage";
-import { IPFS } from "./ipfs";
-import { DatabaseType } from "./databases";
+import type { StorageInstance } from "./storage";
+import type { IPFS } from "./ipfs";
+import type { DatabaseType } from "./databases";
 
 interface Manifest {
   name: string;
