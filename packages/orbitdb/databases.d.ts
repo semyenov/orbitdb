@@ -1,16 +1,17 @@
-import { StorageInstance } from './storage';
+import { StorageInstance } from "./storage";
 import { DatabaseInstance } from "./database";
-import { AccessControllerInstance } from './access-controller';
-import { IdentitiesInstance, IdentityInstance, IPFS, OrbitDBInstance } from "./index";
+import { AccessControllerInstance } from "./access-controller";
+import { IdentitiesInstance, IdentityInstance } from "./index";
+import { IPFS } from "./ipfs";
 
 interface DatabaseOptions {
-  ipfs?: IPFS,
-  identity?: IdentityInstance,
-  address?: string,
-  orbitdb?: OrbitDBInstance,
-  identities?: IdentitiesInstance,
-  accessController?: AccessControllerInstance,
-  directory?: string,
+  ipfs?: IPFS;
+  identity?: IdentityInstance;
+  address?: string;
+  orbitdb?: OrbitDBInstance;
+  identities?: IdentitiesInstance;
+  accessController?: AccessControllerInstance;
+  directory?: string;
 }
 
 interface DocumentsDoc<T = unknown> {
@@ -28,43 +29,46 @@ interface DocumentsIteratorOptions {
 }
 
 interface DocumentsInstance<T = unknown> extends DatabaseInstance<T> {
-  type: 'documents';
+  type: "documents";
 
   all(): Promise<DocumentsDoc<T>[]>;
   del(key: string): Promise<string>;
   get(key: string): Promise<DocumentsDoc<T> | null>;
-  iterator(filters?: DocumentsIteratorOptions): AsyncGenerator<DocumentsDoc<T>, string>;
+  iterator(
+    filters?: DocumentsIteratorOptions,
+  ): AsyncGenerator<DocumentsDoc<T>, string>;
   put(doc: T): Promise<string>;
   query(findFn: (doc: T) => boolean): Promise<T[]>;
 }
 
-declare function Documents<T>(options?: DocumentsOptions<T>):
-  (options: DatabaseOptions) => Promise<DocumentsInstance<T>>;
+declare function Documents<T>(
+  options?: DocumentsOptions<T>,
+): (options: DatabaseOptions) => Promise<DocumentsInstance<T>>;
 
 interface EventsDoc<T = unknown> {
   key: string;
   value: T;
 }
 
-type EventsIteratorOptions = {
+interface EventsIteratorOptions {
   gt?: string;
   gte?: string;
   lt?: string;
   lte?: string;
   amount?: number;
-};
+}
 
 interface EventsInstance<T = unknown> extends DatabaseInstance<T> {
-  type: 'events';
+  type: "events";
 
   add(value: T): Promise<string>;
-  all(): Promise<Omit<KeyValueDoc<T>, 'key'>[]>;
+  all(): Promise<Omit<KeyValueDoc<T>, "key">[]>;
   get(hash: string): Promise<T | null>;
   iterator(options?: EventsIteratorOptions): AsyncGenerator<EventsDoc<T>>;
 }
-
-declare function Events<T>():
-  (options: DatabaseOptions) => Promise<EventsInstance<T>>;
+declare function Events<T>(): (
+  options: DatabaseOptions,
+) => Promise<EventsInstance<T>>;
 
 interface KeyValueDoc<T = unknown> {
   hash: string;
@@ -72,23 +76,25 @@ interface KeyValueDoc<T = unknown> {
   value: T;
 }
 
-type KeyValueIteratorOptions = {
+interface KeyValueIteratorOptions {
   amount?: number;
 }
 
 interface KeyValueInstance<T = unknown> extends DatabaseInstance<T> {
-  type: 'keyvalue';
+  type: "keyvalue";
 
   all(): Promise<KeyValueDoc<T>[]>;
   set(key: string, value: T): Promise<string>;
   del(key: string): Promise<void>;
   get(key: string): Promise<T | null>;
-  iterator(filters?: KeyValueIteratorOptions): AsyncGenerator<KeyValueDoc<T>, string>;
+  iterator(
+    filters?: KeyValueIteratorOptions,
+  ): AsyncGenerator<KeyValueDoc<T>, string>;
   put(key: string, value: T): Promise<string>;
 }
-
-declare function KeyValue<T>():
-  (options: DatabaseOptions) => Promise<KeyValueInstance<T>>;
+declare function KeyValue<T>(): (
+  options: DatabaseOptions,
+) => Promise<KeyValueInstance<T>>;
 
 interface DatabaseTypeMap<T = unknown> {
   documents: DocumentsInstance<T>;
@@ -98,15 +104,15 @@ interface DatabaseTypeMap<T = unknown> {
 
 type DatabaseType = keyof DatabaseTypeMap;
 
-interface KeyValueIndexedInstance<T = unknown> extends KeyValueInstance<T> {
-}
+interface KeyValueIndexedInstance<T = unknown> extends KeyValueInstance<T> {}
 
 interface KeyValueIndexedOptions {
-  storage?: StorageInstance
+  storage?: StorageInstance;
 }
 
-declare function KeyValueIndexed<T>(options?: KeyValueIndexedOptions):
-  (options: DatabaseOptions) => Promise<KeyValueIndexedInstance<T>>;
+declare function KeyValueIndexed<T>(
+  options?: KeyValueIndexedOptions,
+): (options: DatabaseOptions) => Promise<KeyValueIndexedInstance<T>>;
 
 interface DatabasesFunctionTypeMap<T> {
   documents: typeof Documents<T>;
@@ -116,34 +122,28 @@ interface DatabasesFunctionTypeMap<T> {
 
 type DatabaseFunctionType = keyof DatabasesFunctionTypeMap<any>;
 
-declare function useDatabaseType<D extends DatabaseFunctionType, T>(database: DatabasesFunctionTypeMap<T>[D] & {
-  type: T
-}): void;
-
-export {
-  DatabaseType,
-  DatabaseTypeMap,
-
-  DocumentsDoc,
-  DocumentsOptions,
-  DocumentsIteratorOptions,
-  DocumentsInstance,
-  Documents,
-
-  KeyValueDoc,
-  KeyValueIteratorOptions,
-  KeyValueInstance,
-  KeyValue,
-
-  KeyValueIndexedInstance,
-  KeyValueIndexed,
-
-  EventsDoc,
-  EventsIteratorOptions,
-  EventsInstance,
-  Events,
-
+export type {
   DatabaseFunctionType,
   DatabasesFunctionTypeMap,
-  useDatabaseType,
-}
+  DatabaseType,
+  DatabaseTypeMap,
+  DocumentsDoc,
+  DocumentsInstance,
+  DocumentsIteratorOptions,
+  DocumentsOptions,
+  EventsDoc,
+  EventsInstance,
+  EventsIteratorOptions,
+  KeyValueDoc,
+  KeyValueIndexedInstance,
+  KeyValueInstance,
+  KeyValueIteratorOptions,
+};
+
+export { Documents, Events, KeyValue, KeyValueIndexed };
+
+export function useDatabaseType<D extends DatabaseFunctionType, T>(
+  database: DatabasesFunctionTypeMap<T>[D] & {
+    type: T;
+  },
+): void;

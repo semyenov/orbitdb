@@ -1,4 +1,4 @@
-import { KeyStore, KeyStoreInstance } from "./key-store";
+import { KeyStoreInstance } from "./key-store";
 import { StorageInstance } from "./storage";
 import { IPFS } from "./ipfs";
 
@@ -12,11 +12,14 @@ interface IdentityInstance {
   type: string;
   hash?: string;
   bytes?: Uint8Array;
+
   sign?: (data: any) => Promise<string>;
   verify?: (data: any, signature: string) => Promise<boolean>;
 }
 
-declare function Identity(identity: IdentityInstance): Promise<IdentityInstance>;
+declare function Identity(
+  identity: IdentityInstance,
+): Promise<IdentityInstance>;
 
 interface OptionsIdentityProvider {
   keystore: KeyStoreInstance;
@@ -43,7 +46,9 @@ interface IdentitiesOptions {
   storage?: StorageInstance;
 }
 
-declare function PublicKeyIdentityProvider(options: Pick<IdentityOptions, 'keystore'>): () => Promise<IdentityProviderInstance>;
+declare function PublicKeyIdentityProvider(
+  options: Pick<IdentityOptions, "keystore">,
+): () => Promise<IdentityProviderInstance>;
 
 interface IdentityOptions {
   id?: string;
@@ -52,38 +57,42 @@ interface IdentityOptions {
 }
 
 interface IdentitiesInstance {
-  (options?: IdentitiesOptions): Promise<IdentitiesInstance>
+  (options?: IdentitiesOptions): Promise<IdentitiesInstance>;
   createIdentity: (options?: IdentityOptions) => Promise<IdentityInstance>;
   getIdentity: (id: string) => Promise<IdentityInstance>;
   verifyIdentity: (identity: IdentityInstance) => Promise<boolean>;
   keystore: KeyStoreInstance;
-  sign: (identities: IdentityInstance, data: string, keystore: KeyStoreInstance) => Promise<string>;
-  verify: (signature: string, publickey: string, data: string) => Promise<boolean>;
+  sign: (
+    identities: IdentityInstance,
+    data: string,
+    keystore: KeyStoreInstance,
+  ) => Promise<string>;
+  verify: (
+    signature: string,
+    publickey: string,
+    data: string,
+  ) => Promise<boolean>;
 }
-declare function Identities(options?: IdentitiesOptions): Promise<IdentitiesInstance>;
+declare function Identities(
+  options?: IdentitiesOptions,
+): Promise<IdentitiesInstance>;
 
-declare function getIdentityProvider(type: string): IdentityProviderInstance;
-declare function useIdentityProvider(identityProvider: IdentityProvider): void;
-declare function isEqual(identity1: IdentityInstance, identity2: IdentityInstance): boolean;
-declare function isIdentity(identity: any): boolean;
-declare function decodeIdentity(bytes: Uint8Array): Promise<IdentityInstance>;
+export function getIdentityProvider(type: string): IdentityProviderInstance;
+export function useIdentityProvider(identityProvider: IdentityProvider): void;
+export function isEqual(
+  identity1: IdentityInstance,
+  identity2: IdentityInstance,
+): boolean;
+export function isIdentity(identity: any): boolean;
+export function decodeIdentity(bytes: Uint8Array): Promise<IdentityInstance>;
 
-export {
-  IdentityOptions,
-  IdentityInstance,
-  Identity,
-
-  IdentitiesOptions,
+export type {
   IdentitiesInstance,
-  Identities,
-
+  IdentitiesOptions,
+  IdentityInstance,
+  IdentityOptions,
   IdentityProvider,
   IdentityProviderInstance,
-  PublicKeyIdentityProvider,
+};
 
-  useIdentityProvider,
-  getIdentityProvider,
-  decodeIdentity,
-  isIdentity,
-  isEqual,
-}
+export { Identities, Identity, PublicKeyIdentityProvider };

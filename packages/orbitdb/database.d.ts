@@ -1,15 +1,15 @@
 // Type definitions for OrbitDB Database Module
 // Project: https://api.orbitdb.org/module-Database.html
 
-import { PeerId } from '@libp2p/interface'
+import { PeerId } from "@libp2p/interface";
 
-import { AccessControllerInstance } from './access-controller';
-import { IdentityInstance } from './identities';
+import { AccessControllerInstance } from "./access-controller";
+import { IdentityInstance } from "./identities";
 import { LogEntry, LogInstance } from "./log";
 import { DatabaseEvents } from "./events";
 import { SyncInstance } from "./sync";
-import { StorageInstance } from './storage';
-import { IPFS } from './ipfs';
+import { StorageInstance } from "./storage";
+import { IPFS } from "./ipfs";
 
 interface DatabaseOptions<T> {
   ipfs: IPFS;
@@ -27,7 +27,9 @@ interface DatabaseOptions<T> {
   onUpdate?: (entry: LogEntry<T>) => void;
 }
 
-declare function Database<T>(options: DatabaseOptions<T>): Promise<DatabaseInstance<T>>;
+declare function Database<T>(
+  options: DatabaseOptions<T>,
+): Promise<DatabaseInstance<T>>;
 
 interface DatabaseInstance<T> {
   name?: string;
@@ -48,8 +50,6 @@ interface DatabaseInstance<T> {
   drop(): Promise<void>;
 }
 
-export {
-  DatabaseOptions,
-  DatabaseInstance,
-  Database,
-};
+export type { DatabaseInstance, DatabaseOptions };
+
+export { Database };

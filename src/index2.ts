@@ -1,31 +1,33 @@
 import { fakerRU as faker } from "@faker-js/faker";
-import { startOrbitDB, stopOrbitDB, } from "./orbit";
+import { startOrbitDB, stopOrbitDB } from "./orbit";
 import { logger } from "./logger";
-
 
 // Get DB name and directory from command line
 const dbName = process.argv[2] || "my-database";
 const dbDir = process.argv[3] || "./orbitdb";
 
-const dbId = process.argv[4] || "zdpuAsxVFKAoY6z8LnLsUtTKkGB4deEcXmhyAEbwkefaLsXR6";
+const dbId = process.argv[4] ||
+  "zdpuAsxVFKAoY6z8LnLsUtTKkGB4deEcXmhyAEbwkefaLsXR6";
 
 // Create OrbitDB instance
 const orbitdb = await startOrbitDB({
   id: dbId,
   directory: dbDir,
-})
+});
 
 interface IUser {
   _id: string;
   firstName: string;
   lastName: string;
-  email: string
+  email: string;
 }
 
 // orbitdb.ipfs.libp2p.logger = logger
 // logger.log('orbitDb',orbitdb.ipfs.libp2p.logger)
 // Open a database
-const db = await orbitdb.open<IUser, 'documents'>(dbName, { type: "documents" });
+const db = await orbitdb.open<IUser, "documents">(dbName, {
+  type: "documents",
+});
 logger.log("address", db.address);
 
 // Listen for updates
@@ -34,7 +36,7 @@ db.events.on(
   ({ id, hash, payload: { key, op } }) =>
     logger.log("onupdate", { id, hash, op, key }),
 );
-db.events.on('join', (peerId, heads) => logger.log('join', peerId));
+db.events.on("join", (peerId, heads) => logger.log("join", peerId));
 db.events.on("drop", () => logger.log("drop"));
 
 // Add some data

@@ -1,5 +1,9 @@
 import { bitswap } from "@helia/block-brokers";
-import { createOrbitDB, CreateOrbitDBOptions, OrbitDBInstance } from "@orbitdb/core";
+import {
+  createOrbitDB,
+  CreateOrbitDBOptions,
+  OrbitDBInstance,
+} from "@orbitdb/core";
 import { LevelBlockstore } from "blockstore-level";
 
 import { createHelia } from "helia";
@@ -15,7 +19,7 @@ export async function startOrbitDB({
   identity,
   identities,
   directory = ".",
-}: Omit<CreateOrbitDBOptions, 'ipfs'>) {
+}: Omit<CreateOrbitDBOptions, "ipfs">) {
   const options = isBrowser()
     ? DefaultLibp2pBrowserOptions
     : DefaultLibp2pOptions;

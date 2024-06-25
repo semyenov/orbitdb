@@ -5,12 +5,7 @@ interface OrbitDBAddress {
   toString: () => string;
 }
 
-declare function isValidAddress(address: OrbitDBAddress | string): boolean;
-declare function parseAddress(address: OrbitDBAddress | string): OrbitDBAddress;
+export type { OrbitDBAddress };
 
-export {
-  OrbitDBAddress,
-
-  isValidAddress,
-  parseAddress,
-}
+export function isValidAddress(address: OrbitDBAddress | string): boolean;
+export function parseAddress(address: OrbitDBAddress | string): OrbitDBAddress;

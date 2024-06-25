@@ -1,65 +1,14 @@
 import { PeerId } from "@libp2p/interface";
 
-import { IPFS } from './ipfs';
-
+import { IPFS } from "./ipfs";
+import { IdentitiesInstance, IdentityInstance } from "./identities";
 import {
-  Identities,
-  IdentityInstance,
-  IdentitiesInstance,
-  useIdentityProvider,
-  Identity,
-  isEqual,
-  decodeIdentity,
-  isIdentity,
-  getIdentityProvider,
-  PublicKeyIdentityProvider,
-  IdentityProviderInstance,
-  IdentityProvider,
-  IdentityOptions,
-} from './identities';
-
-import {
-  OrbitDBAccessController,
+  AccessController,
   AccessControllerInstance,
-  OrbitDBAccessControllerInstance,
-  IPFSAccessController,
-  useAccessController,
-  AccessController
 } from "./access-controller";
-
-import {
-  KeyStoreInstance,
-  KeyStore,
-  Secp256k1PrivateKey,
-  PrivateKeys,
-
-  signMessage,
-  verifyMessage
-} from "./key-store";
-
-import { Database, DatabaseOptions, DatabaseInstance } from "./database";
-import { ComposedStorage, StorageInstance } from "./storage";
-import { OrbitDBAddress, parseAddress, isValidAddress } from './utils';
-
-import {
-  DatabaseType,
-  DatabaseTypeMap,
-  Documents,
-  Events,
-  KeyValue,
-  KeyValueIndexed,
-  useDatabaseType,
-  DocumentsInstance,
-  DocumentsDoc,
-  EventsInstance,
-  EventsDoc,
-  KeyValueIndexedInstance,
-  KeyValueInstance,
-  KeyValueDoc,
-} from './databases';
-
-import { LogEntry, Log, Entry } from './log';
-import { IPFSBlockStorage, LRUStorage, LevelStorage, MemoryStorage } from './storage';
+import { KeyStoreInstance } from "./key-store";
+import { StorageInstance } from "./storage";
+import { DatabaseType, DatabaseTypeMap } from "./databases";
 
 type OrbitDBOpenOptions<T, D extends DatabaseType> = {
   type?: D;
@@ -73,6 +22,14 @@ type OrbitDBOpenOptions<T, D extends DatabaseType> = {
   entryStorage?: StorageInstance;
   indexStorage?: StorageInstance;
   referencesCount?: number;
+};
+
+interface CreateOrbitDBOptions {
+  id?: string;
+  ipfs: IPFS;
+  identity?: IdentityInstance;
+  identities?: IdentitiesInstance;
+  directory?: string;
 }
 
 interface OrbitDBInstance {
@@ -83,99 +40,77 @@ interface OrbitDBInstance {
   identity: IdentityInstance;
   peerId: PeerId;
 
-  open<T, D extends DatabaseType>(address: string, options?: OrbitDBOpenOptions<T, D>): Promise<DatabaseTypeMap<T>[D]>;
+  open<T, D extends DatabaseType>(
+    address: string,
+    options?: OrbitDBOpenOptions<T, D>,
+  ): Promise<DatabaseTypeMap<T>[D]>;
   stop(): Promise<void>;
 }
 
-interface CreateOrbitDBOptions {
-  id?: string;
-  ipfs: IPFS;
-  identity?: IdentityInstance
-  identities?: IdentitiesInstance;
-  directory?: string;
-}
-
-declare function createOrbitDB(options: CreateOrbitDBOptions): OrbitDBInstance;
+declare function OrbitDB(options: CreateOrbitDBOptions): OrbitDBInstance;
+export { OrbitDB as createOrbitDB };
 
 export {
-  OrbitDBAddress,
-  CreateOrbitDBOptions,
-  OrbitDBOpenOptions,
-  OrbitDBInstance,
-
-  DatabaseOptions,
-  DatabaseInstance,
-  Database,
-
-  // Databases
-  DocumentsDoc,
-  DocumentsInstance,
-  Documents,
-
-  EventsDoc,
-  EventsInstance,
-  Events,
-
-  KeyValueDoc,
-  KeyValueInstance,
-  KeyValue,
-
-  KeyValueIndexedInstance,
-  KeyValueIndexed,
-
-  // Access Controllers
-  OrbitDBAccessControllerInstance,
-  OrbitDBAccessController,
-
-  AccessControllerInstance as IPFSAccessControllerInstance,
-  IPFSAccessController,
-
-  // Identity
-  IdentityProviderInstance,
-  IdentityProvider,
-  IdentityOptions,
-
-  IdentitiesInstance,
-  Identities,
-
-  IdentityInstance,
-  Identity,
-
-  PublicKeyIdentityProvider,
-
-  // KeyStore
+  KeyStore,
+  KeyStoreInstance,
   PrivateKeys,
   Secp256k1PrivateKey,
-  KeyStoreInstance,
-  KeyStore,
-
-  // Log
-  Entry,
-  LogEntry,
-  Log,
-
-  // IPFS
-  IPFS,
-
-  // Storage
-  StorageInstance,
-  ComposedStorage,
-  MemoryStorage,
-  LRUStorage,
-  LevelStorage,
-  IPFSBlockStorage,
-
-  // Utils
-  createOrbitDB,
-  parseAddress,
-  isValidAddress,
-  useDatabaseType,
-  useAccessController,
-  useIdentityProvider,
-  getIdentityProvider,
-  decodeIdentity,
-  verifyMessage,
   signMessage,
-  isIdentity,
+  verifyMessage,
+} from "./key-store";
+
+export {
+  AccessController,
+  AccessControllerInstance,
+  IPFSAccessController,
+  OrbitDBAccessController,
+  OrbitDBAccessControllerInstance,
+  useAccessController,
+} from "./access-controller";
+
+export { Database, DatabaseInstance, DatabaseOptions } from "./database";
+
+export {
+  DatabaseType,
+  DatabaseTypeMap,
+  Documents,
+  DocumentsDoc,
+  DocumentsInstance,
+  Events,
+  EventsDoc,
+  EventsInstance,
+  KeyValue,
+  KeyValueDoc,
+  KeyValueIndexed,
+  KeyValueIndexedInstance,
+  KeyValueInstance,
+  useDatabaseType,
+} from "./databases";
+
+export {
+  decodeIdentity,
+  getIdentityProvider,
+  Identities,
+  IdentitiesInstance,
+  Identity,
+  IdentityInstance,
+  IdentityOptions,
+  IdentityProvider,
+  IdentityProviderInstance,
   isEqual,
-};
+  isIdentity,
+  PublicKeyIdentityProvider,
+  useIdentityProvider,
+} from "./identities";
+
+export { Entry, Log, LogEntry } from "./log";
+export {
+  ComposedStorage,
+  IPFSBlockStorage,
+  LevelStorage,
+  LRUStorage,
+  MemoryStorage,
+  StorageInstance,
+} from "./storage";
+
+export { isValidAddress, OrbitDBAddress, parseAddress } from "./utils";

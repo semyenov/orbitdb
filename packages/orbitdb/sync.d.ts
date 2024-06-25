@@ -1,6 +1,6 @@
 import { SyncEvents } from "./events";
 import { IPFS } from "./ipfs";
-import { LogEntry, Log, LogInstance } from "./log";
+import { Log, LogEntry, LogInstance } from "./log";
 import { PeerId } from "@libp2p/interface";
 
 interface SyncOptions<T> {
@@ -22,8 +22,6 @@ interface SyncInstance<T> {
 }
 declare function Sync<T>(options: SyncOptions<T>): Promise<SyncInstance<T>>;
 
-export {
-  SyncOptions,
-  SyncInstance,
-  Sync,
-}
+export type { SyncInstance, SyncOptions };
+
+export { Sync };
