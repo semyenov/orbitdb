@@ -2,7 +2,7 @@ import { build } from "esbuild";
 
 build({
   outdir: "./dist",
-  entryPoints: ["./src/index.ts"],
+  entryPoints: ["./src/logger.ts"],
   tsconfig: "./tsconfig.build.json",
   sourcemap: "linked",
   format: "esm",

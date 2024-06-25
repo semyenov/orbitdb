@@ -1,7 +1,8 @@
+import { nextTick, stdout } from "node:process";
+import { inspect } from "node:util";
+
 import c from "chalk";
-import { inspect } from "util";
-import { ConsolaReporter, createConsola } from "consola";
-import { nextTick, stdout } from "process";
+import { ConsolaOptions, ConsolaReporter, createConsola } from "consola";
 
 inspect.defaultOptions = {
   numericSeparator: true,
@@ -19,7 +20,7 @@ const accentMap = {
   success: c.bgGreen.white,
 } as const;
 
-const reporter: ConsolaReporter = {
+export const reporter: ConsolaReporter = {
   log(obj, { options: { formatOptions } }) {
     const [message, ...args] = obj.args;
     const compact = args.length === 0 || formatOptions.compact;
@@ -59,27 +60,31 @@ const reporter: ConsolaReporter = {
     nextTick(() => stdout.uncork());
   },
 };
+export const createCoolConsola = (options?: Partial<ConsolaOptions>) =>
+  createConsola({
+    reporters: [reporter],
+    throttle: 100,
+    throttleMin: 10,
 
-export const logger = createConsola({
-  reporters: [reporter],
-  throttle: 100,
-  throttleMin: 10,
+    formatOptions: {
+      columns: 1,
+      colors: true,
+      date: true,
+      compact: true,
+    },
 
-  formatOptions: {
-    columns: 1,
-    colors: true,
-    date: true,
-    compact: true,
-  },
+    defaults: {
+      tag: "cool:logger",
+    },
 
-  defaults: {
-    tag: "cool:logger",
-  },
-});
+    ...options,
+  });
 
-logger.debug("debug", { a: 1, b: 2 });
-logger.success("success", { test: true, test2: false });
-logger.info("info", { lorem: "ipsum", a: 1, b: 2 });
-logger.warn("warn", { foo: "bar", a: 1, b: 2 });
-logger.error("error", { test: "huest" });
-logger.log("log", { a: 1, b: 2 });
+export const logger = createCoolConsola();
+
+// logger.debug("debug", { a: 1, b: 2 });
+// logger.success("success", { test: true, test2: false });
+// logger.info("info", { lorem: "ipsum", a: 1, b: 2 });
+// logger.warn("warn", { foo: "bar", a: 1, b: 2 });
+// logger.error("error", { test: "huest" });
+// logger.log("log", { a: 1, b: 2 });
