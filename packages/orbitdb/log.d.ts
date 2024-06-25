@@ -9,7 +9,7 @@ interface Clock {
 }
 
 export namespace Entry {
-  export interface EntryInstance<T = unknown> {
+  export interface Instance<T = unknown> {
     id: string
     payload: {
       op: 'PUT' | 'DEL'
@@ -31,17 +31,17 @@ export namespace Entry {
     id: string,
     payload: any,
     clock?: any,
-    next?: Array<string | EntryInstance<T>>,
-    refs?: Array<string | EntryInstance<T>>,
-  ): Promise<EntryInstance<T>>
+    next?: Array<string | Instance<T>>,
+    refs?: Array<string | Instance<T>>,
+  ): Promise<Instance<T>>
   export function verify<T>(
     identities: IdentityInstance,
-    entry: EntryInstance<T>,
+    entry: Instance<T>,
   ): Promise<boolean>
   export function isEntry(obj: unknown): boolean
-  export function isEqual<T>(a: EntryInstance<T>, b: EntryInstance<T>): boolean
-  export function decode<T>(bytes: Uint8Array): Promise<EntryInstance<T>>
-  export function encode<T>(entry: EntryInstance<T>): Promise<Uint8Array>
+  export function isEqual<T>(a: Instance<T>, b: Instance<T>): boolean
+  export function decode<T>(bytes: Uint8Array): Promise<Instance<T>>
+  export function encode<T>(entry: Instance<T>): Promise<Uint8Array>
 }
 
 interface LogIteratorOptions {
@@ -56,13 +56,13 @@ interface LogAppendOptions {
 }
 interface LogOptions<T> {
   logId?: string
-  logHeads?: Entry.EntryInstance<T>[]
+  logHeads?: Entry.Instance<T>[]
   access?: AccessControllerInstance
-  entries?: Entry.EntryInstance<T>[]
+  entries?: Entry.Instance<T>[]
   entryStorage?: StorageInstance
   headsStorage?: StorageInstance
   indexStorage?: StorageInstance
-  sortFn?: (a: Entry.EntryInstance<T>, b: Entry.EntryInstance<T>) => number
+  sortFn?: (a: Entry.Instance<T>, b: Entry.Instance<T>) => number
 }
 interface LogInstance<T> {
   id: string
@@ -72,19 +72,19 @@ interface LogInstance<T> {
   storage: StorageInstance
 
   clock(): Promise<Clock>
-  heads(): Promise<Entry.EntryInstance<T>[]>
-  values(): Promise<Entry.EntryInstance<T>[]>
-  all(): Promise<Entry.EntryInstance<T>[]>
-  get(hash: string): Promise<Entry.EntryInstance<T> | undefined>
+  heads(): Promise<Entry.Instance<T>[]>
+  values(): Promise<Entry.Instance<T>[]>
+  all(): Promise<Entry.Instance<T>[]>
+  get(hash: string): Promise<Entry.Instance<T> | undefined>
   has: (hash: string) => Promise<boolean>
   append(
     payload: T,
     options?: LogAppendOptions,
-  ): Promise<Entry.EntryInstance<T>>
+  ): Promise<Entry.Instance<T>>
   join(log: LogInstance<T>): Promise<void>
-  joinEntry(entry: Entry.EntryInstance<T>): Promise<void>
-  traverse(): AsyncGenerator<Entry.EntryInstance<T>>
-  iterator(options?: LogIteratorOptions): AsyncIterable<Entry.EntryInstance<T>>
+  joinEntry(entry: Entry.Instance<T>): Promise<void>
+  traverse(): AsyncGenerator<Entry.Instance<T>>
+  iterator(options?: LogIteratorOptions): AsyncIterable<Entry.Instance<T>>
   clear(): Promise<void>
   close(): Promise<void>
 }

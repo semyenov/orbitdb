@@ -15,7 +15,7 @@ interface AccessControllerOptions {
 }
 
 interface AccessControllerInstance {
-  canAppend(entry: Entry.EntryInstance): Promise<boolean>
+  canAppend(entry: Entry.Instance): Promise<boolean>
 }
 
 interface AccessController<

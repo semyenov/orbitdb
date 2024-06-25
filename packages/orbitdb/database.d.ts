@@ -20,7 +20,7 @@ interface DatabaseOptions<T> {
   indexStorage?: StorageInstance
   referencesCount?: number
   syncAutomatically?: boolean
-  onUpdate?: (entry: Entry.EntryInstance<T>) => void
+  onUpdate?: (entry: Entry.Instance<T>) => void
 }
 interface DatabaseInstance<T> {
   name?: string
