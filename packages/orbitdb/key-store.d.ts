@@ -1,20 +1,15 @@
+import type { PrivateKeys, Secp256k1PrivateKey } from './ipfs'
 import type { StorageInstance } from './storage'
-import type { keys as CryptoKeys } from '@libp2p/crypto'
-import type { PrivateKey } from '@libp2p/interface'
-
-type PrivateKeys = PrivateKey<CryptoKeys.KeyTypes>
-type Secp256k1PrivateKey = CryptoKeys.Secp256k1PrivateKey
-
-interface KeyStoreOptions {
-  storage?: StorageInstance
-  path?: string
-}
 
 interface KeyObject {
   publicKey: Uint8Array
   privateKey: Uint8Array
 }
 
+interface KeyStoreOptions {
+  storage?: StorageInstance
+  path?: string
+}
 interface KeyStoreInstance {
   addKey(id: string, key: KeyObject): Promise<void>
   clear(): Promise<void>

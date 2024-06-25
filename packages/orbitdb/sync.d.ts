@@ -11,7 +11,6 @@ interface SyncOptions<T> {
 
   onSynced?: (peerId: PeerId, heads: LogEntry<T>[]) => void
 }
-
 interface SyncInstance<T> {
   events: SyncEvents<T>
   peers: Set<PeerId>

@@ -121,6 +121,7 @@ interface DatabaseTypeMap<T = unknown> {
 }
 
 type DatabaseType = keyof DatabaseTypeMap
+
 export type {
   DatabaseFunctionType,
   DatabasesFunctionTypeMap,

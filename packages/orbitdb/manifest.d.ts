@@ -13,13 +13,11 @@ interface ManifestStoreOptions {
   ipfs?: IPFS
   storage?: StorageInstance
 }
-
 interface ManifestStoreInstance {
   get(address: string): Promise<Manifest>
   create(manifest: Manifest): Promise<{ hash: string, manifest: Manifest }>
   close(): Promise<void>
 }
-
 declare function ManifestStore(
   options?: ManifestStoreOptions,
 ): Promise<ManifestStoreInstance>
