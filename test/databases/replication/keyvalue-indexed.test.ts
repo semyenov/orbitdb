@@ -184,20 +184,6 @@ describe("KeyValueIndexed Database Replication", function () {
     let replicated = false;
     let expectedEntryHash: string | null = null;
 
-    const onConnected = (peerId, heads) => {
-      replicated = expectedEntryHash !== null &&
-        heads.map((e) => e.hash).includes(expectedEntryHash);
-    };
-
-    const onUpdate = (entry) => {
-      replicated = expectedEntryHash !== null &&
-        entry.hash === expectedEntryHash;
-    };
-
-    const onError = (err) => {
-      console.error(err);
-    };
-
     kv1 = await KeyValueIndexed()({
       ipfs: ipfs1,
       identity: testIdentity1,
@@ -213,11 +199,21 @@ describe("KeyValueIndexed Database Replication", function () {
       directory: "./orbitdb2",
     });
 
-    kv2.events.on("join", onConnected);
-    kv2.events.on("update", onUpdate);
+    kv2.events.on("join", (peerId, heads) => {
+      replicated = expectedEntryHash !== null &&
+        heads.map((e) => e.hash).includes(expectedEntryHash);
+    });
+    kv2.events.on("update", (entry) => {
+      replicated = expectedEntryHash !== null &&
+        entry.hash === expectedEntryHash;
+    });
 
-    kv2.events.on("error", onError);
-    kv1.events.on("error", onError);
+    kv2.events.on("error", (err) => {
+      console.error(err);
+    });
+    kv1.events.on("error", (err) => {
+      console.error(err);
+    });
 
     await kv1.set("init", true);
     await kv1.set("hello", "friend");

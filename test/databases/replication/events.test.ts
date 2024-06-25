@@ -12,6 +12,7 @@ import {
   IPFS,
   KeyStore,
   KeyStoreInstance,
+  LogEntry,
 } from "@orbitdb/core";
 
 import testKeysPath from "../../fixtures/test-keys-path.js";
@@ -34,7 +35,7 @@ describe("Events Database Replication", function () {
   const databaseId = "events-AAA";
 
   const accessController = {
-    canAppend: async (entry) => {
+    canAppend: async (entry: LogEntry) => {
       const identity = await identities.getIdentity(entry.identity);
       return identity.id === testIdentity1.id;
     },
@@ -99,16 +100,6 @@ describe("Events Database Replication", function () {
     let replicated = false;
     let expectedEntryHash: string | null = null;
 
-    const onConnected = (peerId, heads) => {
-      replicated = expectedEntryHash !== null &&
-        heads.map((e) => e.hash).includes(expectedEntryHash);
-    };
-
-    const onUpdate = (entry) => {
-      replicated = expectedEntryHash !== null &&
-        entry.hash === expectedEntryHash;
-    };
-
     const onError = (err) => {
       console.error(err);
     };
@@ -128,8 +119,14 @@ describe("Events Database Replication", function () {
       directory: "./orbitdb2",
     });
 
-    db2.events.on("join", onConnected);
-    db2.events.on("update", onUpdate);
+    db2.events.on("join", (peerId, heads) => {
+      replicated = expectedEntryHash !== null &&
+        heads.map((e) => e.hash).includes(expectedEntryHash);
+    });
+    db2.events.on("update", (entry) => {
+      replicated = expectedEntryHash !== null &&
+        entry.hash === expectedEntryHash;
+    });
 
     db2.events.on("error", onError);
     db1.events.on("error", onError);
@@ -159,20 +156,6 @@ describe("Events Database Replication", function () {
     let replicated = false;
     let expectedEntryHash: string | null = null;
 
-    const onConnected = (peerId, heads) => {
-      replicated = expectedEntryHash !== null &&
-        heads.map((e) => e.hash).includes(expectedEntryHash);
-    };
-
-    const onUpdate = (entry) => {
-      replicated = expectedEntryHash !== null &&
-        entry.hash === expectedEntryHash;
-    };
-
-    const onError = (err) => {
-      console.error(err);
-    };
-
     db1 = await Events()({
       ipfs: ipfs1,
       identity: testIdentity1,
@@ -188,11 +171,21 @@ describe("Events Database Replication", function () {
       directory: "./orbitdb2",
     });
 
-    db2.events.on("join", onConnected);
-    db2.events.on("update", onUpdate);
+    db2.events.on("join", (peerId, heads) => {
+      replicated = expectedEntryHash !== null &&
+        heads.map((e) => e.hash).includes(expectedEntryHash);
+    });
+    db2.events.on("update", (entry) => {
+      replicated = expectedEntryHash !== null &&
+        entry.hash === expectedEntryHash;
+    });
 
-    db2.events.on("error", onError);
-    db1.events.on("error", onError);
+    db2.events.on("error", (err) => {
+      console.error(err);
+    });
+    db1.events.on("error", (err) => {
+      console.error(err);
+    });
 
     await db1.add(expected[0]);
     await db1.add(expected[1]);

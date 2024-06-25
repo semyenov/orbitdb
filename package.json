@@ -19,19 +19,25 @@
     "packages/*"
   ],
   "devDependencies": {
+    "@eslint/js": "^9.5.0",
     "@faker-js/faker": "^8.4.1",
+    "@sozdev/eslint-config": "^0.0.11",
     "@types/events": "^3",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.12.13",
     "@types/orbitdb__core": "workspace:^",
     "@types/rimraf": "^4.0.5",
+    "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "@typescript-eslint/parser": "^7.14.1",
     "esbuild": "^0.21.4",
-    "eslint": "^9.3.0",
+    "eslint": "8.57.0",
     "events": "^3.3.0",
     "fs-extra": "^11.2.0",
+    "globals": "^15.6.0",
     "tinyspy": "^3.0.0",
     "tsx": "^4.11.0",
     "typescript": "^5.4.5",
+    "typescript-eslint": "^7.14.1",
     "util": "^0.12.5"
   },
   "dependencies": {
