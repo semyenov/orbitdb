@@ -1,26 +1,24 @@
-const type = "fake";
+const type = 'fake'
 
-const verifyIdentity = async (data) => {
-  return false;
-};
+async function verifyIdentity(data) {
+  return false
+}
 
-const FakeIdentityProvider = () => async () => {
-  const getId = () => {
-    return "pubKey";
-  };
+function FakeIdentityProvider() {
+  return async () => {
+    const getId = () => 'pubKey'
 
-  const signIdentity = (data) => {
-    return `false signature '${data}'`;
-  };
+    const signIdentity = data => `false signature '${data}'`
 
-  return {
-    getId,
-    signIdentity,
-    type,
-  };
-};
+    return {
+      getId,
+      signIdentity,
+      type,
+    }
+  }
+}
 
-FakeIdentityProvider.verifyIdentity = verifyIdentity;
-FakeIdentityProvider.type = type;
+FakeIdentityProvider.verifyIdentity = verifyIdentity
+FakeIdentityProvider.type = type
 
-export default FakeIdentityProvider;
+export default FakeIdentityProvider

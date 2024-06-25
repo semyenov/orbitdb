@@ -1,4 +1,6 @@
-const NoTypeIdentityProvider = () => async () => {
-};
+function NoTypeIdentityProvider() {
+  return async () => {
+  }
+}
 
-export default NoTypeIdentityProvider;
+export default NoTypeIdentityProvider

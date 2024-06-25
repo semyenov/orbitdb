@@ -1,454 +1,461 @@
-import assert from "assert";
-import { rimraf } from "rimraf";
-import { copy } from "fs-extra";
-import { toString as uint8ArrayToString } from "uint8arrays/to-string";
+import assert from 'node:assert'
 
 import {
-  getIdentityProvider,
   Identities,
-  IdentitiesInstance,
   Identity,
-  IdentityInstance,
-  IdentityOptions,
-  IdentityProvider,
   KeyStore,
-  KeyStoreInstance,
   PublicKeyIdentityProvider,
+  getIdentityProvider,
   signMessage,
   useIdentityProvider,
   verifyMessage,
-} from "@orbitdb/core";
-import testKeysPath from "../fixtures/test-keys-path";
-import CustomIdentityProvider from "../fixtures/providers/custom";
-import FakeIdentityProvider from "../fixtures/providers/fake";
-import NoTypeIdentityProvider from "../fixtures/providers/no-type";
-import NoVerifyIdentityIdentityProvider from "../fixtures/providers/no-verify-identity";
-import { after, afterEach, before, beforeEach, describe, it } from "node:test";
+} from '@orbitdb/core'
+import { copy } from 'fs-extra'
+import { after, afterEach, before, beforeEach, describe, it } from 'node:test'
+import { rimraf } from 'rimraf'
+import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
 
-const type = "publickey";
-const keysPath = "./testkeys";
+import CustomIdentityProvider from '../fixtures/providers/custom'
+import FakeIdentityProvider from '../fixtures/providers/fake'
+import NoTypeIdentityProvider from '../fixtures/providers/no-type'
+import NoVerifyIdentityIdentityProvider from '../fixtures/providers/no-verify-identity'
+import testKeysPath from '../fixtures/test-keys-path'
 
-describe("Identities", function () {
+import type {
+  IdentitiesInstance,
+  IdentityInstance,
+  IdentityOptions,
+  IdentityProvider,
+  KeyStoreInstance,
+} from '@orbitdb/core'
+
+const type = 'publickey'
+const keysPath = './testkeys'
+
+describe('Identities', () => {
   before(async () => {
-    await copy(testKeysPath, keysPath);
-  });
+    await copy(testKeysPath, keysPath)
+  })
 
   after(async () => {
-    await rimraf(keysPath);
-  });
+    await rimraf(keysPath)
+  })
 
-  describe("Creating Identities", () => {
-    const id = "userA";
+  describe('Creating Identities', () => {
+    const id = 'userA'
 
-    let identities: IdentitiesInstance;
-    let identity: IdentityInstance;
-
-    afterEach(async () => {
-      if (identities) {
-        await identities.keystore.close();
-      }
-    });
-
-    it("has the correct id", async () => {
-      identities = await Identities({ path: keysPath });
-      identity = await identities.createIdentity({ id });
-      const key = await identities.keystore.getKey(id);
-      const externalId = uint8ArrayToString(key.public.marshal(), "base16");
-      assert.strictEqual(identity.id, externalId);
-    });
-  });
-
-  describe("Get Identity", () => {
-    const id = "userA";
-
-    let identities: IdentitiesInstance;
-    let identity: IdentityInstance;
+    let identities: IdentitiesInstance
+    let identity: IdentityInstance
 
     afterEach(async () => {
       if (identities) {
-        await identities.keystore.close();
+        await identities.keystore.close()
       }
-    });
+    })
 
-    it("gets the identity from storage", async () => {
-      identities = await Identities({ path: keysPath });
-      identity = await identities.createIdentity({ id });
-      const result = await identities.getIdentity(identity.hash as string);
-      assert.strictEqual(result.id, identity.id);
-      assert.strictEqual(result.hash, identity.hash);
-      assert.strictEqual(result.publicKey, identity.publicKey);
-      assert.strictEqual(result.type, identity.type);
-      assert.deepStrictEqual(result.signatures, identity.signatures);
-      assert.strictEqual(result.sign, undefined);
-      assert.strictEqual(result.verify, undefined);
-    });
+    it('has the correct id', async () => {
+      identities = await Identities({ path: keysPath })
+      identity = await identities.createIdentity({ id })
+      const key = await identities.keystore.getKey(id)
+      const externalId = uint8ArrayToString(key.public.marshal(), 'base16')
+      assert.strictEqual(identity.id, externalId)
+    })
+  })
 
-    it("Passes in an identity provider", async () => {
-      const keystore = await KeyStore({ path: keysPath });
-      identities = await Identities({ keystore });
-      const provider = PublicKeyIdentityProvider({ keystore });
-      identity = await identities.createIdentity({ id, provider });
-      const result = await identities.getIdentity(identity.hash as string);
-      assert.strictEqual(result.id, identity.id);
-      assert.strictEqual(result.hash, identity.hash);
-      assert.strictEqual(result.publicKey, identity.publicKey);
-      assert.strictEqual(result.type, identity.type);
-      assert.deepStrictEqual(result.signatures, identity.signatures);
-      assert.strictEqual(result.sign, undefined);
-      assert.strictEqual(result.verify, undefined);
-    });
-  });
+  describe('Get Identity', () => {
+    const id = 'userA'
 
-  describe("Passing in custom keystore", () => {
-    const id = "userB";
+    let identities: IdentitiesInstance
+    let identity: IdentityInstance
 
-    let identity: IdentityInstance;
-    let identities: IdentitiesInstance;
-    let keystore: KeyStoreInstance;
+    afterEach(async () => {
+      if (identities) {
+        await identities.keystore.close()
+      }
+    })
+
+    it('gets the identity from storage', async () => {
+      identities = await Identities({ path: keysPath })
+      identity = await identities.createIdentity({ id })
+      const result = await identities.getIdentity(identity.hash as string)
+      assert.strictEqual(result.id, identity.id)
+      assert.strictEqual(result.hash, identity.hash)
+      assert.strictEqual(result.publicKey, identity.publicKey)
+      assert.strictEqual(result.type, identity.type)
+      assert.deepStrictEqual(result.signatures, identity.signatures)
+      assert.strictEqual(result.sign, undefined)
+      assert.strictEqual(result.verify, undefined)
+    })
+
+    it('Passes in an identity provider', async () => {
+      const keystore = await KeyStore({ path: keysPath })
+      identities = await Identities({ keystore })
+      const provider = PublicKeyIdentityProvider({ keystore })
+      identity = await identities.createIdentity({ id, provider })
+      const result = await identities.getIdentity(identity.hash as string)
+      assert.strictEqual(result.id, identity.id)
+      assert.strictEqual(result.hash, identity.hash)
+      assert.strictEqual(result.publicKey, identity.publicKey)
+      assert.strictEqual(result.type, identity.type)
+      assert.deepStrictEqual(result.signatures, identity.signatures)
+      assert.strictEqual(result.sign, undefined)
+      assert.strictEqual(result.verify, undefined)
+    })
+  })
+
+  describe('Passing in custom keystore', () => {
+    const id = 'userB'
+
+    let identity: IdentityInstance
+    let identities: IdentitiesInstance
+    let keystore: KeyStoreInstance
 
     before(async () => {
-      keystore = await KeyStore({ path: keysPath });
-      identities = await Identities({ keystore });
-    });
+      keystore = await KeyStore({ path: keysPath })
+      identities = await Identities({ keystore })
+    })
 
     after(async () => {
       if (keystore) {
-        await keystore.close();
+        await keystore.close()
       }
-    });
+    })
 
-    it("has the correct id", async () => {
-      identity = await identities.createIdentity({ id });
-      keystore = identities.keystore;
-      const key = await keystore.getKey(id);
-      const externalId = uint8ArrayToString(key.public.marshal(), "base16");
-      assert.strictEqual(identity.id, externalId);
-    });
+    it('has the correct id', async () => {
+      identity = await identities.createIdentity({ id })
+      keystore = identities.keystore
+      const key = await keystore.getKey(id)
+      const externalId = uint8ArrayToString(key.public.marshal(), 'base16')
+      assert.strictEqual(identity.id, externalId)
+    })
 
-    it("created a key for id in identity-keystore", async () => {
-      const key = await keystore.getKey(id);
-      assert.notStrictEqual(key, undefined);
-    });
+    it('created a key for id in identity-keystore', async () => {
+      const key = await keystore.getKey(id)
+      assert.notStrictEqual(key, undefined)
+    })
 
-    it("has the correct public key", async () => {
-      const key = await keystore.getKey(id);
-      const externalId = uint8ArrayToString(key.public.marshal(), "base16");
-      const signingKey = await keystore.getKey(externalId);
-      assert.notStrictEqual(signingKey, undefined);
-      assert.strictEqual(identity.publicKey, keystore.getPublic(signingKey));
-    });
+    it('has the correct public key', async () => {
+      const key = await keystore.getKey(id)
+      const externalId = uint8ArrayToString(key.public.marshal(), 'base16')
+      const signingKey = await keystore.getKey(externalId)
+      assert.notStrictEqual(signingKey, undefined)
+      assert.strictEqual(identity.publicKey, keystore.getPublic(signingKey))
+    })
 
-    it("has a signature for the id", async () => {
-      const key = await keystore.getKey(id);
-      const externalId = uint8ArrayToString(key.public.marshal(), "base16");
-      const signingKey = await keystore.getKey(externalId);
-      const idSignature = await signMessage(signingKey, externalId);
+    it('has a signature for the id', async () => {
+      const key = await keystore.getKey(id)
+      const externalId = uint8ArrayToString(key.public.marshal(), 'base16')
+      const signingKey = await keystore.getKey(externalId)
+      const idSignature = await signMessage(signingKey, externalId)
       const publicKey = uint8ArrayToString(
         signingKey.public.marshal(),
-        "base16",
-      );
-      const verifies = await verifyMessage(idSignature, publicKey, externalId);
-      assert.strictEqual(verifies, true);
-      assert.strictEqual(identity.signatures.id, idSignature);
-    });
+        'base16',
+      )
+      const verifies = await verifyMessage(idSignature, publicKey, externalId)
+      assert.strictEqual(verifies, true)
+      assert.strictEqual(identity.signatures.id, idSignature)
+    })
 
-    it("has a signature for the publicKey", async () => {
-      const key = await keystore.getKey(id);
-      const externalId = uint8ArrayToString(key.public.marshal(), "base16");
-      const signingKey = await keystore.getKey(externalId);
-      const idSignature = await signMessage(signingKey, externalId);
-      const externalKey = await keystore.getKey(id);
+    it('has a signature for the publicKey', async () => {
+      const key = await keystore.getKey(id)
+      const externalId = uint8ArrayToString(key.public.marshal(), 'base16')
+      const signingKey = await keystore.getKey(externalId)
+      const idSignature = await signMessage(signingKey, externalId)
+      const externalKey = await keystore.getKey(id)
       const publicKeyAndIdSignature = await signMessage(
         externalKey,
         identity.publicKey + idSignature,
-      );
+      )
       assert.strictEqual(
         identity.signatures.publicKey,
         publicKeyAndIdSignature,
-      );
-    });
-  });
+      )
+    })
+  })
 
-  describe("create an identity with saved keys", () => {
-    const id = "userX";
+  describe('create an identity with saved keys', () => {
+    const id = 'userX'
 
-    const expectedPublicKey =
-      "0342fa42a69135eade1e37ea520bc8ee9e240efd62cb0edf0516b21258b4eae656";
-    const expectedIdSignature =
-      "3044022068b4bc360d127e39164fbc3b5184f5bd79cc5976286f793d9b38d1f2818e0259022027b875dc8c73635b32db72177b9922038ec4b1eabc8f1fd0919806b0b2519419";
-    const expectedPkIdSignature =
-      "30440220464cd4a6202dae2d2fb75b47afc7cceafa6b13c310efabbbdaaf38e67f74188b02201bbef8c97b741b4bb9e3e5362edfcd2eb6fe3b93f4e68e5870fcc345a850f366";
+    const expectedPublicKey
+      = '0342fa42a69135eade1e37ea520bc8ee9e240efd62cb0edf0516b21258b4eae656'
+    const expectedIdSignature
+      = '3044022068b4bc360d127e39164fbc3b5184f5bd79cc5976286f793d9b38d1f2818e0259022027b875dc8c73635b32db72177b9922038ec4b1eabc8f1fd0919806b0b2519419'
+    const expectedPkIdSignature
+      = '30440220464cd4a6202dae2d2fb75b47afc7cceafa6b13c310efabbbdaaf38e67f74188b02201bbef8c97b741b4bb9e3e5362edfcd2eb6fe3b93f4e68e5870fcc345a850f366'
 
-    let identities: IdentitiesInstance;
-    let identity: IdentityInstance;
-    let savedKeysKeyStore: KeyStoreInstance;
+    let identities: IdentitiesInstance
+    let identity: IdentityInstance
+    let savedKeysKeyStore: KeyStoreInstance
 
     before(async () => {
-      savedKeysKeyStore = await KeyStore({ path: keysPath });
+      savedKeysKeyStore = await KeyStore({ path: keysPath })
 
-      identities = await Identities({ keystore: savedKeysKeyStore });
-      identity = await identities.createIdentity({ id });
-    });
+      identities = await Identities({ keystore: savedKeysKeyStore })
+      identity = await identities.createIdentity({ id })
+    })
 
     after(async () => {
       if (savedKeysKeyStore) {
-        await savedKeysKeyStore.close();
+        await savedKeysKeyStore.close()
       }
-    });
+    })
 
-    it("has the correct id", async () => {
-      const key = await savedKeysKeyStore.getKey(id);
+    it('has the correct id', async () => {
+      const key = await savedKeysKeyStore.getKey(id)
       assert.strictEqual(
         identity.id,
-        uint8ArrayToString(key.public.marshal(), "base16"),
-      );
-    });
+        uint8ArrayToString(key.public.marshal(), 'base16'),
+      )
+    })
 
-    it("has the correct public key", async () => {
-      assert.strictEqual(identity.publicKey, expectedPublicKey);
-    });
+    it('has the correct public key', async () => {
+      assert.strictEqual(identity.publicKey, expectedPublicKey)
+    })
 
-    it("has the correct identity type", async () => {
-      assert.strictEqual(identity.type, type);
-    });
+    it('has the correct identity type', async () => {
+      assert.strictEqual(identity.type, type)
+    })
 
-    it("has the correct idSignature", async () => {
-      assert.strictEqual(identity.signatures.id, expectedIdSignature);
-    });
+    it('has the correct idSignature', async () => {
+      assert.strictEqual(identity.signatures.id, expectedIdSignature)
+    })
 
-    it("has a publicKeyAndIdSignature for the publicKey", async () => {
-      assert.strictEqual(identity.signatures.publicKey, expectedPkIdSignature);
-    });
+    it('has a publicKeyAndIdSignature for the publicKey', async () => {
+      assert.strictEqual(identity.signatures.publicKey, expectedPkIdSignature)
+    })
 
-    it("has the correct signatures", async () => {
-      const internalSigningKey = await savedKeysKeyStore.getKey(identity.id);
-      const externalSigningKey = await savedKeysKeyStore.getKey(id);
-      const idSignature = await signMessage(internalSigningKey, identity.id);
+    it('has the correct signatures', async () => {
+      const internalSigningKey = await savedKeysKeyStore.getKey(identity.id)
+      const externalSigningKey = await savedKeysKeyStore.getKey(id)
+      const idSignature = await signMessage(internalSigningKey, identity.id)
       const publicKeyAndIdSignature = await signMessage(
         externalSigningKey,
         identity.publicKey + idSignature,
-      );
+      )
       const expectedSignature = {
         id: idSignature,
         publicKey: publicKeyAndIdSignature,
-      };
-      assert.deepStrictEqual(identity.signatures, expectedSignature);
-    });
-  });
+      }
+      assert.deepStrictEqual(identity.signatures, expectedSignature)
+    })
+  })
 
-  describe("verify identity's signature", () => {
-    const id = "QmFoo";
+  describe('verify identity\'s signature', () => {
+    const id = 'QmFoo'
 
-    let identities: IdentitiesInstance;
-    let identity: IdentityInstance;
-    let keystore: KeyStoreInstance;
+    let identities: IdentitiesInstance
+    let identity: IdentityInstance
+    let keystore: KeyStoreInstance
 
     before(async () => {
-      keystore = await KeyStore({ path: keysPath });
-    });
+      keystore = await KeyStore({ path: keysPath })
+    })
 
     after(async () => {
       if (keystore) {
-        await keystore.close();
+        await keystore.close()
       }
-    });
+    })
 
-    it("identity pkSignature verifies", async () => {
-      identities = await Identities({ keystore });
-      identity = await identities.createIdentity({ id });
+    it('identity pkSignature verifies', async () => {
+      identities = await Identities({ keystore })
+      identity = await identities.createIdentity({ id })
       const verified = await verifyMessage(
         identity.signatures.id,
         identity.publicKey,
         identity.id,
-      );
-      assert.strictEqual(verified, true);
-    });
+      )
+      assert.strictEqual(verified, true)
+    })
 
-    it("identity signature verifies", async () => {
-      identities = await Identities({ keystore });
-      identity = await identities.createIdentity({ id });
+    it('identity signature verifies', async () => {
+      identities = await Identities({ keystore })
+      identity = await identities.createIdentity({ id })
       const verified = await verifyMessage(
         identity.signatures.publicKey,
         identity.id,
         identity.publicKey + identity.signatures.id,
-      );
-      assert.strictEqual(verified, true);
-    });
+      )
+      assert.strictEqual(verified, true)
+    })
 
-    it("false signature doesn't verify", async () => {
-      useIdentityProvider(FakeIdentityProvider);
+    it('false signature doesn\'t verify', async () => {
+      useIdentityProvider(FakeIdentityProvider)
       identity = await identities.createIdentity(
         { provider: FakeIdentityProvider() } as unknown as IdentityOptions,
-      );
-      const verified = await identities.verifyIdentity(identity);
-      assert.strictEqual(verified, false);
-    });
-  });
+      )
+      const verified = await identities.verifyIdentity(identity)
+      assert.strictEqual(verified, false)
+    })
+  })
 
-  describe("verify identity", () => {
-    const id = "QmFoo";
+  describe('verify identity', () => {
+    const id = 'QmFoo'
 
-    let identities: IdentitiesInstance;
-    let identity: IdentityInstance;
-    let keystore: KeyStoreInstance;
+    let identities: IdentitiesInstance
+    let identity: IdentityInstance
+    let keystore: KeyStoreInstance
 
     before(async () => {
-      keystore = await KeyStore({ path: keysPath });
-      identities = await Identities({ keystore });
-    });
+      keystore = await KeyStore({ path: keysPath })
+      identities = await Identities({ keystore })
+    })
 
     after(async () => {
       if (keystore) {
-        await keystore.close();
+        await keystore.close()
       }
-    });
+    })
 
-    it("identity verifies", async () => {
-      identity = await identities.createIdentity({ id });
-      const verified = await identities.verifyIdentity(identity);
-      assert.strictEqual(verified, true);
-    });
-  });
+    it('identity verifies', async () => {
+      identity = await identities.createIdentity({ id })
+      const verified = await identities.verifyIdentity(identity)
+      assert.strictEqual(verified, true)
+    })
+  })
 
-  describe("sign data with an identity", () => {
-    const id = "0x01234567890abcdefghijklmnopqrstuvwxyz";
-    const data = "hello friend";
+  describe('sign data with an identity', () => {
+    const id = '0x01234567890abcdefghijklmnopqrstuvwxyz'
+    const data = 'hello friend'
 
-    let identities: IdentitiesInstance;
-    let identity: IdentityInstance;
-    let keystore: KeyStoreInstance;
+    let identities: IdentitiesInstance
+    let identity: IdentityInstance
+    let keystore: KeyStoreInstance
 
     before(async () => {
-      keystore = await KeyStore({ path: keysPath });
-      identities = await Identities({ keystore });
-      identity = await identities.createIdentity({ id });
-    });
+      keystore = await KeyStore({ path: keysPath })
+      identities = await Identities({ keystore })
+      identity = await identities.createIdentity({ id })
+    })
 
     after(async () => {
       if (keystore) {
-        await keystore.close();
+        await keystore.close()
       }
-    });
+    })
 
-    it("sign data", async () => {
-      const signingKey = await keystore.getKey(identity.id);
-      const expectedSignature = await signMessage(signingKey, data);
-      const signature = await identities.sign(identity, data, keystore);
-      assert.strictEqual(signature, expectedSignature);
-    });
+    it('sign data', async () => {
+      const signingKey = await keystore.getKey(identity.id)
+      const expectedSignature = await signMessage(signingKey, data)
+      const signature = await identities.sign(identity, data, keystore)
+      assert.strictEqual(signature, expectedSignature)
+    })
 
-    it("throws an error if private key is not found from keystore", async () => {
-      const { publicKey, signatures, type } = identity;
+    it('throws an error if private key is not found from keystore', async () => {
+      const { publicKey, signatures, type } = identity
       const modifiedIdentity = await Identity(
         {
-          id: "this id does not exist",
+          id: 'this id does not exist',
           publicKey,
           signatures,
           type,
         } as IdentityInstance,
-      );
-      let signature: string | undefined;
-      let err: string | undefined;
+      )
+      let signature: string | undefined
+      let err: string | undefined
       try {
-        signature = await identities.sign(modifiedIdentity, data, keystore);
-      } catch (e) {
-        err = (e as Error).toString();
+        signature = await identities.sign(modifiedIdentity, data, keystore)
       }
-      assert.strictEqual(signature, undefined);
+      catch (e) {
+        err = (e as Error).toString()
+      }
+      assert.strictEqual(signature, undefined)
       assert.strictEqual(
         err,
-        "Error: Private signing key not found from KeyStore",
-      );
-    });
-  });
+        'Error: Private signing key not found from KeyStore',
+      )
+    })
+  })
 
-  describe("verify data signed by an identity", () => {
-    const id =
-      "03602a3da3eb35f1148e8028f141ec415ef7f6d4103443edbfec2a0711d716f53f";
-    const data = "hello friend";
+  describe('verify data signed by an identity', () => {
+    const id
+      = '03602a3da3eb35f1148e8028f141ec415ef7f6d4103443edbfec2a0711d716f53f'
+    const data = 'hello friend'
 
-    let identities: IdentitiesInstance;
-    let identity: IdentityInstance;
-    let keystore: KeyStoreInstance;
-    let signature: string;
+    let identities: IdentitiesInstance
+    let identity: IdentityInstance
+    let keystore: KeyStoreInstance
+    let signature: string
 
     before(async () => {
-      keystore = await KeyStore({ path: keysPath });
-    });
+      keystore = await KeyStore({ path: keysPath })
+    })
 
     after(async () => {
       if (keystore) {
-        await keystore.close();
+        await keystore.close()
       }
-    });
+    })
 
     beforeEach(async () => {
-      identities = await Identities({ keystore });
-      identity = await identities.createIdentity({ id });
-      signature = await identities.sign(identity, data, keystore);
-    });
+      identities = await Identities({ keystore })
+      identity = await identities.createIdentity({ id })
+      signature = await identities.sign(identity, data, keystore)
+    })
 
-    it("verifies that the signature is valid", async () => {
+    it('verifies that the signature is valid', async () => {
       const verified = await identities.verify(
         signature,
         identity.publicKey,
         data,
-      );
-      assert.strictEqual(verified, true);
-    });
+      )
+      assert.strictEqual(verified, true)
+    })
 
-    it("doesn't verify invalid signature", async () => {
+    it('doesn\'t verify invalid signature', async () => {
       const verified = await identities.verify(
-        "invalid",
+        'invalid',
         identity.publicKey,
         data,
-      );
-      assert.strictEqual(verified, false);
-    });
-  });
+      )
+      assert.strictEqual(verified, false)
+    })
+  })
 
-  describe("manage identity providers", () => {
-    it("can add an identity provider", () => {
-      useIdentityProvider(CustomIdentityProvider);
+  describe('manage identity providers', () => {
+    it('can add an identity provider', () => {
+      useIdentityProvider(CustomIdentityProvider)
 
       assert.deepStrictEqual(
-        getIdentityProvider("custom"),
+        getIdentityProvider('custom'),
         CustomIdentityProvider,
-      );
-    });
+      )
+    })
 
-    it("cannot add an identity provider with missing type", () => {
-      let err: string | undefined;
+    it('cannot add an identity provider with missing type', () => {
+      let err: string | undefined
 
       try {
         useIdentityProvider(
           NoTypeIdentityProvider as unknown as IdentityProvider,
-        );
-      } catch (e) {
-        err = (e as Error).toString();
+        )
+      }
+      catch (e) {
+        err = (e as Error).toString()
       }
 
       assert.strictEqual(
         err,
-        "Error: Given IdentityProvider doesn't have a field 'type'.",
-      );
-    });
+        'Error: Given IdentityProvider doesn\'t have a field \'type\'.',
+      )
+    })
 
-    it("cannot add an identity provider with missing verifyIdentity", async () => {
-      let err: string | undefined;
+    it('cannot add an identity provider with missing verifyIdentity', async () => {
+      let err: string | undefined
 
       try {
         useIdentityProvider(
           NoVerifyIdentityIdentityProvider as unknown as IdentityProvider,
-        );
-      } catch (e) {
-        err = (e as Error).toString();
+        )
+      }
+      catch (e) {
+        err = (e as Error).toString()
       }
 
       assert.strictEqual(
         err,
-        "Error: Given IdentityProvider doesn't have a function 'verifyIdentity'.",
-      );
-    });
-  });
-});
+        'Error: Given IdentityProvider doesn\'t have a function \'verifyIdentity\'.',
+      )
+    })
+  })
+})

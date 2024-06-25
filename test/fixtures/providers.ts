@@ -1,60 +1,48 @@
-const customIdentityProvider = () => {
-  const verifyIdentity = async (data) => {
-    return true;
-  };
+function customIdentityProvider() {
+  const verifyIdentity = async data => true
 
   const CustomIdentityProvider = () => () => {
-    const getId = () => {
-      return "custom";
-    };
+    const getId = () => 'custom'
 
-    const signIdentity = (data) => {
-      return `signature '${data}'`;
-    };
+    const signIdentity = data => `signature '${data}'`
 
     return {
       getId,
       signIdentity,
-      type: "custom",
-    };
-  };
+      type: 'custom',
+    }
+  }
 
   return {
     default: CustomIdentityProvider,
-    type: "custom",
+    type: 'custom',
     verifyIdentity,
-  };
-};
+  }
+}
 
-const fakeIdentityProvider = () => {
-  const verifyIdentity = async (data) => {
-    return false;
-  };
+function fakeIdentityProvider() {
+  const verifyIdentity = async data => false
 
   const FakeIdentityProvider = () => () => {
-    const getId = () => {
-      return "pubKey";
-    };
+    const getId = () => 'pubKey'
 
-    const signIdentity = (data) => {
-      return `false signature '${data}'`;
-    };
+    const signIdentity = data => `false signature '${data}'`
 
     return {
       getId,
       signIdentity,
-      type: "fake",
-    };
-  };
+      type: 'fake',
+    }
+  }
 
   return {
     default: FakeIdentityProvider,
     verifyIdentity,
-    type: "fake",
-  };
-};
+    type: 'fake',
+  }
+}
 
-const CustomIdentityProvider = customIdentityProvider();
-const FakeIdentityProvider = fakeIdentityProvider();
+const CustomIdentityProvider = customIdentityProvider()
+const FakeIdentityProvider = fakeIdentityProvider()
 
-export { CustomIdentityProvider, FakeIdentityProvider };
+export { CustomIdentityProvider, FakeIdentityProvider }

@@ -1,1 +1,1 @@
-export default "./test/fixtures/newtestkeys2";
+export default './test/fixtures/newtestkeys2'

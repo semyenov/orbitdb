@@ -25,7 +25,6 @@ const schema = [
       'newline-before-return': ['error'],
       'newline-per-chained-call': ['error', { ignoreChainWithDepth: 2 }],
       'multiline-ternary': ['error', 'always'],
-      'brace-style': ['error', '1tbs'],
       'arrow-body-style': ['error', 'as-needed'],
       'eqeqeq': ['error', 'always'],
     },

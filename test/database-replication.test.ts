@@ -9,7 +9,7 @@ import {
   MemoryStorage,
 } from '@orbitdb/core'
 import { copy } from 'fs-extra'
-import { after, afterEach, before, beforeEach, describe, it } from 'node:test'
+import { afterEach, beforeEach, describe, it } from 'node:test'
 import { rimraf } from 'rimraf'
 
 import testKeysPath from './fixtures/test-keys-path'
@@ -346,10 +346,6 @@ describe('Database - Replication', () => {
       let updateCount1 = 0
       let updateCount2 = 0
 
-      const onConnected1 = (peerId: string, heads: LogEntry[]) => {
-        connected1 = true
-      }
-
       const onConnected2 = (peerId: string, heads: LogEntry[]) => {
         connected2 = true
       }
@@ -362,7 +358,9 @@ describe('Database - Replication', () => {
         ++updateCount2
       }
 
-      db1.events.on('join', onConnected1)
+      db1.events.on('join', (peerId: string, heads: LogEntry[]) => {
+        connected1 = true
+      })
       db2.events.on('join', onConnected2)
       db1.events.on('update', onUpdate1)
       db2.events.on('update', onUpdate2)

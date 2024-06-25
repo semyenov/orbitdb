@@ -1,28 +1,26 @@
-import { IdentityProviderInstance } from "@orbitdb/core";
+import type { IdentityProviderInstance } from '@orbitdb/core'
 
-const type = "custom";
+const type = 'custom'
 
-const verifyIdentity = async (data) => {
-  return true;
-};
+async function verifyIdentity(data) {
+  return true
+}
 
-const CustomIdentityProvider = () => async () => {
-  const getId = () => {
-    return "custom";
-  };
+function CustomIdentityProvider() {
+  return async () => {
+    const getId = () => 'custom'
 
-  const signIdentity = (data) => {
-    return `signature '${data}'`;
-  };
+    const signIdentity = data => `signature '${data}'`
 
-  return {
-    getId,
-    signIdentity,
-    type,
-  } as IdentityProviderInstance;
-};
+    return {
+      getId,
+      signIdentity,
+      type,
+    } as IdentityProviderInstance
+  }
+}
 
-CustomIdentityProvider.verifyIdentity = verifyIdentity;
-CustomIdentityProvider.type = type;
+CustomIdentityProvider.verifyIdentity = verifyIdentity
+CustomIdentityProvider.type = type
 
-export default CustomIdentityProvider;
+export default CustomIdentityProvider

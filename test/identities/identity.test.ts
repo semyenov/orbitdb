@@ -1,17 +1,19 @@
-import assert from "assert";
-import { before, beforeEach, describe, it } from "node:test";
-import { decodeIdentity, Identity, isEqual, isIdentity } from "@orbitdb/core";
-describe("Identity", function () {
-  const id = "0x01234567890abcdefghijklmnopqrstuvwxyz";
-  const publicKey = "<pubkey>";
+import assert from 'node:assert'
+
+import { Identity, decodeIdentity, isEqual, isIdentity } from '@orbitdb/core'
+import { before, beforeEach, describe, it } from 'node:test'
+
+describe('Identity', () => {
+  const id = '0x01234567890abcdefghijklmnopqrstuvwxyz'
+  const publicKey = '<pubkey>'
   const signatures = {
-    id: "signature for <id>",
-    publicKey: "signature for <publicKey + idSignature>",
-  };
+    id: 'signature for <id>',
+    publicKey: 'signature for <publicKey + idSignature>',
+  }
 
-  const type = "orbitdb";
+  const type = 'orbitdb'
 
-  const expectedHash = "zdpuArx43BnXdDff5rjrGLYrxUomxNroc2uaocTgcWK76UfQT";
+  const expectedHash = 'zdpuArx43BnXdDff5rjrGLYrxUomxNroc2uaocTgcWK76UfQT'
   const expectedBytes = Uint8Array.from([
     164,
     98,
@@ -175,114 +177,115 @@ describe("Identity", function () {
     114,
     101,
     62,
-  ]);
+  ])
 
-  let identity: Awaited<ReturnType<typeof Identity>>;
+  let identity: Awaited<ReturnType<typeof Identity>>
 
   before(async () => {
-    identity = await Identity({ id, publicKey, signatures, type });
-  });
+    identity = await Identity({ id, publicKey, signatures, type })
+  })
 
-  it("has the correct id", async () => {
-    assert.strictEqual(identity.id, id);
-  });
+  it('has the correct id', async () => {
+    assert.strictEqual(identity.id, id)
+  })
 
-  it("has the correct publicKey", async () => {
-    assert.strictEqual(identity.publicKey, publicKey);
-  });
+  it('has the correct publicKey', async () => {
+    assert.strictEqual(identity.publicKey, publicKey)
+  })
 
-  it("has the correct idSignature", async () => {
-    assert.strictEqual(identity.signatures.id, signatures.id);
-  });
+  it('has the correct idSignature', async () => {
+    assert.strictEqual(identity.signatures.id, signatures.id)
+  })
 
-  it("has the correct publicKeyAndIdSignature", async () => {
-    assert.strictEqual(identity.signatures.publicKey, signatures.publicKey);
-  });
+  it('has the correct publicKeyAndIdSignature', async () => {
+    assert.strictEqual(identity.signatures.publicKey, signatures.publicKey)
+  })
 
-  describe("Constructor inputs", () => {
-    it("throws and error if id was not given in constructor", async () => {
-      let err: string | undefined;
+  describe('Constructor inputs', () => {
+    it('throws and error if id was not given in constructor', async () => {
+      let err: string | undefined
       try {
-        identity = await Identity({} as any);
-      } catch (e) {
-        err = (e as Error).toString();
+        identity = await Identity({} as any)
       }
-      assert.strictEqual(err, "Error: Identity id is required");
-    });
+      catch (e) {
+        err = (e as Error).toString()
+      }
+      assert.strictEqual(err, 'Error: Identity id is required')
+    })
 
     // ... (other similar test cases)
-  });
+  })
 
-  describe("isIdentity", () => {
-    describe("valid Identity", () => {
-      it("is a valid identity", async () => {
-        const identity = await Identity({ id, publicKey, signatures, type });
-        const result = isIdentity(identity);
-        assert.strictEqual(result, true);
-      });
-    });
+  describe('isIdentity', () => {
+    describe('valid Identity', () => {
+      it('is a valid identity', async () => {
+        const identity = await Identity({ id, publicKey, signatures, type })
+        const result = isIdentity(identity)
+        assert.strictEqual(result, true)
+      })
+    })
 
-    describe("invalid Identity", () => {
+    describe('invalid Identity', () => {
       beforeEach(async () => {
-        identity = await Identity({ id, publicKey, signatures, type });
-      });
+        identity = await Identity({ id, publicKey, signatures, type })
+      })
 
-      it("is not a valid identity if id is missing", async () => {
-        const invalidIdentity = { ...identity, id: undefined } as any;
-        const result = isIdentity(invalidIdentity);
-        assert.strictEqual(result, false);
-      });
+      it('is not a valid identity if id is missing', async () => {
+        const invalidIdentity = { ...identity, id: undefined } as any
+        const result = isIdentity(invalidIdentity)
+        assert.strictEqual(result, false)
+      })
 
       // ... (other similar test cases)
-    });
-  });
+    })
+  })
 
-  describe("isEqual", () => {
-    describe("equal identities", () => {
-      it("identities are equal", async () => {
-        const identity1 = await Identity({ id, publicKey, signatures, type });
-        const identity2 = await Identity({ id, publicKey, signatures, type });
-        const result = isEqual(identity1, identity2);
-        assert.strictEqual(result, true);
-      });
-    });
+  describe('isEqual', () => {
+    describe('equal identities', () => {
+      it('identities are equal', async () => {
+        const identity1 = await Identity({ id, publicKey, signatures, type })
+        const identity2 = await Identity({ id, publicKey, signatures, type })
+        const result = isEqual(identity1, identity2)
+        assert.strictEqual(result, true)
+      })
+    })
 
-    describe("not equal identities", () => {
-      let identity1: Awaited<ReturnType<typeof Identity>>;
-      let identity2: Awaited<ReturnType<typeof Identity>>;
+    describe('not equal identities', () => {
+      let identity1: Awaited<ReturnType<typeof Identity>>
+      let identity2: Awaited<ReturnType<typeof Identity>>
 
       before(async () => {
-        identity1 = await Identity({ id, publicKey, signatures, type });
-        identity2 = await Identity({ id, publicKey, signatures, type });
-      });
+        identity1 = await Identity({ id, publicKey, signatures, type })
+        identity2 = await Identity({ id, publicKey, signatures, type })
+      })
 
-      it("identities are not equal if id is different", async () => {
-        identity2 = await Identity({ id: "X", publicKey, signatures, type });
-        const result = isEqual(identity1, identity2);
-        assert.strictEqual(result, false);
-      });
+      it('identities are not equal if id is different', async () => {
+        identity2 = await Identity({ id: 'X', publicKey, signatures, type })
+        const result = isEqual(identity1, identity2)
+        assert.strictEqual(result, false)
+      })
 
       // ... (other similar test cases)
-    });
-  });
+    })
+  })
 
-  describe("Decode Identity", () => {
+  describe('Decode Identity', () => {
     before(async () => {
-      identity = await Identity({ id, publicKey, signatures, type });
-    });
+      identity = await Identity({ id, publicKey, signatures, type })
+    })
 
-    it("decodes an identity from bytes", async () => {
-      const result = await decodeIdentity(expectedBytes);
+    it('decodes an identity from bytes', async () => {
+      const result = await decodeIdentity(expectedBytes)
 
-      assert.strictEqual(isIdentity(result), true);
-      assert.strictEqual(result.id, id);
-      assert.strictEqual(result.publicKey, publicKey);
-      assert.strictEqual(result.type, type);
-      assert.strictEqual(result.hash, expectedHash);
-      assert.strictEqual(result.sign, undefined);
-      assert.strictEqual(result.verify, undefined);
-      assert.deepStrictEqual(result.bytes, expectedBytes);
-      assert.deepStrictEqual(result.signatures, signatures);
-    });
-  });
-});
+      assert.strictEqual(isIdentity(result), true)
+      assert.strictEqual(result.id, id)
+      assert.strictEqual(result.publicKey, publicKey)
+      assert.strictEqual(result.type, type)
+      assert.strictEqual(result.hash, expectedHash)
+      assert.strictEqual(result.sign, undefined)
+      assert.strictEqual(result.verify, undefined)
+      assert.deepStrictEqual(result.bytes, expectedBytes)
+      assert.deepStrictEqual(result.signatures, signatures)
+    })
+  })
+})

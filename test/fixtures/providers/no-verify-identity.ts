@@ -1,11 +1,11 @@
-const type = "no-verify-identity";
+const type = 'no-verify-identity'
 
-const NoVerifyIdentityIdentityProvider = () => async () => {
-  return {
+function NoVerifyIdentityIdentityProvider() {
+  return async () => ({
     type,
-  };
-};
+  })
+}
 
-NoVerifyIdentityIdentityProvider.type = type;
+NoVerifyIdentityIdentityProvider.type = type
 
-export default NoVerifyIdentityIdentityProvider;
+export default NoVerifyIdentityIdentityProvider
