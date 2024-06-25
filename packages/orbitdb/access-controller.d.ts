@@ -8,23 +8,26 @@ interface CreateAccessControllerOptions {
   storage?: StorageInstance;
 }
 
-interface AccessControllerInstance {
-  canAppend(entry: LogEntry): Promise<boolean>;
-}
-
 interface AccessControllerOptions {
   orbitdb: OrbitDBInstance,
   identities: IdentitiesInstance,
   address?: string,
 }
 
+interface AccessControllerInstance {
+  canAppend(entry: LogEntry): Promise<boolean>;
+}
+interface AccessController<T extends string, U extends AccessControllerInstance> {
+  type: T;
+  (options: AccessControllerOptions): Promise<U>;
+}
+
 interface IPFSAccessControllerInstance extends AccessControllerInstance {
-  type: 'ipfs';
+  type: string;
   address: string;
   write: string[];
 }
-declare function IPFSAccessController(options?: CreateAccessControllerOptions):
-  (options: AccessControllerOptions) => Promise<IPFSAccessControllerInstance>;
+declare const IPFSAccessController: (options?: CreateAccessControllerOptions) => AccessController<'ipfs', IPFSAccessControllerInstance>
 
 interface OrbitDBAccessControllerInstance extends AccessControllerInstance {
   close(): Promise<void>
@@ -36,18 +39,19 @@ interface OrbitDBAccessControllerInstance extends AccessControllerInstance {
   revoke(capability: string, key: string): Promise<void>;
   events: DatabaseEvents;
 }
-declare function OrbitDBAccessController(options?: Pick<CreateAccessControllerOptions, 'write'>):
-  (options: AccessControllerOptions) => Promise<OrbitDBAccessControllerInstance>;
+declare const OrbitDBAccessController: (options?: CreateAccessControllerOptions) => AccessController<'orbitdb', OrbitDBAccessControllerInstance>
 
 declare function useAccessController(accessController: { type: string }): void;
 
 export {
+  AccessControllerInstance,
+  AccessController,
+
+  IPFSAccessControllerInstance,
   IPFSAccessController,
+
+  OrbitDBAccessControllerInstance,
   OrbitDBAccessController,
 
   useAccessController,
-
-  AccessControllerInstance,
-  OrbitDBAccessControllerInstance,
 };
-

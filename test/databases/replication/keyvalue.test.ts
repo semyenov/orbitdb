@@ -10,7 +10,8 @@ import {
   IdentitiesInstance,
   IdentityInstance,
   DocumentsDoc,
-  DocumentsInstance, KeyValueInstance, KeyValueDoc
+  DocumentsInstance, KeyValueInstance, KeyValueDoc,
+  IPFSAccessControllerInstance
 } from '@orbitdb/core'
 import testKeysPath from '../../fixtures/test-keys-path.js'
 import connectPeers from '../../utils/connect-nodes.js'

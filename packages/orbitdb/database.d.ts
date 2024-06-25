@@ -34,6 +34,7 @@ interface DatabaseInstance<T> {
   address?: string;
   peers: Set<PeerId>;
   indexBy: keyof T;
+  type: string;
   meta: any;
 
   events: DatabaseEvents<T>;

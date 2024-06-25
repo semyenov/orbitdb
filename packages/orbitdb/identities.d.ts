@@ -52,6 +52,7 @@ interface IdentityOptions {
 }
 
 interface IdentitiesInstance {
+  (options?: IdentitiesOptions): Promise<IdentitiesInstance>
   createIdentity: (options?: IdentityOptions) => Promise<IdentityInstance>;
   getIdentity: (id: string) => Promise<IdentityInstance>;
   verifyIdentity: (identity: IdentityInstance) => Promise<boolean>;

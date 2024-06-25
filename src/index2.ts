@@ -15,10 +15,17 @@ const orbitdb = await startOrbitDB({
   directory: dbDir,
 })
 
+interface IUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string
+}
+
 // orbitdb.ipfs.libp2p.logger = logger
 // logger.log('orbitDb',orbitdb.ipfs.libp2p.logger)
 // Open a database
-const db = await orbitdb.open<{ _id: string; firstName: string; lastName: string; email: string }>(dbName, { type: "documents" });
+const db = await orbitdb.open<IUser, 'documents'>(dbName, { type: "documents" });
 logger.log("address", db.address);
 
 // Listen for updates
@@ -31,7 +38,7 @@ db.events.on('join', (peerId, heads) => logger.log('join', peerId));
 db.events.on("drop", () => logger.log("drop"));
 
 // Add some data
-await generate(1000000);
+await generate(10000);
 
 // Get some data
 const value = await db.get("12");

@@ -22,7 +22,7 @@ describe('Documents Database', function () {
   let accessController: IPFSAccessControllerInstance
   let identities: IdentitiesInstance
   let testIdentity1: IdentityInstance
-  let db: DocumentsInstance
+  let db: DocumentsInstance<any>
 
   const databaseId = 'documents-AAA'
 
@@ -155,7 +155,7 @@ describe('Documents Database', function () {
 
   describe('Custom index \'doc\'', () => {
     beforeEach(async () => {
-      db = await Documents({ indexBy: 'doc' })({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+      db = await Documents<{ doc: string, msg: string }>({ indexBy: 'doc' })({ ipfs, identity: testIdentity1, address: databaseId, accessController }) as DocumentsInstance<{ doc: string, msg: string }>
     })
 
     afterEach(async () => {

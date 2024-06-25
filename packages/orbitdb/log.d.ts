@@ -7,8 +7,7 @@ interface LogEntry<T = unknown> {
   id: string;
   payload: {
     op: 'PUT' | 'DEL';
-    key: string;
-    value: T
+    key: string; value: T
   };
   hash: string;
   next: string[];
@@ -33,7 +32,7 @@ interface LogOptions<T> {
 
 declare namespace Entry {
   function create<T>(
-    identity: any,
+    identity: IdentityInstance,
     id: string,
     payload: any,
     clock?: any,
@@ -41,7 +40,7 @@ declare namespace Entry {
     refs?: Array<string | LogEntry<T>>
   ): Promise<LogEntry<T>>
 
-  function verify<T>(identities: any, entry: LogEntry<T>): Promise<boolean>
+  function verify<T>(identities: IdentityInstance, entry: LogEntry<T>): Promise<boolean>
   function isEntry(obj: unknown): boolean
   function isEqual<T>(a: LogEntry<T>, b: LogEntry<T>): boolean
   function decode<T>(bytes: Uint8Array): Promise<LogEntry<T>>

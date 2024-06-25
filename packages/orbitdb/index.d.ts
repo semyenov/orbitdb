@@ -23,7 +23,8 @@ import {
   AccessControllerInstance,
   OrbitDBAccessControllerInstance,
   IPFSAccessController,
-  useAccessController
+  useAccessController,
+  AccessController
 } from "./access-controller";
 
 import {
@@ -66,7 +67,7 @@ type OrbitDBOpenOptions<T, D extends DatabaseType> = {
   sync?: boolean;
 
   Database?: DatabaseTypeMap<T>[D];
-  AccessController?: AccessControllerInstance;
+  AccessController?: AccessController<string, AccessControllerInstance>;
 
   headsStorage?: StorageInstance;
   entryStorage?: StorageInstance;

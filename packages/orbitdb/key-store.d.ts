@@ -33,8 +33,8 @@ declare function signMessage(key: Secp256k1PrivateKey, data: string | Uint8Array
 
 export {
   KeyObject,
-  Secp256k1PrivateKey,
   PrivateKeys,
+  Secp256k1PrivateKey,
 
   KeyStoreOptions,
   KeyStoreInstance,
