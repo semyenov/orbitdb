@@ -5,8 +5,6 @@
     "module": "ES2022",
     "moduleResolution": "Bundler",
 
-    "skipLibCheck": true,
-
     "allowJs": true,
     "checkJs": true,
     "allowSyntheticDefaultImports": true,
@@ -16,14 +14,14 @@
 
     // "lib": ["ESNext", "DOM"],
 
-    "typeRoots": ["./node_modules/@types", "./types"],
     "types": ["node"],
 
     // only necessary for the example linting check, your project may not need
     // these settings
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "skipLibCheck": false                                 /* Skip type checking all .d.ts files. */
   },
 
-  "include": ["src", "types"],
+  "include": ["src", "packages"],
   "exclude": ["scripts", "node_modules"]
 }

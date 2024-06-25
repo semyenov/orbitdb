@@ -7,17 +7,18 @@ import { noise } from "@chainsafe/libp2p-noise";
 import { yamux } from "@chainsafe/libp2p-yamux";
 import { gossipsub } from "@chainsafe/libp2p-gossipsub";
 import { circuitRelayTransport } from "@libp2p/circuit-relay-v2";
-
 import type { Libp2pOptions } from "libp2p";
+import { mdns } from '@libp2p/mdns'
 
 export const DefaultLibp2pOptions: Libp2pOptions = {
   addresses: {
-    listen: ["/ip4/0.0.0.0/tcp/0/ws"],
+    listen: ["/ip4/127.0.0.1/tcp/0/ws"],
   },
+  peerDiscovery: [mdns()],
   transports: [
     tcp(),
     webRTC(),
-    webSockets({ filter: all }),
+    webSockets({ filter: all, }),
     circuitRelayTransport({ discoverRelays: 1 }),
   ],
   connectionEncryption: [

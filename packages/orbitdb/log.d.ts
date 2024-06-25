@@ -1,0 +1,99 @@
+import { StorageInstance } from "./storage";
+import { IPFS } from "./ipfs";
+import { Identity, IdentityInstance } from "./identities";
+import { AccessControllerInstance } from "./access-controller";
+
+interface LogEntry<T = unknown> {
+  id: string;
+  payload: {
+    op: 'PUT' | 'DEL';
+    key: string; value: T
+  };
+  hash: string;
+  next: string[];
+  refs: string[];
+  clock: Clock;
+  v: number;
+  key: string;
+  identity: string;
+  sig: string;
+}
+
+interface LogOptions<T> {
+  logId?: string;
+  logHeads?: LogEntry<T>[];
+  access?: AccessControllerInstance;
+  entries?: LogEntry<T>[];
+  entryStorage?: StorageInstance;
+  headsStorage?: StorageInstance;
+  indexStorage?: StorageInstance;
+  sortFn?: (a: LogEntry<T>, b: LogEntry<T>) => number;
+}
+
+declare namespace Entry {
+  function create<T>(
+    identity: IdentityInstance,
+    id: string,
+    payload: any,
+    clock?: any,
+    next?: Array<string | LogEntry<T>>,
+    refs?: Array<string | LogEntry<T>>
+  ): Promise<LogEntry<T>>
+
+  function verify<T>(identities: IdentityInstance, entry: LogEntry<T>): Promise<boolean>
+  function isEntry(obj: unknown): boolean
+  function isEqual<T>(a: LogEntry<T>, b: LogEntry<T>): boolean
+  function decode<T>(bytes: Uint8Array): Promise<LogEntry<T>>
+  function encode<T>(entry: LogEntry<T>): Promise<Uint8Array>
+}
+
+interface Clock {
+  id: string;
+  time: number;
+}
+
+type OptionsIterator = {
+  gt?: string;
+  gte?: string;
+  lt?: string;
+  lte?: string;
+  amount?: number;
+};
+
+interface LogInstance<T> {
+  id: string;
+
+  access?: AccessControllerInstance;
+  identity: IdentityInstance;
+  storage: StorageInstance;
+
+  clock(): Promise<Clock>;
+  heads(): Promise<LogEntry<T>[]>;
+  values(): Promise<LogEntry<T>[]>;
+  all(): Promise<LogEntry<T>[]>;
+  get(hash: string): Promise<LogEntry<T> | undefined>;
+  has: (hash: string) => Promise<boolean>
+  append(payload: T, options?: { referencesCount: number }): Promise<LogEntry<T>>;
+  join(log: LogInstance<T>): Promise<void>;
+  joinEntry(entry: LogEntry<T>): Promise<void>;
+  traverse(): AsyncGenerator<LogEntry<T>>;
+  iterator(options?: OptionsIterator): AsyncIterable<LogEntry<T>>;
+  clear(): Promise<void>;
+  close(): Promise<void>;
+}
+
+declare function Log<T>(
+  ipfs: IPFS,
+  identity: IdentityInstance,
+  options?: LogOptions<T>
+): Promise<LogInstance<T>>;
+
+export {
+  LogOptions,
+  LogEntry,
+  Entry,
+  Clock,
+
+  LogInstance,
+  Log,
+}
