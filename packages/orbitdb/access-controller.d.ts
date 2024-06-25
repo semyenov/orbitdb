@@ -1,6 +1,6 @@
 import type { DatabaseEvents } from './events'
 import type { IdentitiesInstance, OrbitDBInstance } from './index'
-import type { LogEntry } from './log'
+import type { Entry } from './log'
 import type { StorageInstance } from './storage'
 
 interface CreateAccessControllerOptions {
@@ -15,7 +15,7 @@ interface AccessControllerOptions {
 }
 
 interface AccessControllerInstance {
-  canAppend(entry: LogEntry): Promise<boolean>
+  canAppend(entry: Entry.EntryInstance): Promise<boolean>
 }
 
 interface AccessController<

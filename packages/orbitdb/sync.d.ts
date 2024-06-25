@@ -1,6 +1,6 @@
 import type { SyncEvents } from './events'
 import type { IPFS } from './ipfs'
-import type { LogEntry, LogInstance } from './log'
+import type { Entry, LogInstance } from './log'
 import type { PeerId } from '@libp2p/interface'
 
 interface SyncOptions<T> {
@@ -9,7 +9,7 @@ interface SyncOptions<T> {
   events?: SyncEvents<T>
   start?: boolean
 
-  onSynced?: (peerId: PeerId, heads: LogEntry<T>[]) => void
+  onSynced?: (peerId: PeerId, heads: Entry.EntryInstance<T>[]) => void
 }
 interface SyncInstance<T> {
   events: SyncEvents<T>
@@ -17,7 +17,7 @@ interface SyncInstance<T> {
 
   start: () => Promise<void>
   stop: () => Promise<void>
-  add(entry: LogEntry<T>): void
+  add(entry: Entry.EntryInstance<T>): void
 }
 declare function Sync<T>(options: SyncOptions<T>): Promise<SyncInstance<T>>
 

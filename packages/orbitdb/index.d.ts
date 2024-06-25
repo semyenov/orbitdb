@@ -105,7 +105,6 @@ export {
   useIdentityProvider,
 } from './identities'
 
-export type { LogEntry } from './log'
 export { Entry, Log } from './log'
 
 export {

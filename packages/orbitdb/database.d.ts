@@ -2,7 +2,7 @@ import type { AccessControllerInstance } from './access-controller'
 import type { DatabaseEvents } from './events'
 import type { IdentityInstance } from './identities'
 import type { IPFS } from './ipfs'
-import type { LogEntry, LogInstance } from './log'
+import type { Entry, LogInstance } from './log'
 import type { StorageInstance } from './storage'
 import type { SyncInstance } from './sync'
 import type { PeerId } from '@libp2p/interface'
@@ -20,7 +20,7 @@ interface DatabaseOptions<T> {
   indexStorage?: StorageInstance
   referencesCount?: number
   syncAutomatically?: boolean
-  onUpdate?: (entry: LogEntry<T>) => void
+  onUpdate?: (entry: Entry.EntryInstance<T>) => void
 }
 interface DatabaseInstance<T> {
   name?: string
