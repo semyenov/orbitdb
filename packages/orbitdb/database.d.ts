@@ -1,55 +1,52 @@
 // Type definitions for OrbitDB Database Module
 // Project: https://api.orbitdb.org/module-Database.html
 
-import type { PeerId } from "@libp2p/interface";
-
-import type { AccessControllerInstance } from "./access-controller";
-import type { IdentityInstance } from "./identities";
-import type { LogEntry, LogInstance } from "./log";
-import type { DatabaseEvents } from "./events";
-import type { SyncInstance } from "./sync";
-import type { StorageInstance } from "./storage";
-import type { IPFS } from "./ipfs";
+import type { AccessControllerInstance } from './access-controller'
+import type { DatabaseEvents } from './events'
+import type { IdentityInstance } from './identities'
+import type { IPFS } from './ipfs'
+import type { LogEntry, LogInstance } from './log'
+import type { StorageInstance } from './storage'
+import type { SyncInstance } from './sync'
+import type { PeerId } from '@libp2p/interface'
 
 interface DatabaseOptions<T> {
-  ipfs: IPFS;
-  identity?: IdentityInstance;
-  accessController?: AccessControllerInstance;
-  address?: string;
-  name?: string;
-  directory?: string;
-  meta?: any;
-  headsStorage?: StorageInstance;
-  entryStorage?: StorageInstance;
-  indexStorage?: StorageInstance;
-  referencesCount?: number;
-  syncAutomatically?: boolean;
-  onUpdate?: (entry: LogEntry<T>) => void;
+  ipfs: IPFS
+  identity?: IdentityInstance
+  accessController?: AccessControllerInstance
+  address?: string
+  name?: string
+  directory?: string
+  meta?: any
+  headsStorage?: StorageInstance
+  entryStorage?: StorageInstance
+  indexStorage?: StorageInstance
+  referencesCount?: number
+  syncAutomatically?: boolean
+  onUpdate?: (entry: LogEntry<T>) => void
 }
+interface DatabaseInstance<T> {
+  name?: string
+  address?: string
+  peers: Set<PeerId>
+  indexBy: keyof T
+  type: string
+  meta: any
 
+  events: DatabaseEvents<T>
+  access?: AccessControllerInstance
+  identity?: IdentityInstance
+  log: LogInstance<T>
+  sync: SyncInstance<T>
+
+  addOperation(op: any): Promise<string>
+  close(): Promise<void>
+  drop(): Promise<void>
+}
 declare function Database<T>(
   options: DatabaseOptions<T>,
-): Promise<DatabaseInstance<T>>;
+): Promise<DatabaseInstance<T>>
 
-interface DatabaseInstance<T> {
-  name?: string;
-  address?: string;
-  peers: Set<PeerId>;
-  indexBy: keyof T;
-  type: string;
-  meta: any;
+export type { DatabaseInstance, DatabaseOptions }
 
-  events: DatabaseEvents<T>;
-  access?: AccessControllerInstance;
-  identity?: IdentityInstance;
-  log: LogInstance<T>;
-  sync: SyncInstance<T>;
-
-  addOperation(op: any): Promise<string>;
-  close(): Promise<void>;
-  drop(): Promise<void>;
-}
-
-export type { DatabaseInstance, DatabaseOptions };
-
-export { Database };
+export { Database }

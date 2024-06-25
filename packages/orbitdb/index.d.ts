@@ -1,78 +1,78 @@
-import type { IPFS, PeerId } from "./ipfs";
-import type { IdentitiesInstance, IdentityInstance } from "./identities";
 import type {
   AccessController,
   AccessControllerInstance,
-} from "./access-controller";
-import type { KeyStoreInstance } from "./key-store";
-import type { StorageInstance } from "./storage";
-import type { DatabaseType, DatabaseTypeMap } from "./databases";
+} from './access-controller'
+import type { DatabaseType, DatabaseTypeMap } from './databases'
+import type { IdentitiesInstance, IdentityInstance } from './identities'
+import type { IPFS, PeerId } from './ipfs'
+import type { KeyStoreInstance } from './key-store'
+import type { StorageInstance } from './storage'
 
 interface OrbitDBOpenOptions<T, D extends DatabaseType> {
-  type?: D;
-  meta?: any;
-  sync?: boolean;
+  type?: D
+  meta?: any
+  sync?: boolean
 
-  Database?: DatabaseTypeMap<T>[D];
-  AccessController?: AccessController<string, AccessControllerInstance>;
+  Database?: DatabaseTypeMap<T>[D]
+  AccessController?: AccessController<string, AccessControllerInstance>
 
-  headsStorage?: StorageInstance;
-  entryStorage?: StorageInstance;
-  indexStorage?: StorageInstance;
-  referencesCount?: number;
+  headsStorage?: StorageInstance
+  entryStorage?: StorageInstance
+  indexStorage?: StorageInstance
+  referencesCount?: number
 }
 
 interface CreateOrbitDBOptions {
-  id?: string;
-  ipfs: IPFS;
-  identity?: IdentityInstance;
-  identities?: IdentitiesInstance;
-  directory?: string;
+  id?: string
+  ipfs: IPFS
+  identity?: IdentityInstance
+  identities?: IdentitiesInstance
+  directory?: string
 }
 
 interface OrbitDBInstance {
-  id: string;
-  ipfs: IPFS;
-  directory: string;
-  keystore: KeyStoreInstance;
-  identity: IdentityInstance;
-  peerId: PeerId;
+  id: string
+  ipfs: IPFS
+  directory: string
+  keystore: KeyStoreInstance
+  identity: IdentityInstance
+  peerId: PeerId
 
   open<T, D extends DatabaseType>(
     address: string,
     options?: OrbitDBOpenOptions<T, D>,
-  ): Promise<DatabaseTypeMap<T>[D]>;
-  stop(): Promise<void>;
+  ): Promise<DatabaseTypeMap<T>[D]>
+  stop(): Promise<void>
 }
 
-declare function OrbitDB(options: CreateOrbitDBOptions): OrbitDBInstance;
+declare function OrbitDB(options: CreateOrbitDBOptions): OrbitDBInstance
 
-export type { CreateOrbitDBOptions, OrbitDBInstance, OrbitDBOpenOptions };
+export type { CreateOrbitDBOptions, OrbitDBInstance, OrbitDBOpenOptions }
 
-export { OrbitDB as createOrbitDB };
+export { OrbitDB as createOrbitDB }
 
-export type { IPFS, PeerId } from "./ipfs";
+export type { IPFS, PeerId } from './ipfs'
 
 export type {
   KeyStoreInstance,
   PrivateKeys,
   Secp256k1PrivateKey,
-} from "./key-store";
-export { KeyStore, signMessage, verifyMessage } from "./key-store";
+} from './key-store'
+export { KeyStore, signMessage, verifyMessage } from './key-store'
 
 export type {
   AccessController,
   AccessControllerInstance,
   OrbitDBAccessControllerInstance,
-} from "./access-controller";
+} from './access-controller'
 export {
   IPFSAccessController,
   OrbitDBAccessController,
   useAccessController,
-} from "./access-controller";
+} from './access-controller'
 
-export type { DatabaseInstance, DatabaseOptions } from "./database";
-export { Database } from "./database";
+export type { DatabaseInstance, DatabaseOptions } from './database'
+export { Database } from './database'
 
 export type {
   DatabaseType,
@@ -85,8 +85,8 @@ export type {
   KeyValueIndexedInstance,
   KeyValueInstance,
   useDatabaseType,
-} from "./databases";
-export { Documents, Events, KeyValue, KeyValueIndexed } from "./databases";
+} from './databases'
+export { Documents, Events, KeyValue, KeyValueIndexed } from './databases'
 
 export type {
   IdentitiesInstance,
@@ -94,7 +94,7 @@ export type {
   IdentityOptions,
   IdentityProvider,
   IdentityProviderInstance,
-} from "./identities";
+} from './identities'
 export {
   decodeIdentity,
   getIdentityProvider,
@@ -104,10 +104,10 @@ export {
   isIdentity,
   PublicKeyIdentityProvider,
   useIdentityProvider,
-} from "./identities";
+} from './identities'
 
-export type { LogEntry } from "./log";
-export { Entry, Log } from "./log";
+export type { LogEntry } from './log'
+export { Entry, Log } from './log'
 
 export {
   ComposedStorage,
@@ -116,7 +116,7 @@ export {
   LRUStorage,
   MemoryStorage,
   StorageInstance,
-} from "./storage";
+} from './storage'
 
-export type { OrbitDBAddress } from "./utils";
-export { isValidAddress, parseAddress } from "./utils";
+export type { OrbitDBAddress } from './utils'
+export { isValidAddress, parseAddress } from './utils'

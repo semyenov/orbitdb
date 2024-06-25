@@ -1,11 +1,11 @@
 interface OrbitDBAddress {
-  protocol: string;
-  hash: string;
-  address: string;
-  toString: () => string;
+  protocol: string
+  hash: string
+  address: string
+  toString: () => string
 }
 
-export type { OrbitDBAddress };
+export type { OrbitDBAddress }
 
-export function isValidAddress(address: OrbitDBAddress | string): boolean;
-export function parseAddress(address: OrbitDBAddress | string): OrbitDBAddress;
+export function isValidAddress(address: OrbitDBAddress | string): boolean
+export function parseAddress(address: OrbitDBAddress | string): OrbitDBAddress
