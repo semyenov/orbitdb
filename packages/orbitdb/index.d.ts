@@ -53,60 +53,62 @@ export { OrbitDB as createOrbitDB };
 
 export type { IPFS, PeerId } from "./ipfs";
 
-export {
-  KeyStore,
+export type {
   KeyStoreInstance,
   PrivateKeys,
   Secp256k1PrivateKey,
-  signMessage,
-  verifyMessage,
 } from "./key-store";
+export { KeyStore, signMessage, verifyMessage } from "./key-store";
 
-export {
+export type {
   AccessController,
   AccessControllerInstance,
+  OrbitDBAccessControllerInstance,
+} from "./access-controller";
+export {
   IPFSAccessController,
   OrbitDBAccessController,
-  OrbitDBAccessControllerInstance,
   useAccessController,
 } from "./access-controller";
 
-export { Database, DatabaseInstance, DatabaseOptions } from "./database";
+export type { DatabaseInstance, DatabaseOptions } from "./database";
+export { Database } from "./database";
 
-export {
+export type {
   DatabaseType,
   DatabaseTypeMap,
-  Documents,
   DocumentsDoc,
   DocumentsInstance,
-  Events,
   EventsDoc,
   EventsInstance,
-  KeyValue,
   KeyValueDoc,
-  KeyValueIndexed,
   KeyValueIndexedInstance,
   KeyValueInstance,
   useDatabaseType,
 } from "./databases";
+export { Documents, Events, KeyValue, KeyValueIndexed } from "./databases";
 
-export {
-  decodeIdentity,
-  getIdentityProvider,
-  Identities,
+export type {
   IdentitiesInstance,
-  Identity,
   IdentityInstance,
   IdentityOptions,
   IdentityProvider,
   IdentityProviderInstance,
+} from "./identities";
+export {
+  decodeIdentity,
+  getIdentityProvider,
+  Identities,
+  Identity,
   isEqual,
   isIdentity,
   PublicKeyIdentityProvider,
   useIdentityProvider,
 } from "./identities";
 
-export { Entry, Log, LogEntry } from "./log";
+export type { LogEntry } from "./log";
+export { Entry, Log } from "./log";
+
 export {
   ComposedStorage,
   IPFSBlockStorage,
@@ -116,4 +118,5 @@ export {
   StorageInstance,
 } from "./storage";
 
-export { isValidAddress, OrbitDBAddress, parseAddress } from "./utils";
+export type { OrbitDBAddress } from "./utils";
+export { isValidAddress, parseAddress } from "./utils";

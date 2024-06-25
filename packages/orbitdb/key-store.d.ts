@@ -46,7 +46,6 @@ export function verifyMessage(
   publicKey: string,
   data: string | Uint8Array,
 ): Promise<boolean>;
-
 export function signMessage(
   key: Secp256k1PrivateKey,
   data: string | Uint8Array,

@@ -1,6 +1,6 @@
 import { SyncEvents } from "./events";
 import { IPFS } from "./ipfs";
-import { Log, LogEntry, LogInstance } from "./log";
+import { LogEntry, LogInstance } from "./log";
 import { PeerId } from "@libp2p/interface";
 
 interface SyncOptions<T> {

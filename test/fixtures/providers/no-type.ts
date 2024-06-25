@@ -1,5 +1,4 @@
 const NoTypeIdentityProvider = () => async () => {
+};
 
-}
-
-export default NoTypeIdentityProvider
+export default NoTypeIdentityProvider;

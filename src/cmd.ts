@@ -1,8 +1,14 @@
 import { fakerRU as faker } from "@faker-js/faker";
-import { startOrbitDB, stopOrbitDB } from "./orbit";
+import { startOrbitDB } from "./orbit";
 import { logger } from "./logger";
-import { IPFSAccessController, OrbitDBAccessController } from "@orbitdb/core";
-// import {userA, userB, identities} from './create-users'
+import { OrbitDBAccessController } from "@orbitdb/core";
+
+interface IUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
 
 // const users = [userA, userB]
 // Get DB name and directory from command line
@@ -25,7 +31,7 @@ const accessController = await OrbitDBAccessController({ write: ["*"] });
 // logger.log('orbitDb',orbitdb.ipfs.libp2p.logger)
 
 // Open a database
-const db = await orbitdb.open<{ _id: string; test: string }, "documents">(
+const db = await orbitdb.open<IUser, "documents">(
   dbName,
   { type: "documents", AccessController: accessController },
 );
@@ -64,7 +70,12 @@ while (true) {
     case "put":
       const _id = await logger.prompt("Enter key: ", { type: "text" });
       const value = await logger.prompt("Enter value: ", { type: "text" });
-      await db.put({ _id, test: value });
+      await db.put({
+        _id,
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        email: faker.internet.email(),
+      });
       break;
     case "all":
       const all = await db.all();
@@ -81,40 +92,3 @@ while (true) {
       process.exit(0);
   }
 }
-// Add some data
-// await generate(1000000);
-
-// Get some data
-const value = await db.get("12");
-
-logger.debug("value", value);
-
-// Iterate over records
-for await (const record of db.iterator({ amount: 1 })) {
-  logger.warn("record", record);
-}
-
-// // Stop OrbitDB
-// // await stopOrbitDB(orbitdb);
-
-// async function generate(size: number, chunkSize: number = 1000) {
-//     let time = 0;
-//     for (let i = 0; i < size; i += chunkSize) {
-//         const length = Math.min(chunkSize, size - i);
-//         const chunk = Array.from({ length }, (_, j) => ({
-//             _id: (i + (j + 1)).toString(),
-//             firstName: faker.person.firstName(),
-//             lastName: faker.person.lastName(),
-//             email: faker.internet.email(),
-//             company: faker.company.name(),
-//             phone: faker.phone.number(),
-//             value: faker.lorem.paragraphs({ min: 2, max: 5 }),
-//         }));
-
-//         const startTime = performance.now();
-//         await Promise.all(chunk.map(db.put));
-//         time += performance.now() - startTime;
-//     }
-
-//     logger.info("time", `took ${(1000 / time / size).toFixed(2)}op/sec average`);
-// }

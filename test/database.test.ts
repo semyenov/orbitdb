@@ -17,6 +17,7 @@ import {
   KeyStore,
   KeyStoreInstance,
   LevelStorage,
+  LogEntry,
   MemoryStorage,
 } from "@orbitdb/core";
 
@@ -37,7 +38,7 @@ describe("Database", function () {
   const databaseId = "database-AAA";
 
   const accessController = {
-    canAppend: async (entry) => {
+    canAppend: async (entry: LogEntry) => {
       const identity1 = await identities.getIdentity(entry.identity);
       return identity1.id === testIdentity.id;
     },
@@ -135,7 +136,7 @@ describe("Database", function () {
         "/log/_heads/",
       );
 
-      strictEqual(await existsSync(headsPath), true);
+      strictEqual(existsSync(headsPath), true);
 
       await db.close();
 

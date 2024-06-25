@@ -22,8 +22,6 @@ interface IUser {
   email: string;
 }
 
-// orbitdb.ipfs.libp2p.logger = logger
-// logger.log('orbitDb',orbitdb.ipfs.libp2p.logger)
 // Open a database
 const db = await orbitdb.open<IUser, "documents">(dbName, {
   type: "documents",

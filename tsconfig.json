@@ -11,6 +11,7 @@
     "esModuleInterop": true,
     "allowUnreachableCode": false,
     "noImplicitAny": false,
+    "strict": true,
 
     // "lib": ["ESNext", "DOM"],
 

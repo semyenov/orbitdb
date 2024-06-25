@@ -13,6 +13,7 @@ import {
   KeyValueIndexedInstance,
   LogEntry,
 } from "@orbitdb/core";
+
 import testKeysPath from "../../fixtures/test-keys-path.js";
 import connectPeers from "../../utils/connect-nodes.js";
 import waitFor from "../../utils/wait-for.js";
