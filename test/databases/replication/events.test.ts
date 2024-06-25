@@ -3,15 +3,15 @@ import { rimraf } from 'rimraf'
 import { copy } from 'fs-extra'
 
 import {
-	KeyStore,
-	Identities,
-	Events,
-	IPFS,
-	KeyStoreInstance,
-	IdentitiesInstance,
-	IdentityInstance,
-	DocumentsDoc,
-	DocumentsInstance, EventsInstance, EventsDoc
+  KeyStore,
+  Identities,
+  Events,
+  IPFS,
+  KeyStoreInstance,
+  IdentitiesInstance,
+  IdentityInstance,
+  DocumentsDoc,
+  DocumentsInstance, EventsInstance, EventsDoc
 } from '@orbitdb/core'
 
 import testKeysPath from '../../fixtures/test-keys-path.js'
@@ -20,12 +20,12 @@ import waitFor from '../../utils/wait-for.js'
 import createHelia from '../../utils/create-helia.js'
 
 import {
-	after,
-	afterEach,
-	before,
-	beforeEach,
-	describe,
-	it
+  after,
+  afterEach,
+  before,
+  beforeEach,
+  describe,
+  it
 } from "node:test";
 const keysPath = './testkeys'
 

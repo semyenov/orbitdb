@@ -4,7 +4,7 @@ import { IPFS } from "./ipfs";
 import { LogEntry, Log, LogInstance } from "./log";
 import { PeerId } from "@libp2p/interface";
 
-interface SyncOptions<T, A extends AccessControllerType = 'ipfs'> {
+interface SyncOptions<T, A extends AccessControllerType> {
   ipfs: IPFS;
   log: LogInstance<T, A>;
   events?: SyncEvents<T>;
@@ -21,10 +21,10 @@ interface SyncInstance<T> {
   stop: () => Promise<void>;
   add(entry: LogEntry<T>): void;
 }
-declare function Sync<T, A extends AccessControllerType = 'ipfs'>(options: SyncOptions<T, A>): Promise<SyncInstance<T>>;
+declare function Sync<T, A extends AccessControllerType>(options: SyncOptions<T, A>): Promise<SyncInstance<T>>;
 
 export {
-  Sync,
+  SyncOptions,
   SyncInstance,
-  SyncOptions
+  Sync,
 }

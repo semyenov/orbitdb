@@ -18,4 +18,8 @@ interface ManifestStoreInstance {
 
 declare function ManifestStore(options?: { ipfs?: IPFS; storage?: Storage }): Promise<ManifestStoreInstance>;
 
-export { ManifestStore, ManifestStoreInstance, Manifest };
+export {
+  Manifest,
+  ManifestStoreInstance,
+  ManifestStore,
+};

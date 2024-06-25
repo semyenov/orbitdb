@@ -10,6 +10,7 @@ declare function parseAddress(address: OrbitDBAddress | string): OrbitDBAddress;
 
 export {
   OrbitDBAddress,
+
   isValidAddress,
   parseAddress,
 }

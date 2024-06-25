@@ -1,24 +1,24 @@
 import { strictEqual, deepStrictEqual, notStrictEqual } from 'assert'
 
 import {
-	after,
-	afterEach,
-	before,
-	beforeEach,
-	describe,
-	it
+  after,
+  afterEach,
+  before,
+  beforeEach,
+  describe,
+  it
 } from "node:test";
 
 import { rimraf } from 'rimraf'
 
 import {
-	KeyStore,
-	Identities,
-	IPFSAccessController,
-	IPFS,
-	KeyStoreInstance,
-	IdentitiesInstance,
-	IdentityInstance, OrbitDBInstance
+  KeyStore,
+  Identities,
+  IPFSAccessController,
+  IPFS,
+  KeyStoreInstance,
+  IdentitiesInstance,
+  IdentityInstance, OrbitDBInstance
 } from "@orbitdb/core"
 
 import connectPeers from '../utils/connect-nodes'
@@ -99,8 +99,8 @@ describe('IPFSAccessController', function () {
       const mockEntry = {
         identity: testIdentity1.hash,
         v: 1
-      // ...
-      // doesn't matter what we put here, only identity is used for the check
+        // ...
+        // doesn't matter what we put here, only identity is used for the check
       }
       const canAppend = await accessController.canAppend(mockEntry)
       strictEqual(canAppend, true)
@@ -110,8 +110,8 @@ describe('IPFSAccessController', function () {
       const mockEntry = {
         identity: testIdentity2.hash,
         v: 1
-      // ...
-      // doesn't matter what we put here, only identity is used for the check
+        // ...
+        // doesn't matter what we put here, only identity is used for the check
       }
       const canAppend = await accessController.canAppend(mockEntry)
       strictEqual(canAppend, false)

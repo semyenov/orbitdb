@@ -3,28 +3,27 @@ import path from 'path'
 import fs from 'fs'
 import { rimraf } from 'rimraf'
 import { copy } from 'fs-extra'
-import { KeyStore, Identities, MemoryStorage } from '../../src/index.js'
-import KeyValueIndexed from '../../src/databases/keyvalue-indexed.js'
+import { KeyStore, Identities, MemoryStorage, IPFS, KeyStoreInstance, IPFSAccessControllerInstance, IdentitiesInstance, IdentityInstance, KeyValueIndexedInstance, KeyValueIndexed, KeyValueDoc } from '@orbitdb/core'
 import testKeysPath from '../fixtures/test-keys-path.js'
 import createHelia from '../utils/create-helia.js'
 
 const keysPath = './testkeys'
 
 import {
-	after,
-	afterEach,
-	before,
-	beforeEach,
-	describe,
-	it
+  after,
+  afterEach,
+  before,
+  beforeEach,
+  describe,
+  it
 } from "node:test";
 describe('KeyValueIndexed Database', function () {
-  let ipfs
-  let keystore
-  let accessController
-  let identities
-  let testIdentity1
-  let db
+  let ipfs: IPFS
+  let keystore: KeyStoreInstance
+  let accessController: IPFSAccessControllerInstance
+  let identities: IdentitiesInstance
+  let testIdentity1: IdentityInstance
+  let db: KeyValueIndexedInstance
 
   const databaseId = 'keyvalue-AAA'
 
@@ -68,7 +67,7 @@ describe('KeyValueIndexed Database', function () {
     })
 
     it('creates a keyvalue store', async () => {
-      strictEqual(db.address.toString(), databaseId)
+      strictEqual(db.address?.toString(), databaseId)
       strictEqual(db.type, 'keyvalue')
     })
 
@@ -79,7 +78,7 @@ describe('KeyValueIndexed Database', function () {
     })
 
     it('returns 0 items when it\'s a fresh database', async () => {
-      const all = []
+      const all: KeyValueDoc[] = []
       for await (const item of db.iterator()) {
         all.unshift(item)
       }
@@ -192,11 +191,11 @@ describe('KeyValueIndexed Database', function () {
         { hash: 'zdpuAyi1oGLiYbH2UmRvXdGGC7z1vQYGE8oCvrfUvR5bGx6PN', key: 'key7', value: 'friend33' }
       ]
 
-      for (const { key, value } of Object.values(keyvalue)) {
+      for (const { key, value, hash } of Object.values(keyvalue)) {
         await db.put(key, value)
       }
 
-      const all = []
+      const all: KeyValueDoc[] = []
       for await (const pair of db.iterator()) {
         all.unshift(pair)
       }
@@ -223,9 +222,9 @@ describe('KeyValueIndexed Database', function () {
     })
 
     it('returns no documents when the database is empty', async () => {
-      const all = []
-      for await (const { key, value } of db.iterator()) {
-        all.unshift({ key, value })
+      const all: KeyValueDoc[] = []
+      for await (const { key, value, hash } of db.iterator()) {
+        all.unshift({ key, value, hash })
       }
       strictEqual(all.length, 0)
     })
@@ -245,36 +244,37 @@ describe('KeyValueIndexed Database', function () {
       await db.put('key6', 6)
       await db.del('key6')
 
-      const all = []
-      for await (const { key, value } of db.iterator()) {
-        all.unshift({ key, value })
+      const all: KeyValueDoc[] = []
+      for await (const { key, value, hash } of db.iterator()) {
+        all.unshift({ key, value, hash })
       }
       strictEqual(all.length, 5)
     })
 
     it('returns only the amount of documents given as a parameter', async () => {
       const amount = 3
-      const all = []
-      for await (const { key, value } of db.iterator({ amount })) {
-        all.unshift({ key, value })
+      const all: KeyValueDoc[] = []
+      for await (const { key, value, hash } of db.iterator({ amount })) {
+        all.unshift({ key, value, hash })
       }
       strictEqual(all.length, amount)
     })
 
     it('returns only two documents if amount given as a parameter is 2', async () => {
       const amount = 2
-      const all = []
-      for await (const { key, value } of db.iterator({ amount })) {
-        all.unshift({ key, value })
+      const all: KeyValueDoc[] = []
+      for await (const { key, value, hash } of db.iterator({ amount })) {
+        all.unshift({ key, value, hash })
       }
       strictEqual(all.length, amount)
     })
 
     it('returns only one document if amount given as a parameter is 1', async () => {
       const amount = 1
-      const all = []
-      for await (const { key, value } of db.iterator({ amount })) {
-        all.unshift({ key, value })
+      const all: KeyValueDoc[] = []
+      for await (const { key, value, hash } of db.iterator({ amount })) {
+        console.log(key, value, hash)
+        all.unshift({ key, value, hash })
       }
       strictEqual(all.length, amount)
     })
@@ -295,7 +295,7 @@ describe('KeyValueIndexed Database', function () {
       await db.put('key', 'value')
 
       let result
-      for await (const { key, value } of db.iterator()) {
+      for await (const { key, value, hash } of db.iterator()) {
         result = [key, value]
       }
 

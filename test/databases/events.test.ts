@@ -1,28 +1,27 @@
 import { deepStrictEqual, strictEqual } from 'assert'
 import { rimraf } from 'rimraf'
 import { copy } from 'fs-extra'
-import { KeyStore, Identities } from '../../src/index.js'
-import Events from '../../src/databases/events.js'
+import { KeyStore, Identities, Events, IPFS, KeyStoreInstance, IPFSAccessControllerInstance, IdentitiesInstance, IdentityInstance, EventsInstance, EventsDoc } from '@orbitdb/core'
 import testKeysPath from '../fixtures/test-keys-path.js'
 import createHelia from '../utils/create-helia.js'
 
 const keysPath = './testkeys'
 
 import {
-	after,
-	afterEach,
-	before,
-	beforeEach,
-	describe,
-	it
+  after,
+  afterEach,
+  before,
+  beforeEach,
+  describe,
+  it
 } from "node:test";
 describe('Events Database', function () {
-  let ipfs
-  let keystore
-  let accessController
-  let identities
-  let testIdentity1
-  let db
+  let ipfs: IPFS
+  let keystore: KeyStoreInstance
+  let accessController: IPFSAccessControllerInstance
+  let identities: IdentitiesInstance
+  let testIdentity1: IdentityInstance
+  let db: EventsInstance
 
   const databaseId = 'events-AAA'
 
@@ -61,7 +60,7 @@ describe('Events Database', function () {
   })
 
   it('creates an event store', async () => {
-    strictEqual(db.address.toString(), databaseId)
+    strictEqual(db.address?.toString(), databaseId)
     strictEqual(db.type, 'events')
   })
 
@@ -104,7 +103,7 @@ describe('Events Database', function () {
   })
 
   describe('Iterator Options', () => {
-    let hashes = []
+    let hashes: string[] = []
     const last = arr => arr[arr.length - 1]
     const first = arr => arr[0]
 
@@ -116,7 +115,7 @@ describe('Events Database', function () {
       it('returns one item', async () => {
         const expected = ['hello4']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ amount: 1 })) {
           all.unshift(record)
         }
@@ -128,7 +127,7 @@ describe('Events Database', function () {
       it('returns two items', async () => {
         const expected = ['hello3', 'hello4']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ amount: 2 })) {
           all.unshift(record)
         }
@@ -140,7 +139,7 @@ describe('Events Database', function () {
       it('returns three items', async () => {
         const expected = ['hello2', 'hello3', 'hello4']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ amount: 3 })) {
           all.unshift(record)
         }
@@ -152,7 +151,7 @@ describe('Events Database', function () {
       it('sets \'amount\' greater than items available', async () => {
         const expected = ['hello0', 'hello1', 'hello2', 'hello3', 'hello4']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ amount: 100 })) {
           all.unshift(record)
         }
@@ -164,7 +163,7 @@ describe('Events Database', function () {
       it('sets \'amount\' to 0', async () => {
         const expected = []
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ amount: 0 })) {
           all.unshift(record)
         }
@@ -178,7 +177,7 @@ describe('Events Database', function () {
       it('returns all items less than head', async () => {
         const expected = ['hello0', 'hello1', 'hello2', 'hello3']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ lt: last(hashes) })) {
           all.unshift(record)
         }
@@ -190,7 +189,7 @@ describe('Events Database', function () {
       it('returns one item less than head', async () => {
         const expected = ['hello3']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ lt: last(hashes), amount: 1 })) {
           all.unshift(record)
         }
@@ -202,7 +201,7 @@ describe('Events Database', function () {
       it('returns two items less than head', async () => {
         const expected = ['hello2', 'hello3']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ lt: last(hashes), amount: 2 })) {
           all.unshift(record)
         }
@@ -216,7 +215,7 @@ describe('Events Database', function () {
       it('returns all items less or equal to head', async () => {
         const expected = ['hello0', 'hello1', 'hello2', 'hello3', 'hello4']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ lte: last(hashes) })) {
           all.unshift(record)
         }
@@ -228,7 +227,7 @@ describe('Events Database', function () {
       it('returns one item less than or equal to head', async () => {
         const expected = ['hello4']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ lte: last(hashes), amount: 1 })) {
           all.unshift(record)
         }
@@ -240,7 +239,7 @@ describe('Events Database', function () {
       it('returns two items less than or equal to head', async () => {
         const expected = ['hello3', 'hello4']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ lte: last(hashes), amount: 2 })) {
           all.unshift(record)
         }
@@ -254,7 +253,7 @@ describe('Events Database', function () {
       it('returns all items greater than root', async () => {
         const expected = ['hello1', 'hello2', 'hello3', 'hello4']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ gt: first(hashes) })) {
           all.unshift(record)
         }
@@ -266,7 +265,7 @@ describe('Events Database', function () {
       it('returns one item greater than root', async () => {
         const expected = ['hello1']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ gt: first(hashes), amount: 1 })) {
           all.unshift(record)
         }
@@ -278,7 +277,7 @@ describe('Events Database', function () {
       it('returns two items greater than root', async () => {
         const expected = ['hello1', 'hello2']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ gt: first(hashes), amount: 2 })) {
           all.unshift(record)
         }
@@ -292,7 +291,7 @@ describe('Events Database', function () {
       it('returns all items greater than or equal to root', async () => {
         const expected = ['hello0', 'hello1', 'hello2', 'hello3', 'hello4']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ gte: first(hashes) })) {
           all.unshift(record)
         }
@@ -304,7 +303,7 @@ describe('Events Database', function () {
       it('returns one item greater than or equal to root', async () => {
         const expected = ['hello0']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ gte: first(hashes), amount: 1 })) {
           all.unshift(record)
         }
@@ -316,7 +315,7 @@ describe('Events Database', function () {
       it('returns two items greater than or equal to root', async () => {
         const expected = ['hello0', 'hello1']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ gte: first(hashes), amount: 2 })) {
           all.unshift(record)
         }
@@ -330,7 +329,7 @@ describe('Events Database', function () {
       it('returns all items greater than root and less than head', async () => {
         const expected = ['hello1', 'hello2', 'hello3']
 
-        const all = []
+        const all: EventsDoc[] = []
         for await (const record of db.iterator({ gt: first(hashes), lt: last(hashes) })) {
           all.unshift(record)
         }

@@ -2,7 +2,7 @@ import { Identities } from "../packages/orbitdb";
 import { logger } from "./logger";
 
 export const identities = await Identities({
-    path: './identities'
+  path: './identities'
 })
 
 export const userA = await identities.createIdentity({ id: 'userA' })

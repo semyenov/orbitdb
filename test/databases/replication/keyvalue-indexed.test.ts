@@ -2,15 +2,15 @@ import { deepStrictEqual } from 'assert'
 import { rimraf } from 'rimraf'
 import { copy } from 'fs-extra'
 import {
-	KeyStore,
-	Identities,
-	KeyValueIndexed,
-	IPFS,
-	KeyStoreInstance,
-	IdentitiesInstance,
-	IdentityInstance,
-	DocumentsDoc,
-	DocumentsInstance, EventsInstance, EventsDoc, KeyValueIndexedInstance, KeyValueDoc, LogEntry
+  KeyStore,
+  Identities,
+  KeyValueIndexed,
+  IPFS,
+  KeyStoreInstance,
+  IdentitiesInstance,
+  IdentityInstance,
+  DocumentsDoc,
+  DocumentsInstance, EventsInstance, EventsDoc, KeyValueIndexedInstance, KeyValueDoc, LogEntry
 } from '@orbitdb/core'
 import testKeysPath from '../../fixtures/test-keys-path.js'
 import connectPeers from '../../utils/connect-nodes.js'
@@ -20,12 +20,12 @@ import createHelia from '../../utils/create-helia.js'
 const keysPath = './testkeys'
 
 import {
-	after,
-	afterEach,
-	before,
-	beforeEach,
-	describe,
-	it
+  after,
+  afterEach,
+  before,
+  beforeEach,
+  describe,
+  it
 } from "node:test";
 describe('KeyValueIndexed Database Replication', function () {
   this.timeout(30000)
@@ -95,7 +95,7 @@ describe('KeyValueIndexed Database Replication', function () {
 
   it('replicates a database', async () => {
     let replicated = false
-    let expectedEntryHash : string | null = null
+    let expectedEntryHash: string | null = null
 
     const onConnected = (peerId, heads) => {
       replicated = expectedEntryHash !== null && heads.map(e => e.hash).includes(expectedEntryHash)
@@ -162,7 +162,7 @@ describe('KeyValueIndexed Database Replication', function () {
 
   it('loads the database after replication', async () => {
     let replicated = false
-    let expectedEntryHash : string | null = null
+    let expectedEntryHash: string | null = null
 
     const onConnected = (peerId, heads) => {
       replicated = expectedEntryHash !== null && heads.map(e => e.hash).includes(expectedEntryHash)
@@ -239,7 +239,7 @@ describe('KeyValueIndexed Database Replication', function () {
     let replicated3: string | boolean = false
     let expectedEntryHash1: string | null = null
     let expectedEntryHash2: string | null = null
-    let expectedEntryHash3: string| null = null
+    let expectedEntryHash3: string | null = null
 
     const onError = (err) => {
       console.error(err)

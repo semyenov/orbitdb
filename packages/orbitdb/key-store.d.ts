@@ -14,8 +14,8 @@ interface KeyObject {
 }
 
 type PrivateKeys = PrivateKey<crypto.keys.KeyTypes>;
-
 type Secp256k1PrivateKey = crypto.keys.Secp256k1PrivateKey;
+
 interface KeyStoreInstance {
   addKey(id: string, key: KeyObject): Promise<void>;
   clear(): Promise<void>;
@@ -26,21 +26,20 @@ interface KeyStoreInstance {
   getPublic(keys: PrivateKeys, options?: { format: "buffer" }): Promise<Uint8Array>;
   hasKey(id: string): Promise<boolean>;
 }
-
-
 declare function KeyStore(options?: KeyStoreOptions): Promise<KeyStoreInstance>;
 
 declare function verifyMessage(signature: string, publicKey: string, data: string | Uint8Array): Promise<boolean>;
 declare function signMessage(key: Secp256k1PrivateKey, data: string | Uint8Array): Promise<string>;
 
 export {
-  KeyStore,
-  KeyStoreOptions,
   KeyObject,
-  KeyStoreInstance,
-	Secp256k1PrivateKey,
-	PrivateKeys,
+  Secp256k1PrivateKey,
+  PrivateKeys,
 
-	verifyMessage,
-	signMessage
+  KeyStoreOptions,
+  KeyStoreInstance,
+  KeyStore,
+
+  verifyMessage,
+  signMessage
 };

@@ -3,24 +3,26 @@ import { rimraf } from 'rimraf'
 import { copy } from 'fs-extra'
 
 import {
-	after,
-	afterEach,
-	before,
-	beforeEach,
-	describe,
-	it
+  after,
+  afterEach,
+  before,
+  beforeEach,
+  describe,
+  it
 } from "node:test";
 
 import {
-	KeyStore,
-	Identities,
-	Documents,
-	IPFS,
-	KeyStoreInstance,
-	IdentitiesInstance,
-	IdentityInstance,
-	DocumentsDoc,
-	DocumentsInstance
+  KeyStore,
+  Identities,
+  Documents,
+  IPFS,
+  KeyStoreInstance,
+  IdentitiesInstance,
+  IdentityInstance,
+  DocumentsDoc,
+  DocumentsInstance,
+  IPFSAccessControllerInstance,
+  OrbitDBAccessControllerInstance
 } from '@orbitdb/core'
 
 import testKeysPath from '../../fixtures/test-keys-path.js'
@@ -37,11 +39,11 @@ describe('Documents Database Replication', function () {
   let keystore: KeyStoreInstance
   let identities: IdentitiesInstance
   let testIdentity1: IdentityInstance, testIdentity2: IdentityInstance
-  let db1: DocumentsInstance, db2: DocumentsInstance
+  // let db1: DocumentsInstance<unknown, 'ipfs'>, db2: DocumentsInstance<unknown, 'ipfs'>
 
   const databaseId = 'documents-AAA'
 
-  const accessController = {
+  const accessController: OrbitDBAccessControllerInstance = {
     canAppend: async (entry) => {
       const identity1 = await identities.getIdentity(entry.identity)
       const identity2 = await identities.getIdentity(entry.identity)
@@ -81,8 +83,10 @@ describe('Documents Database Replication', function () {
   })
 
   beforeEach(async () => {
-    db1 = await Documents()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
-    db2 = await Documents()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+    const db1 = await Documents()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
+    db1.access.
+
+      db2 = await Documents()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
   })
 
   afterEach(async () => {

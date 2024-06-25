@@ -1,29 +1,28 @@
 import { deepStrictEqual, strictEqual, notStrictEqual } from 'assert'
 import { rimraf } from 'rimraf'
 import { copy } from 'fs-extra'
-import { KeyStore, Identities } from '../../src/index.js'
-import Documents from '../../src/databases/documents.js'
+import { KeyStore, Identities, Documents, DocumentsInstance, IdentityInstance, IdentitiesInstance, IPFSAccessControllerInstance, KeyStoreInstance, IPFS, DocumentsDoc } from '@orbitdb/core'
 import testKeysPath from '../fixtures/test-keys-path.js'
 import createHelia from '../utils/create-helia.js'
 
 const keysPath = './testkeys'
 
 import {
-	after,
-	afterEach,
-	before,
-	beforeEach,
-	describe,
-	it
+  after,
+  afterEach,
+  before,
+  beforeEach,
+  describe,
+  it
 } from "node:test";
 
 describe('Documents Database', function () {
-  let ipfs
-  let keystore
-  let accessController
-  let identities
-  let testIdentity1
-  let db
+  let ipfs: IPFS
+  let keystore: KeyStoreInstance
+  let accessController: IPFSAccessControllerInstance
+  let identities: IdentitiesInstance
+  let testIdentity1: IdentityInstance
+  let db: DocumentsInstance
 
   const databaseId = 'documents-AAA'
 
@@ -63,7 +62,7 @@ describe('Documents Database', function () {
     })
 
     it('creates a document store', async () => {
-      strictEqual(db.address.toString(), databaseId)
+      strictEqual(db.address?.toString(), databaseId)
       strictEqual(db.type, 'documents')
       strictEqual(db.indexBy, '_id')
     })
@@ -76,7 +75,7 @@ describe('Documents Database', function () {
       await db.put(expected)
 
       const doc = await db.get(key)
-      deepStrictEqual(doc.value, expected)
+      deepStrictEqual(doc?.value, expected)
     })
 
     it('throws an error when putting a document with the wrong key', async () => {
@@ -167,7 +166,7 @@ describe('Documents Database', function () {
     })
 
     it('creates a document store', async () => {
-      strictEqual(db.address.toString(), databaseId)
+      strictEqual(db.address?.toString(), databaseId)
       strictEqual(db.type, 'documents')
       strictEqual(db.indexBy, 'doc')
     })
@@ -180,7 +179,7 @@ describe('Documents Database', function () {
       await db.put(expected)
 
       const doc = await db.get(key)
-      deepStrictEqual(doc.value, expected)
+      deepStrictEqual(doc?.value, expected)
     })
 
     it('deletes a document', async () => {
@@ -275,7 +274,7 @@ describe('Documents Database', function () {
     })
 
     it('returns no documents when the database is empty', async () => {
-      const all = []
+      const all: DocumentsDoc[] = []
       for await (const doc of db.iterator()) {
         all.unshift(doc)
       }
@@ -297,7 +296,7 @@ describe('Documents Database', function () {
       await db.put({ _id: 'doc6', something: true })
       await db.del('doc6')
 
-      const all = []
+      const all: DocumentsDoc[] = []
       for await (const doc of db.iterator()) {
         all.unshift(doc)
       }
@@ -306,7 +305,7 @@ describe('Documents Database', function () {
 
     it('returns only the amount of documents given as a parameter', async () => {
       const amount = 3
-      const all = []
+      const all: DocumentsDoc[] = []
       for await (const doc of db.iterator({ amount })) {
         all.unshift(doc)
       }
@@ -315,7 +314,7 @@ describe('Documents Database', function () {
 
     it('returns only two documents if amount given as a parameter is 2', async () => {
       const amount = 2
-      const all = []
+      const all: DocumentsDoc[] = []
       for await (const doc of db.iterator({ amount })) {
         all.unshift(doc)
       }
@@ -324,7 +323,7 @@ describe('Documents Database', function () {
 
     it('returns only one document if amount given as a parameter is 1', async () => {
       const amount = 1
-      const all = []
+      const all: DocumentsDoc[] = []
       for await (const doc of db.iterator({ amount })) {
         all.unshift(doc)
       }
@@ -359,33 +358,33 @@ describe('Documents Database', function () {
     })
 
     it('supports booleans', async () => {
-      const { value } = await db.get('booleans')
-      deepStrictEqual(value, data.booleans)
+      const doc = await db.get('booleans')
+      deepStrictEqual(doc?.value, data.booleans)
     })
 
     it('supports integers', async () => {
-      const { value } = await db.get('integers')
-      deepStrictEqual(value, data.integers)
+      const doc = await db.get('integers')
+      deepStrictEqual(doc?.value, data.integers)
     })
 
     it('supports floats', async () => {
-      const { value } = await db.get('floats')
-      deepStrictEqual(value, data.floats)
+      const doc = await db.get('floats')
+      deepStrictEqual(doc?.value, data.floats)
     })
 
     it('supports Arrays', async () => {
-      const { value } = await db.get('arrays')
-      deepStrictEqual(value, data.arrays)
+      const doc = await db.get('arrays')
+      deepStrictEqual(doc?.value, data.arrays)
     })
 
     it('supports Maps', async () => {
-      const { value } = await db.get('maps')
-      deepStrictEqual(value, { _id: 'maps', value: Object.fromEntries(data.maps.value) })
+      const doc = await db.get('maps')
+      deepStrictEqual(doc?.value, { _id: 'maps', value: Object.fromEntries(data.maps.value) })
     })
 
     it('supports Uint8Arrays', async () => {
-      const { value } = await db.get('uint8')
-      deepStrictEqual(value, data.uint8)
+      const doc = await db.get('uint8')
+      deepStrictEqual(doc?.value, data.uint8)
     })
 
     it('doesn\'t support Sets', async () => {

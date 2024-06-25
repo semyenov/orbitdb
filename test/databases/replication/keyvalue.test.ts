@@ -2,15 +2,15 @@ import { deepStrictEqual } from 'assert'
 import { rimraf } from 'rimraf'
 import { copy } from 'fs-extra'
 import {
-	KeyStore,
-	Identities,
-	KeyValue,
-	IPFS,
-	KeyStoreInstance,
-	IdentitiesInstance,
-	IdentityInstance,
-	DocumentsDoc,
-	DocumentsInstance, KeyValueInstance, KeyValueDoc
+  KeyStore,
+  Identities,
+  KeyValue,
+  IPFS,
+  KeyStoreInstance,
+  IdentitiesInstance,
+  IdentityInstance,
+  DocumentsDoc,
+  DocumentsInstance, KeyValueInstance, KeyValueDoc
 } from '@orbitdb/core'
 import testKeysPath from '../../fixtures/test-keys-path.js'
 import connectPeers from '../../utils/connect-nodes.js'
@@ -20,12 +20,12 @@ import createHelia from '../../utils/create-helia.js'
 const keysPath = './testkeys'
 
 import {
-	after,
-	afterEach,
-	before,
-	beforeEach,
-	describe,
-	it
+  after,
+  afterEach,
+  before,
+  beforeEach,
+  describe,
+  it
 } from "node:test";
 describe('KeyValue Database Replication', function () {
   this.timeout(30000)
@@ -208,7 +208,7 @@ describe('KeyValue Database Replication', function () {
     const value9 = await kv1.get('empty')
     deepStrictEqual(value9, undefined)
 
-    const all2: KeyValueDoc[]  = []
+    const all2: KeyValueDoc[] = []
     for await (const keyValue of kv2.iterator()) {
       all2.push(keyValue)
     }

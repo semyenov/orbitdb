@@ -12,40 +12,42 @@ import { Storage } from './storage';
 import { IPFS } from './ipfs';
 
 interface DatabaseOptions<T, A extends keyof AccessControllerTypeMap = 'ipfs'> {
-	ipfs: IPFS;
-	identity?: IdentityInstance;
-	address?: string;
-	name?: string;
-	accessController?: AccessControllerTypeMap[A];
-	directory?: string;
-	meta?: any;
-	headsStorage?: Storage;
-	entryStorage?: Storage;
-	indexStorage?: Storage;
-	referencesCount?: number;
-	syncAutomatically?: boolean;
-	onUpdate?: (entry: LogEntry<T>) => void;
+  ipfs: IPFS;
+  identity?: IdentityInstance;
+  address?: string;
+  name?: string;
+  accessController?: AccessControllerTypeMap[A];
+  directory?: string;
+  meta?: any;
+  headsStorage?: Storage;
+  entryStorage?: Storage;
+  indexStorage?: Storage;
+  referencesCount?: number;
+  syncAutomatically?: boolean;
+  onUpdate?: (entry: LogEntry<T>) => void;
 }
 
-declare function Database<T, A extends AccessControllerType = 'ipfs'>(options: DatabaseOptions<T, A>): Promise<DatabaseInstance<T, A>>;
+declare function Database<T, A extends AccessControllerType>(options: DatabaseOptions<T, A>): Promise<DatabaseInstance<T, A>>;
 
-interface DatabaseInstance<T, A extends AccessControllerType = 'ipfs'> {
-	access?: AccessControllerTypeMap[A];
-	address?: string;
-	events: DatabaseEvents<T>;
-	log: LogInstance<T, A>;
-	name?: string;
-	peers: Set<PeerId>;
-	sync: SyncInstance<T>;
-	meta: any;
-	identity?: IdentityInstance;
+interface DatabaseInstance<T, A extends AccessControllerType> {
+  name?: string;
+  address?: string;
+  peers: Set<PeerId>;
+  indexBy: keyof T;
+  meta: any;
 
-	addOperation(op: any): Promise<string>;
-	close(): Promise<void>;
-	drop(): Promise<void>;
+  events: DatabaseEvents<T>;
+  access?: AccessControllerTypeMap[A];
+  identity?: IdentityInstance;
+  log: LogInstance<T, A>;
+  sync: SyncInstance<T>;
+
+  addOperation(op: any): Promise<string>;
+  close(): Promise<void>;
+  drop(): Promise<void>;
 }
 
 export {
-	Database,
-	DatabaseInstance
+  DatabaseInstance,
+  Database,
 };
