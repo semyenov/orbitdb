@@ -342,7 +342,7 @@ describe('Identities', () => {
     })
 
     it('throws an error if private key is not found from keystore', async () => {
-      const { publicKey, signatures, type } = identity
+      const { publicKey, signatures } = identity
       const modifiedIdentity = await Identity(
         {
           id: 'this id does not exist',

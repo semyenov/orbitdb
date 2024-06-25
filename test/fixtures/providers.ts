@@ -1,5 +1,5 @@
 function customIdentityProvider() {
-  const verifyIdentity = async data => true
+  const verifyIdentity = async _data => true
 
   const CustomIdentityProvider = () => () => {
     const getId = () => 'custom'
@@ -21,7 +21,7 @@ function customIdentityProvider() {
 }
 
 function fakeIdentityProvider() {
-  const verifyIdentity = async data => false
+  const verifyIdentity = async _data => false
 
   const FakeIdentityProvider = () => () => {
     const getId = () => 'pubKey'

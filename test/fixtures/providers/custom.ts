@@ -2,7 +2,7 @@ import type { IdentityProviderInstance } from '@orbitdb/core'
 
 const type = 'custom'
 
-async function verifyIdentity(data) {
+async function verifyIdentity(_data) {
   return true
 }
 

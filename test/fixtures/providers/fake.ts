@@ -1,6 +1,6 @@
 const type = 'fake'
 
-async function verifyIdentity(data) {
+async function verifyIdentity(_data) {
   return false
 }
 

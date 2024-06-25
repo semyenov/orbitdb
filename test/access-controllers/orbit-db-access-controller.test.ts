@@ -164,11 +164,10 @@ describe('OrbitDBAccessController', () => {
 
     it('emit \'update\' event when a capability was added', async () => {
       let update = false
-      const onUpdate = (entry) => {
-        update = true
-      }
 
-      accessController.events.on('update', onUpdate)
+      accessController.events.on('update', (_entry) => {
+        update = true
+      })
 
       await accessController.grant('read', 'AXES')
 
@@ -309,11 +308,10 @@ describe('OrbitDBAccessController', () => {
       await accessController.grant('admin', 'dogs')
 
       let update = false
-      const onUpdate = (entry) => {
-        update = true
-      }
 
-      accessController.events.on('update', onUpdate)
+      accessController.events.on('update', (_entry) => {
+        update = true
+      })
 
       await accessController.revoke('admin', 'cats')
 

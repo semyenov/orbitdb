@@ -226,7 +226,7 @@ describe('KeyValue Database', () => {
         },
       ]
 
-      for (const { key, value, hash } of Object.values(keyvalue)) {
+      for (const { key, value } of Object.values(keyvalue)) {
         await db.put(key, value)
       }
 

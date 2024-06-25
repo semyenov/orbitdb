@@ -219,8 +219,8 @@ describe('Identity', () => {
   describe('isIdentity', () => {
     describe('valid Identity', () => {
       it('is a valid identity', async () => {
-        const identity = await Identity({ id, publicKey, signatures, type })
-        const result = isIdentity(identity)
+        const currentIdentity = await Identity({ id, publicKey, signatures, type })
+        const result = isIdentity(currentIdentity)
         assert.strictEqual(result, true)
       })
     })
