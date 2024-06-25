@@ -1,6 +1,3 @@
-// Type definitions for OrbitDB Database Module
-// Project: https://api.orbitdb.org/module-Database.html
-
 import type { AccessControllerInstance } from './access-controller'
 import type { DatabaseEvents } from './events'
 import type { IdentityInstance } from './identities'
