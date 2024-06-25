@@ -59,4 +59,4 @@ export type {
 }
 export { IPFSAccessController, OrbitDBAccessController }
 
-export function useAccessController(accessController: { type: string }): void
+export function useAccessController(accessController: AccessController<string, AccessControllerInstance>): void
