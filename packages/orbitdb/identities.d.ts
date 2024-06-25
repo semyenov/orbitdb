@@ -40,6 +40,10 @@ interface IdentityProvider {
   type: string
 }
 
+declare function PublicKeyIdentityProvider(
+  options: Pick<IdentityOptions, 'keystore'>,
+): () => Promise<IdentityProviderInstance>
+
 interface IdentitiesOptions {
   path?: string
 
@@ -47,11 +51,6 @@ interface IdentitiesOptions {
   keystore?: KeyStoreInstance
   storage?: StorageInstance
 }
-
-declare function PublicKeyIdentityProvider(
-  options: Pick<IdentityOptions, 'keystore'>,
-): () => Promise<IdentityProviderInstance>
-
 interface IdentitiesInstance {
   (options?: IdentitiesOptions): Promise<IdentitiesInstance>
   createIdentity: (options?: IdentityOptions) => Promise<IdentityInstance>

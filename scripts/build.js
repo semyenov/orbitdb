@@ -1,17 +1,20 @@
-import { build } from "esbuild";
+import process from 'node:process'
+
+import { build } from 'esbuild'
 
 build({
-  outdir: "./dist",
-  entryPoints: ["./src/logger.ts"],
-  tsconfig: "./tsconfig.build.json",
-  sourcemap: "linked",
-  format: "esm",
+  outdir: './dist',
+  entryPoints: ['./packages/orbitdb/index.d.ts'],
+  sourceRoot: './packages/orbitdb',
+  tsconfig: './tsconfig.build.json',
+  sourcemap: 'linked',
+  format: 'esm',
   minify: true,
   bundle: true,
   treeShaking: true,
   define: {
-    "process.env.NODE_DEBUG": "false",
-    "process.env.NODE_ENV": '"production"',
-    global: "globalThis",
+    'process.env.NODE_DEBUG': 'false',
+    'process.env.NODE_ENV': '"production"',
+    'global': 'globalThis',
   },
-}).catch(() => process.exit(1));
+}).catch(() => process.exit(1))
