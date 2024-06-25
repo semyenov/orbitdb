@@ -48,7 +48,6 @@ interface OrbitDBInstance {
 declare function OrbitDB(options: CreateOrbitDBOptions): OrbitDBInstance
 
 export type { CreateOrbitDBOptions, OrbitDBInstance, OrbitDBOpenOptions }
-
 export { OrbitDB as createOrbitDB }
 
 export type { IPFS, PeerId } from './ipfs'
