@@ -44,6 +44,16 @@ export namespace Entry {
   export function encode<T>(entry: LogEntry<T>): Promise<Uint8Array>
 }
 
+interface LogIteratorOptions {
+  gt?: string
+  gte?: string
+  lt?: string
+  lte?: string
+  amount?: number
+}
+interface LogAppendOptions {
+  referencesCount: number
+}
 interface LogOptions<T> {
   logId?: string
   logHeads?: LogEntry<T>[]
@@ -54,19 +64,6 @@ interface LogOptions<T> {
   indexStorage?: StorageInstance
   sortFn?: (a: LogEntry<T>, b: LogEntry<T>) => number
 }
-
-interface LogIteratorOptions {
-  gt?: string
-  gte?: string
-  lt?: string
-  lte?: string
-  amount?: number
-}
-
-interface LogAppendOptions {
-  referencesCount: number
-}
-
 interface LogInstance<T> {
   id: string
 
@@ -91,7 +88,6 @@ interface LogInstance<T> {
   clear(): Promise<void>
   close(): Promise<void>
 }
-
 declare function Log<T>(
   ipfs: IPFS,
   identity: IdentityInstance,
@@ -106,5 +102,4 @@ export type {
   LogIteratorOptions,
   LogOptions,
 }
-
 export { Log }

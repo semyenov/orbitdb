@@ -12,6 +12,7 @@ interface OrbitDBOpenOptions<T, D extends DatabaseType> {
   type?: D
   meta?: any
   sync?: boolean
+  referencesCount?: number
 
   Database?: DatabaseTypeMap<T>[D]
   AccessController?: AccessController<string, AccessControllerInstance>
@@ -19,7 +20,6 @@ interface OrbitDBOpenOptions<T, D extends DatabaseType> {
   headsStorage?: StorageInstance
   entryStorage?: StorageInstance
   indexStorage?: StorageInstance
-  referencesCount?: number
 }
 
 interface CreateOrbitDBOptions {

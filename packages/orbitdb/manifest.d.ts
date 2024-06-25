@@ -22,6 +22,6 @@ declare function ManifestStore(
   options?: ManifestStoreOptions,
 ): Promise<ManifestStoreInstance>
 
-export type { Manifest, ManifestStoreInstance }
+export type { Manifest, ManifestStoreInstance, ManifestStoreOptions }
 
 export { ManifestStore }

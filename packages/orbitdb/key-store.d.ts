@@ -32,7 +32,6 @@ export type {
   PrivateKeys,
   Secp256k1PrivateKey,
 }
-
 export { KeyStore }
 
 export function verifyMessage(

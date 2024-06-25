@@ -21,14 +21,13 @@ interface DocumentsDoc<T = unknown> {
   value: T
 }
 
-interface DocumentsOptions<T> {
-  indexBy?: keyof T
-}
-
 interface DocumentsIteratorOptions {
   amount?: number
 }
 
+interface DocumentsOptions<T> {
+  indexBy?: keyof T
+}
 interface DocumentsInstance<T = unknown> extends DatabaseInstance<T> {
   type: 'documents'
 
@@ -41,7 +40,6 @@ interface DocumentsInstance<T = unknown> extends DatabaseInstance<T> {
   put(doc: T): Promise<string>
   query(findFn: (doc: T) => boolean): Promise<T[]>
 }
-
 declare function Documents<T>(
   documentsOptions?: DocumentsOptions<T>,
 ): (options: DatabaseOptions) => Promise<DocumentsInstance<T>>
@@ -50,7 +48,6 @@ interface EventsDoc<T = unknown> {
   key: string
   value: T
 }
-
 interface EventsIteratorOptions {
   gt?: string
   gte?: string
@@ -58,7 +55,6 @@ interface EventsIteratorOptions {
   lte?: string
   amount?: number
 }
-
 interface EventsInstance<T = unknown> extends DatabaseInstance<T> {
   type: 'events'
 
@@ -76,11 +72,9 @@ interface KeyValueDoc<T = unknown> {
   key: string
   value: T
 }
-
 interface KeyValueIteratorOptions {
   amount?: number
 }
-
 interface KeyValueInstance<T = unknown> extends DatabaseInstance<T> {
   type: 'keyvalue'
 
@@ -100,7 +94,6 @@ declare function KeyValue<T>(): (
 interface KeyValueIndexedOptions {
   storage?: StorageInstance
 }
-
 interface KeyValueIndexedInstance<T = unknown> extends KeyValueInstance<T> {}
 declare function KeyValueIndexed<T>(
   keyValueIndexedOptions?: KeyValueIndexedOptions,
@@ -111,7 +104,6 @@ interface DatabasesFunctionTypeMap<T> {
   events: typeof Events<T>
   keyvalue: typeof KeyValue<T> | typeof KeyValueIndexed<T>
 }
-
 type DatabaseFunctionType = keyof DatabasesFunctionTypeMap<any>
 
 interface DatabaseTypeMap<T = unknown> {
@@ -119,7 +111,6 @@ interface DatabaseTypeMap<T = unknown> {
   events: EventsInstance<T>
   keyvalue: KeyValueInstance<T> | KeyValueIndexedInstance<T>
 }
-
 type DatabaseType = keyof DatabaseTypeMap
 
 export type {
@@ -139,7 +130,6 @@ export type {
   KeyValueInstance,
   KeyValueIteratorOptions,
 }
-
 export { Documents, Events, KeyValue, KeyValueIndexed }
 
 export function useDatabaseType<D extends DatabaseFunctionType, T>(

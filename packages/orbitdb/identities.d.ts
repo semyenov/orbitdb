@@ -81,7 +81,6 @@ export type {
   IdentityProvider,
   IdentityProviderInstance,
 }
-
 export { Identities, Identity, PublicKeyIdentityProvider }
 
 export function getIdentityProvider(type: string): IdentityProviderInstance

@@ -57,7 +57,6 @@ export type {
   IPFSAccessControllerInstance,
   OrbitDBAccessControllerInstance,
 }
-
 export { IPFSAccessController, OrbitDBAccessController }
 
 export function useAccessController(accessController: { type: string }): void

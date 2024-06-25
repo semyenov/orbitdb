@@ -45,5 +45,4 @@ declare function Database<T>(
 ): Promise<DatabaseInstance<T>>
 
 export type { DatabaseInstance, DatabaseOptions }
-
 export { Database }
