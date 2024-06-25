@@ -1,6 +1,6 @@
-import { PeerId } from "@libp2p/interface";
+import {PeerId} from "@libp2p/interface";
 
-import { IPFS } from './ipfs';
+import {IPFS} from './ipfs';
 
 import {
 	Identities,
@@ -21,7 +21,11 @@ import {
 import {
 	AccessControllerTypeMap,
 	AccessControllerType,
-	OrbitDBAccessController
+	OrbitDBAccessController,
+	IPFSAccessControllerInstance,
+	OrbitDBAccessControllerInstance,
+	IPFSAccessController,
+	useAccessController
 } from "./access-controller";
 
 import {
@@ -34,10 +38,9 @@ import {
 	verifyMessage
 } from "./key-store";
 
-import { Database, DatabaseInstance } from "./database";
-import { ComposedStorage, Storage } from "./storage";
-import { IPFSAccessController } from './access-controller'
-import { OrbitDBAddress, parseAddress, isValidAddress } from './utils';
+import {Database, DatabaseInstance} from "./database";
+import {ComposedStorage, Storage} from "./storage";
+import {OrbitDBAddress, parseAddress, isValidAddress} from './utils';
 
 import {
 	DatabaseType,
@@ -47,12 +50,19 @@ import {
 	Events,
 	KeyValue,
 	KeyValueIndexed,
-	useDatabaseType
+	useDatabaseType,
+	DocumentsInstance,
+	DocumentsDoc,
+	EventsInstance,
+	EventsDoc,
+	KeyValueIndexedInstance,
+	KeyValueInstance,
+	KeyValueDoc,
+
 } from './databases';
 
-import { LogEntry, Log, Entry } from './log';
-import { IPFSBlockStorage, LRUStorage, LevelStorage, MemoryStorage } from './storage';
-import { useAccessController } from './access-controller';
+import {LogEntry, Log, Entry} from './log';
+import {IPFSBlockStorage, LRUStorage, LevelStorage, MemoryStorage} from './storage';
 
 type OrbitDBOpenOptions<D extends DatabaseType, T, A extends AccessControllerType> = {
 	type?: D;
@@ -99,9 +109,21 @@ export {
 
 	ComposedStorage,
 	Database,
-	IPFSAccessController as DefaultAccessController,
+
+	// Databases
 	Documents,
 	Events,
+	DocumentsInstance,
+	DocumentsDoc,
+	EventsInstance,
+	EventsDoc,
+	KeyValueIndexedInstance,
+	KeyValueInstance,
+	KeyValueDoc,
+
+	// Access Controller
+	IPFSAccessControllerInstance,
+	OrbitDBAccessControllerInstance,
 	IPFSAccessController,
 	IPFSBlockStorage,
 

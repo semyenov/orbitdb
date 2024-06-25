@@ -24,7 +24,7 @@ import {
 	KeyStoreInstance,
 	IdentitiesInstance,
 	DatabaseInstance,
-	IdentityInstance
+	IdentityInstance, IPFSAccessControllerInstance
 } from '@orbitdb/core'
 
 import testKeysPath from './fixtures/test-keys-path.js'
@@ -48,7 +48,7 @@ describe('Database', function () {
 			const identity1 = await identities.getIdentity(entry.identity)
 			return identity1.id === testIdentity.id
 		}
-	}
+	} as IPFSAccessControllerInstance
 
 	before(async () => {
 		ipfs = await createHelia()
