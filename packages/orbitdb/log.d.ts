@@ -1,7 +1,7 @@
-import { StorageInstance } from "./storage";
-import { IPFS } from "./ipfs";
-import { Identity, IdentityInstance } from "./identities";
-import { AccessControllerInstance } from "./access-controller";
+import type { StorageInstance } from "./storage";
+import type { IPFS } from "./ipfs";
+import type { IdentityInstance } from "./identities";
+import type { AccessControllerInstance } from "./access-controller";
 
 interface Clock {
   id: string;

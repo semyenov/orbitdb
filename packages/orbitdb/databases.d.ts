@@ -1,8 +1,10 @@
-import { StorageInstance } from "./storage";
-import { DatabaseInstance } from "./database";
-import { AccessControllerInstance } from "./access-controller";
-import { IdentitiesInstance, IdentityInstance } from "./index";
-import { IPFS } from "./ipfs";
+import type { OrbitDBInstance } from "./index";
+
+import type { IPFS } from "./ipfs";
+import type { StorageInstance } from "./storage";
+import type { DatabaseInstance } from "./database";
+import type { AccessControllerInstance } from "./access-controller";
+import type { IdentitiesInstance, IdentityInstance } from "./identities";
 
 interface DatabaseOptions {
   ipfs?: IPFS;

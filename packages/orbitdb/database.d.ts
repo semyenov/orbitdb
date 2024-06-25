@@ -1,15 +1,15 @@
 // Type definitions for OrbitDB Database Module
 // Project: https://api.orbitdb.org/module-Database.html
 
-import { PeerId } from "@libp2p/interface";
+import type { PeerId } from "@libp2p/interface";
 
-import { AccessControllerInstance } from "./access-controller";
-import { IdentityInstance } from "./identities";
-import { LogEntry, LogInstance } from "./log";
-import { DatabaseEvents } from "./events";
-import { SyncInstance } from "./sync";
-import { StorageInstance } from "./storage";
-import { IPFS } from "./ipfs";
+import type { AccessControllerInstance } from "./access-controller";
+import type { IdentityInstance } from "./identities";
+import type { LogEntry, LogInstance } from "./log";
+import type { DatabaseEvents } from "./events";
+import type { SyncInstance } from "./sync";
+import type { StorageInstance } from "./storage";
+import type { IPFS } from "./ipfs";
 
 interface DatabaseOptions<T> {
   ipfs: IPFS;

@@ -1,7 +1,7 @@
 import * as crypto from "@libp2p/crypto";
-import { PrivateKey } from "@libp2p/interface";
+import type { PrivateKey } from "@libp2p/interface";
 
-import { StorageInstance } from "./storage";
+import type { StorageInstance } from "./storage";
 
 type PrivateKeys = PrivateKey<crypto.keys.KeyTypes>;
 type Secp256k1PrivateKey = crypto.keys.Secp256k1PrivateKey;
@@ -31,17 +31,6 @@ interface KeyStoreInstance {
 }
 declare function KeyStore(options?: KeyStoreOptions): Promise<KeyStoreInstance>;
 
-declare function verifyMessage(
-  signature: string,
-  publicKey: string,
-  data: string | Uint8Array,
-): Promise<boolean>;
-
-declare function signMessage(
-  key: Secp256k1PrivateKey,
-  data: string | Uint8Array,
-): Promise<string>;
-
 export type {
   KeyObject,
   KeyStoreInstance,
@@ -50,4 +39,15 @@ export type {
   Secp256k1PrivateKey,
 };
 
-export { KeyStore, signMessage, verifyMessage };
+export { KeyStore };
+
+export function verifyMessage(
+  signature: string,
+  publicKey: string,
+  data: string | Uint8Array,
+): Promise<boolean>;
+
+export function signMessage(
+  key: Secp256k1PrivateKey,
+  data: string | Uint8Array,
+): Promise<string>;

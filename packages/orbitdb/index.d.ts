@@ -10,7 +10,7 @@ import { KeyStoreInstance } from "./key-store";
 import { StorageInstance } from "./storage";
 import { DatabaseType, DatabaseTypeMap } from "./databases";
 
-type OrbitDBOpenOptions<T, D extends DatabaseType> = {
+interface OrbitDBOpenOptions<T, D extends DatabaseType> {
   type?: D;
   meta?: any;
   sync?: boolean;
@@ -22,7 +22,7 @@ type OrbitDBOpenOptions<T, D extends DatabaseType> = {
   entryStorage?: StorageInstance;
   indexStorage?: StorageInstance;
   referencesCount?: number;
-};
+}
 
 interface CreateOrbitDBOptions {
   id?: string;
@@ -48,6 +48,9 @@ interface OrbitDBInstance {
 }
 
 declare function OrbitDB(options: CreateOrbitDBOptions): OrbitDBInstance;
+
+export type { CreateOrbitDBOptions, OrbitDBInstance, OrbitDBOpenOptions };
+
 export { OrbitDB as createOrbitDB };
 
 export {

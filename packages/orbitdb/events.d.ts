@@ -1,6 +1,6 @@
-import { EventEmitter } from "events";
+import type { EventEmitter } from "events";
 
-import { LogEntry } from "./log";
+import type { LogEntry } from "./log";
 
 interface SyncEvents<T> extends EventEmitter {
   on(

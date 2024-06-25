@@ -1,18 +1,3 @@
-interface IPFSBlockStorageOptions {
-  ipfs: any;
-  pin?: boolean;
-  timeout?: number;
-}
-
-interface LRUStorageOptions {
-  size?: string;
-}
-
-interface LevelStorageOptions {
-  path?: string;
-  valueEncoding?: string;
-}
-
 interface ComposedStorageInstance {
   put(hash: string, data: any): Promise<void>;
   get(hash: string): Promise<any>;
@@ -26,6 +11,11 @@ declare function ComposedStorage(
   storage2: StorageInstance,
 ): Promise<ComposedStorageInstance>;
 
+interface IPFSBlockStorageOptions {
+  ipfs: any;
+  pin?: boolean;
+  timeout?: number;
+}
 interface IPFSBlockStorageInstance {
   get(hash: string): Promise<Uint8Array>;
   put(hash: string, value: any): Promise<void>;
@@ -34,6 +24,9 @@ declare function IPFSBlockStorage(
   options: IPFSBlockStorageOptions,
 ): Promise<IPFSBlockStorageInstance>;
 
+interface LRUStorageOptions {
+  size?: string;
+}
 interface LRUStorageInstance {
   put(hash: string, data: any): Promise<void>;
   get(hash: string): Promise<any>;
@@ -46,6 +39,10 @@ declare function LRUStorage(
   options?: LRUStorageOptions,
 ): Promise<LRUStorageInstance>;
 
+interface LevelStorageOptions {
+  path?: string;
+  valueEncoding?: string;
+}
 interface LevelStorageInstance {
   put(hash: string, data: any): Promise<void>;
   get(hash: string): Promise<any>;

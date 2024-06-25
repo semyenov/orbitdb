@@ -1,6 +1,6 @@
-import { KeyStoreInstance } from "./key-store";
-import { StorageInstance } from "./storage";
-import { IPFS } from "./ipfs";
+import type { KeyStoreInstance } from "./key-store";
+import type { StorageInstance } from "./storage";
+import type { IPFS } from "./ipfs";
 
 interface IdentityInstance {
   id: string;
