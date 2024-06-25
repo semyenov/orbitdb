@@ -20,9 +20,7 @@ import {
   IdentitiesInstance,
   IdentityInstance,
   DocumentsDoc,
-  DocumentsInstance,
-  IPFSAccessControllerInstance,
-  OrbitDBAccessControllerInstance
+  DocumentsInstance
 } from '@orbitdb/core'
 
 import testKeysPath from '../../fixtures/test-keys-path.js'
@@ -39,11 +37,11 @@ describe('Documents Database Replication', function () {
   let keystore: KeyStoreInstance
   let identities: IdentitiesInstance
   let testIdentity1: IdentityInstance, testIdentity2: IdentityInstance
-  // let db1: DocumentsInstance<unknown, 'ipfs'>, db2: DocumentsInstance<unknown, 'ipfs'>
+  let db1: DocumentsInstance, db2: DocumentsInstance
 
   const databaseId = 'documents-AAA'
 
-  const accessController: OrbitDBAccessControllerInstance = {
+  const accessController = {
     canAppend: async (entry) => {
       const identity1 = await identities.getIdentity(entry.identity)
       const identity2 = await identities.getIdentity(entry.identity)
@@ -83,10 +81,8 @@ describe('Documents Database Replication', function () {
   })
 
   beforeEach(async () => {
-    const db1 = await Documents()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
-    db1.access.
-
-      db2 = await Documents()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+    db1 = await Documents()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
+    db2 = await Documents()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
   })
 
   afterEach(async () => {

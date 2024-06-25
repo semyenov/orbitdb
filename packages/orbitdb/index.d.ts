@@ -19,10 +19,8 @@ import {
 } from './identities';
 
 import {
-  AccessControllerTypeMap,
-  AccessControllerType,
   OrbitDBAccessController,
-  IPFSAccessControllerInstance,
+  AccessControllerInstance,
   OrbitDBAccessControllerInstance,
   IPFSAccessController,
   useAccessController
@@ -38,8 +36,8 @@ import {
   verifyMessage
 } from "./key-store";
 
-import { Database, DatabaseInstance } from "./database";
-import { ComposedStorage, Storage } from "./storage";
+import { Database, DatabaseOptions, DatabaseInstance } from "./database";
+import { ComposedStorage, StorageInstance } from "./storage";
 import { OrbitDBAddress, parseAddress, isValidAddress } from './utils';
 
 import {
@@ -57,23 +55,22 @@ import {
   KeyValueIndexedInstance,
   KeyValueInstance,
   KeyValueDoc,
-
 } from './databases';
 
 import { LogEntry, Log, Entry } from './log';
 import { IPFSBlockStorage, LRUStorage, LevelStorage, MemoryStorage } from './storage';
 
-type OrbitDBOpenOptions<T, A extends AccessControllerType, D extends DatabaseType> = {
+type OrbitDBOpenOptions<T, D extends DatabaseType> = {
   type?: D;
   meta?: any;
   sync?: boolean;
 
-  Database?: DatabaseTypeMap<T, A>[D];
-  AccessController?: AccessControllerTypeMap[A];
+  Database?: DatabaseTypeMap<T>[D];
+  AccessController?: AccessControllerInstance;
 
-  headsStorage?: Storage;
-  entryStorage?: Storage;
-  indexStorage?: Storage;
+  headsStorage?: StorageInstance;
+  entryStorage?: StorageInstance;
+  indexStorage?: StorageInstance;
   referencesCount?: number;
 }
 
@@ -85,7 +82,7 @@ interface OrbitDBInstance {
   identity: IdentityInstance;
   peerId: PeerId;
 
-  open<T, A extends AccessControllerType, D extends DatabaseType = 'events'>(address: string, options?: OrbitDBOpenOptions<T, A, D>): Promise<DatabaseTypeMap<T, A>[D]>;
+  open<T, D extends DatabaseType>(address: string, options?: OrbitDBOpenOptions<T, D>): Promise<DatabaseTypeMap<T>[D]>;
   stop(): Promise<void>;
 }
 
@@ -100,12 +97,12 @@ interface CreateOrbitDBOptions {
 declare function createOrbitDB(options: CreateOrbitDBOptions): OrbitDBInstance;
 
 export {
+  OrbitDBAddress,
   CreateOrbitDBOptions,
   OrbitDBOpenOptions,
   OrbitDBInstance,
-  OrbitDBAddress,
-  ComposedStorage,
 
+  DatabaseOptions,
   DatabaseInstance,
   Database,
 
@@ -129,7 +126,7 @@ export {
   OrbitDBAccessControllerInstance,
   OrbitDBAccessController,
 
-  IPFSAccessControllerInstance,
+  AccessControllerInstance as IPFSAccessControllerInstance,
   IPFSAccessController,
 
   // Identity
@@ -152,15 +149,16 @@ export {
   KeyStore,
 
   // Log
-  LogEntry,
   Entry,
+  LogEntry,
   Log,
 
   // IPFS
   IPFS,
 
   // Storage
-  Storage,
+  StorageInstance,
+  ComposedStorage,
   MemoryStorage,
   LRUStorage,
   LevelStorage,

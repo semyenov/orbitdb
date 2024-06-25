@@ -1,18 +1,7 @@
-import { Storage } from "./storage";
+import { StorageInstance } from "./storage";
 import { IPFS } from "./ipfs";
 import { Identity, IdentityInstance } from "./identities";
-import { AccessControllerTypeMap, AccessControllerType } from "./access-controller";
-
-interface LogOptions<T, A extends AccessControllerType> {
-  logId?: string;
-  logHeads?: LogEntry<T>[];
-  access?: AccessControllerTypeMap[A];
-  entries?: LogEntry<T>[];
-  entryStorage?: Storage;
-  headsStorage?: Storage;
-  indexStorage?: Storage;
-  sortFn?: (a: LogEntry<T>, b: LogEntry<T>) => number;
-}
+import { AccessControllerInstance } from "./access-controller";
 
 interface LogEntry<T = unknown> {
   id: string;
@@ -29,6 +18,17 @@ interface LogEntry<T = unknown> {
   key: string;
   identity: string;
   sig: string;
+}
+
+interface LogOptions<T> {
+  logId?: string;
+  logHeads?: LogEntry<T>[];
+  access?: AccessControllerInstance;
+  entries?: LogEntry<T>[];
+  entryStorage?: StorageInstance;
+  headsStorage?: StorageInstance;
+  indexStorage?: StorageInstance;
+  sortFn?: (a: LogEntry<T>, b: LogEntry<T>) => number;
 }
 
 declare namespace Entry {
@@ -53,12 +53,6 @@ interface Clock {
   time: number;
 }
 
-declare function Log<T, A extends AccessControllerType>(
-  ipfs: IPFS,
-  identity: IdentityInstance,
-  options?: LogOptions<T, A>
-): Promise<LogInstance<T, A>>;
-
 type OptionsIterator = {
   gt?: string;
   gte?: string;
@@ -67,12 +61,12 @@ type OptionsIterator = {
   amount?: number;
 };
 
-interface LogInstance<T, A extends AccessControllerType> {
+interface LogInstance<T> {
   id: string;
 
-  access?: AccessControllerTypeMap[A];
+  access?: AccessControllerInstance;
   identity: IdentityInstance;
-  storage: Storage;
+  storage: StorageInstance;
 
   clock(): Promise<Clock>;
   heads(): Promise<LogEntry<T>[]>;
@@ -81,13 +75,19 @@ interface LogInstance<T, A extends AccessControllerType> {
   get(hash: string): Promise<LogEntry<T> | undefined>;
   has: (hash: string) => Promise<boolean>
   append(payload: T, options?: { referencesCount: number }): Promise<LogEntry<T>>;
-  join(log: LogInstance<T, A>): Promise<void>;
+  join(log: LogInstance<T>): Promise<void>;
   joinEntry(entry: LogEntry<T>): Promise<void>;
   traverse(): AsyncGenerator<LogEntry<T>>;
   iterator(options?: OptionsIterator): AsyncIterable<LogEntry<T>>;
   clear(): Promise<void>;
   close(): Promise<void>;
 }
+
+declare function Log<T>(
+  ipfs: IPFS,
+  identity: IdentityInstance,
+  options?: LogOptions<T>
+): Promise<LogInstance<T>>;
 
 export {
   LogOptions,

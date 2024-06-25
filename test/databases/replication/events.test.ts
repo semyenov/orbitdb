@@ -10,8 +10,8 @@ import {
   KeyStoreInstance,
   IdentitiesInstance,
   IdentityInstance,
-  DocumentsDoc,
-  DocumentsInstance, EventsInstance, EventsDoc
+  EventsInstance,
+  EventsDoc
 } from '@orbitdb/core'
 
 import testKeysPath from '../../fixtures/test-keys-path.js'

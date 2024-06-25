@@ -1,12 +1,11 @@
-import { Storage } from "./storage";
+import { StorageInstance } from "./storage";
 import { IPFS } from "./ipfs";
 import { DatabaseType } from "./databases";
-import { AccessControllerType } from "./access-controller";
 
 interface Manifest {
   name: string;
   type: DatabaseType;
-  accessController: AccessControllerType;
+  accessController: string;
   meta?: any;
 }
 
@@ -16,7 +15,7 @@ interface ManifestStoreInstance {
   close(): Promise<void>;
 }
 
-declare function ManifestStore(options?: { ipfs?: IPFS; storage?: Storage }): Promise<ManifestStoreInstance>;
+declare function ManifestStore(options?: { ipfs?: IPFS; storage?: StorageInstance }): Promise<ManifestStoreInstance>;
 
 export {
   Manifest,

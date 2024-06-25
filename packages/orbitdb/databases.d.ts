@@ -1,14 +1,16 @@
-import { Storage } from './storage';
+import { StorageInstance } from './storage';
 import { DatabaseInstance } from "./database";
-import { AccessControllerType, AccessControllerTypeMap, IPFSAccessControllerInstance } from './access-controller';
+import { AccessControllerInstance } from './access-controller';
 import { IdentitiesInstance, IdentityInstance, IPFS, OrbitDBInstance } from "./index";
 
-interface DocumentsOptions<T> {
-  indexBy?: keyof T;
-}
-
-type DocumentsIteratorOptions = {
-  amount?: number;
+interface DatabaseOptions {
+  ipfs?: IPFS,
+  identity?: IdentityInstance,
+  address?: string,
+  orbitdb?: OrbitDBInstance,
+  identities?: IdentitiesInstance,
+  accessController?: AccessControllerInstance,
+  directory?: string,
 }
 
 interface DocumentsDoc<T = unknown> {
@@ -17,17 +19,15 @@ interface DocumentsDoc<T = unknown> {
   value: T;
 }
 
-interface DatabaseOptions<A extends AccessControllerType> {
-  ipfs?: IPFS,
-  identity?: IdentityInstance,
-  orbitdb?: OrbitDBInstance,
-  identities?: IdentitiesInstance,
-  accessController?: AccessControllerTypeMap[A],
-  address?: string,
-  directory?: string,
+interface DocumentsOptions<T> {
+  indexBy?: keyof T;
 }
 
-interface DocumentsInstance<T, A extends AccessControllerType> extends DatabaseInstance<T, A> {
+interface DocumentsIteratorOptions {
+  amount?: number;
+}
+
+interface DocumentsInstance<T = unknown> extends DatabaseInstance<T> {
   type: 'documents';
 
   all(): Promise<DocumentsDoc<T>[]>;
@@ -38,8 +38,8 @@ interface DocumentsInstance<T, A extends AccessControllerType> extends DatabaseI
   query(findFn: (doc: T) => boolean): Promise<T[]>;
 }
 
-declare function Documents<T, A extends AccessControllerType>(options?: DocumentsOptions<T>):
-  (options: DatabaseOptions<A>) => Promise<DocumentsInstance<T, A>>;
+declare function Documents<T>(options?: DocumentsOptions<T>):
+  (options: DatabaseOptions) => Promise<DocumentsInstance<T>>;
 
 interface EventsDoc<T = unknown> {
   key: string;
@@ -54,7 +54,7 @@ type EventsIteratorOptions = {
   amount?: number;
 };
 
-interface EventsInstance<T, A extends AccessControllerType> extends DatabaseInstance<T, A> {
+interface EventsInstance<T = unknown> extends DatabaseInstance<T> {
   type: 'events';
 
   add(value: T): Promise<string>;
@@ -63,8 +63,8 @@ interface EventsInstance<T, A extends AccessControllerType> extends DatabaseInst
   iterator(options?: EventsIteratorOptions): AsyncGenerator<EventsDoc<T>>;
 }
 
-declare function Events<T, A extends AccessControllerType>():
-  (options: DatabaseOptions<A>) => Promise<EventsInstance<T, A>>;
+declare function Events<T>():
+  (options: DatabaseOptions) => Promise<EventsInstance<T>>;
 
 interface KeyValueDoc<T = unknown> {
   hash: string;
@@ -76,7 +76,7 @@ type KeyValueIteratorOptions = {
   amount?: number;
 }
 
-interface KeyValueInstance<T, A extends AccessControllerType> extends DatabaseInstance<T, A> {
+interface KeyValueInstance<T = unknown> extends DatabaseInstance<T> {
   type: 'keyvalue';
 
   all(): Promise<KeyValueDoc<T>[]>;
@@ -87,36 +87,36 @@ interface KeyValueInstance<T, A extends AccessControllerType> extends DatabaseIn
   put(key: string, value: T): Promise<string>;
 }
 
-declare function KeyValue<T, A extends AccessControllerType>():
-  (options: DatabaseOptions<A>) => Promise<KeyValueInstance<T, A>>;
+declare function KeyValue<T>():
+  (options: DatabaseOptions) => Promise<KeyValueInstance<T>>;
 
-interface DatabaseTypeMap<T, A extends AccessControllerType> {
-  documents: DocumentsInstance<T, A>;
-  events: EventsInstance<T, A>;
-  keyvalue: KeyValueInstance<T, A> | KeyValueIndexedInstance<T, A>;
+interface DatabaseTypeMap<T = unknown> {
+  documents: DocumentsInstance<T>;
+  events: EventsInstance<T>;
+  keyvalue: KeyValueInstance<T> | KeyValueIndexedInstance<T>;
 }
 
-type DatabaseType = keyof DatabaseTypeMap<any, any>;
+type DatabaseType = keyof DatabaseTypeMap;
 
-interface KeyValueIndexedInstance<T, A extends AccessControllerType> extends KeyValueInstance<T, A> {
+interface KeyValueIndexedInstance<T = unknown> extends KeyValueInstance<T> {
 }
 
 interface KeyValueIndexedOptions {
-  storage?: Storage
+  storage?: StorageInstance
 }
 
-declare function KeyValueIndexed<T, A extends AccessControllerType>(options?: KeyValueIndexedOptions):
-  (options: DatabaseOptions<A>) => Promise<KeyValueIndexedInstance<T, A>>;
+declare function KeyValueIndexed<T>(options?: KeyValueIndexedOptions):
+  (options: DatabaseOptions) => Promise<KeyValueIndexedInstance<T>>;
 
-interface DatabasesFunctionTypeMap<T, A extends AccessControllerType> {
-  documents: typeof Documents<T, A>;
-  events: typeof Events<T, A>;
-  keyvalue: typeof KeyValue<T, A> | typeof KeyValueIndexed<T, A>;
+interface DatabasesFunctionTypeMap<T> {
+  documents: typeof Documents<T>;
+  events: typeof Events<T>;
+  keyvalue: typeof KeyValue<T> | typeof KeyValueIndexed<T>;
 }
 
-type DatabaseFunctionType = keyof DatabasesFunctionTypeMap<any, any>;
+type DatabaseFunctionType = keyof DatabasesFunctionTypeMap<any>;
 
-declare function useDatabaseType<D extends DatabaseFunctionType, T, A extends AccessControllerType>(database: DatabasesFunctionTypeMap<T, A>[D] & {
+declare function useDatabaseType<D extends DatabaseFunctionType, T>(database: DatabasesFunctionTypeMap<T>[D] & {
   type: T
 }): void;
 

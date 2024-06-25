@@ -1,10 +1,10 @@
 import * as crypto from '@libp2p/crypto';
 import { PrivateKey } from '@libp2p/interface';
 
-import { Storage } from "./storage";
+import { StorageInstance } from "./storage";
 
 interface KeyStoreOptions {
-  storage?: Storage;
+  storage?: StorageInstance;
   path?: string;
 }
 

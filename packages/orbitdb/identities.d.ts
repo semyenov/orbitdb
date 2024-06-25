@@ -1,5 +1,5 @@
 import { KeyStore, KeyStoreInstance } from "./key-store";
-import { Storage } from "./storage";
+import { StorageInstance } from "./storage";
 import { IPFS } from "./ipfs";
 
 interface IdentityInstance {
@@ -36,10 +36,11 @@ interface IdentityProvider {
 }
 
 interface IdentitiesOptions {
-  keystore?: KeyStoreInstance;
   path?: string;
-  storage?: Storage;
+
   ipfs?: IPFS;
+  keystore?: KeyStoreInstance;
+  storage?: StorageInstance;
 }
 
 declare function PublicKeyIdentityProvider(options: Pick<IdentityOptions, 'keystore'>): () => Promise<IdentityProviderInstance>;
@@ -82,6 +83,6 @@ export {
   useIdentityProvider,
   getIdentityProvider,
   decodeIdentity,
-  isEqual,
   isIdentity,
+  isEqual,
 }

@@ -1,27 +1,32 @@
 import { LogEntry } from "./log";
-import { Storage } from "./storage";
+import { StorageInstance } from "./storage";
 import { IdentitiesInstance, OrbitDBInstance } from "./index";
 import { DatabaseEvents } from "./events";
 
-interface AccessControllerTypeMap {
-  ipfs: IPFSAccessControllerInstance,
-  orbitdb: OrbitDBAccessControllerInstance
-}
-type AccessControllerType = keyof AccessControllerTypeMap;
-
 interface CreateAccessControllerOptions {
   write?: string[];
-  storage?: Storage;
+  storage?: StorageInstance;
 }
 
-interface IPFSAccessControllerInstance {
-  canAppend(entry: LogEntry<unknown>): Promise<boolean>;
-  type?: AccessControllerType;
-  address?: string;
-  write?: string[];
+interface AccessControllerInstance {
+  canAppend(entry: LogEntry): Promise<boolean>;
 }
 
-interface OrbitDBAccessControllerInstance extends IPFSAccessControllerInstance {
+interface AccessControllerOptions {
+  orbitdb: OrbitDBInstance,
+  identities: IdentitiesInstance,
+  address?: string,
+}
+
+interface IPFSAccessControllerInstance extends AccessControllerInstance {
+  type: 'ipfs';
+  address: string;
+  write: string[];
+}
+declare function IPFSAccessController(options?: CreateAccessControllerOptions):
+  (options: AccessControllerOptions) => Promise<IPFSAccessControllerInstance>;
+
+interface OrbitDBAccessControllerInstance extends AccessControllerInstance {
   close(): Promise<void>
   drop(): Promise<void>
   capabilities(): Promise<string[]>
@@ -31,30 +36,18 @@ interface OrbitDBAccessControllerInstance extends IPFSAccessControllerInstance {
   revoke(capability: string, key: string): Promise<void>;
   events: DatabaseEvents;
 }
-
-interface AccessControllerOptions {
-  orbitdb: OrbitDBInstance,
-  identities: IdentitiesInstance,
-  address?: string,
-}
-
-declare function IPFSAccessController(options?: CreateAccessControllerOptions):
-  (options: AccessControllerOptions) => Promise<IPFSAccessControllerInstance>;
-
 declare function OrbitDBAccessController(options?: Pick<CreateAccessControllerOptions, 'write'>):
   (options: AccessControllerOptions) => Promise<OrbitDBAccessControllerInstance>;
 
-declare function useAccessController(accessController: { type: AccessControllerType }): void;
+declare function useAccessController(accessController: { type: string }): void;
 
 export {
   IPFSAccessController,
   OrbitDBAccessController,
+
   useAccessController,
 
-  IPFSAccessControllerInstance,
+  AccessControllerInstance,
   OrbitDBAccessControllerInstance,
-
-  AccessControllerTypeMap,
-  AccessControllerType
 };
 

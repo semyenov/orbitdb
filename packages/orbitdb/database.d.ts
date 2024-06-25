@@ -3,33 +3,33 @@
 
 import { PeerId } from '@libp2p/interface'
 
-import { AccessControllerTypeMap, AccessControllerType } from './access-controller';
+import { AccessControllerInstance } from './access-controller';
 import { IdentityInstance } from './identities';
 import { LogEntry, LogInstance } from "./log";
 import { DatabaseEvents } from "./events";
 import { SyncInstance } from "./sync";
-import { Storage } from './storage';
+import { StorageInstance } from './storage';
 import { IPFS } from './ipfs';
 
-interface DatabaseOptions<T, A extends keyof AccessControllerTypeMap = 'ipfs'> {
+interface DatabaseOptions<T> {
   ipfs: IPFS;
   identity?: IdentityInstance;
+  accessController?: AccessControllerInstance;
   address?: string;
   name?: string;
-  accessController?: AccessControllerTypeMap[A];
   directory?: string;
   meta?: any;
-  headsStorage?: Storage;
-  entryStorage?: Storage;
-  indexStorage?: Storage;
+  headsStorage?: StorageInstance;
+  entryStorage?: StorageInstance;
+  indexStorage?: StorageInstance;
   referencesCount?: number;
   syncAutomatically?: boolean;
   onUpdate?: (entry: LogEntry<T>) => void;
 }
 
-declare function Database<T, A extends AccessControllerType>(options: DatabaseOptions<T, A>): Promise<DatabaseInstance<T, A>>;
+declare function Database<T>(options: DatabaseOptions<T>): Promise<DatabaseInstance<T>>;
 
-interface DatabaseInstance<T, A extends AccessControllerType> {
+interface DatabaseInstance<T> {
   name?: string;
   address?: string;
   peers: Set<PeerId>;
@@ -37,9 +37,9 @@ interface DatabaseInstance<T, A extends AccessControllerType> {
   meta: any;
 
   events: DatabaseEvents<T>;
-  access?: AccessControllerTypeMap[A];
+  access?: AccessControllerInstance;
   identity?: IdentityInstance;
-  log: LogInstance<T, A>;
+  log: LogInstance<T>;
   sync: SyncInstance<T>;
 
   addOperation(op: any): Promise<string>;
@@ -48,6 +48,7 @@ interface DatabaseInstance<T, A extends AccessControllerType> {
 }
 
 export {
+  DatabaseOptions,
   DatabaseInstance,
   Database,
 };
