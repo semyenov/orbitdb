@@ -26,7 +26,7 @@ interface LogEntry<T = unknown> {
 }
 
 export namespace Entry {
-  function create<T>(
+  export function create<T>(
     identity: IdentityInstance,
     id: string,
     payload: any,
@@ -34,14 +34,14 @@ export namespace Entry {
     next?: Array<string | LogEntry<T>>,
     refs?: Array<string | LogEntry<T>>,
   ): Promise<LogEntry<T>>
-  function verify<T>(
+  export function verify<T>(
     identities: IdentityInstance,
     entry: LogEntry<T>,
   ): Promise<boolean>
-  function isEntry(obj: unknown): boolean
-  function isEqual<T>(a: LogEntry<T>, b: LogEntry<T>): boolean
-  function decode<T>(bytes: Uint8Array): Promise<LogEntry<T>>
-  function encode<T>(entry: LogEntry<T>): Promise<Uint8Array>
+  export function isEntry(obj: unknown): boolean
+  export function isEqual<T>(a: LogEntry<T>, b: LogEntry<T>): boolean
+  export function decode<T>(bytes: Uint8Array): Promise<LogEntry<T>>
+  export function encode<T>(entry: LogEntry<T>): Promise<Uint8Array>
 }
 
 interface LogOptions<T> {
