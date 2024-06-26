@@ -2,48 +2,48 @@ import type { KeyStoreInstance } from './key-store'
 import type { StorageInstance } from './storage'
 import type { IPFS } from './vendor'
 
-interface IdentityOptions {
-  id?: string
-  provider?: ReturnType<typeof PublicKeyIdentityProvider>
+interface IdentityProviderGetIdOptions {
+  id: string
+}
+interface IdentityProviderOptions {
   keystore?: KeyStoreInstance
 }
-interface IdentityInstance {
-  id: string
-  publicKey: string
-  signatures: {
-    id: string
-    publicKey: string
-  }
+interface IdentityProviderInstance {
   type: string
-  hash?: string
-  bytes?: Uint8Array
+  getId: (options: IdentityProviderGetIdOptions) => string
+  signIdentity: (data: string, options: IdentityProviderGetIdOptions) => string
+}
+// eslint-disable-next-line ts/consistent-type-definitions
+type IdentityProvider<
+  T extends string,
+  U extends IdentityProviderInstance,
+> = {
+  (options: IdentityProviderOptions): U
+  verifyIdentity: (data: any) => Promise<boolean>
+  type: T
+}
+
+interface IdentityOptions {
+  id: string
+  type: string
+  publicKey: string
+  signatures: { id: string, publicKey: string }
 
   sign?: (data: any) => Promise<string>
   verify?: (data: any, signature: string) => Promise<boolean>
 }
+interface IdentityInstance extends IdentityOptions {
+  hash: string
+  bytes: Uint8Array
+}
 declare function Identity(
-  identity: IdentityInstance,
+  options: IdentityOptions,
 ): Promise<IdentityInstance>
 
-interface IdentityProviderOptions {
-  keystore: KeyStoreInstance
-  provider: Function
+interface IdentitiesCreateIdentityOptions {
+  id?: string
+  provider?: IdentityProviderInstance
 }
-interface IdentityProviderInstance {
-  type: string
-  getId: (options: IdentityProviderOptions) => string
-  signIdentity: (data: string, options: IdentityProviderOptions) => string
-}
-interface IdentityProvider {
-  (): () => Promise<IdentityProviderInstance>
-  verifyIdentity: (data: any) => Promise<boolean>
-  type: string
-}
-
-declare function PublicKeyIdentityProvider(
-  options: Pick<IdentityOptions, 'keystore'>,
-): () => Promise<IdentityProviderInstance>
-
 interface IdentitiesOptions {
   path?: string
 
@@ -52,8 +52,7 @@ interface IdentitiesOptions {
   storage?: StorageInstance
 }
 interface IdentitiesInstance {
-  (options?: IdentitiesOptions): Promise<IdentitiesInstance>
-  createIdentity: (options?: IdentityOptions) => Promise<IdentityInstance>
+  createIdentity: (options?: IdentitiesCreateIdentityOptions) => Promise<IdentityInstance>
   getIdentity: (id: string) => Promise<IdentityInstance>
   verifyIdentity: (identity: IdentityInstance) => Promise<boolean>
   keystore: KeyStoreInstance
@@ -71,7 +70,10 @@ declare function Identities(
   options?: IdentitiesOptions,
 ): Promise<IdentitiesInstance>
 
+declare const PublicKeyIdentityProvider: IdentityProvider<'publickey', IdentityProviderInstance>
+
 export type {
+  IdentitiesCreateIdentityOptions,
   IdentitiesInstance,
   IdentitiesOptions,
   IdentityInstance,
@@ -82,7 +84,7 @@ export type {
 export { Identities, Identity, PublicKeyIdentityProvider }
 
 export function getIdentityProvider(type: string): IdentityProviderInstance
-export function useIdentityProvider(identityProvider: IdentityProvider): void
+export function useIdentityProvider(identityProvider: IdentityProvider<string, IdentityProviderInstance>): void
 export function decodeIdentity(bytes: Uint8Array): Promise<IdentityInstance>
 export function isIdentity(identity: any): boolean
 export function isEqual(

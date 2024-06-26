@@ -8,17 +8,18 @@ import type { IPFS, PeerId } from './vendor'
 
 interface DatabaseOptions<T> {
   ipfs: IPFS
-  identity?: IdentityInstance
-  accessController?: AccessControllerInstance
   address?: string
   name?: string
   directory?: string
+  referencesCount?: number
+  syncAutomatically?: boolean
   meta?: any
+
+  accessController?: AccessControllerInstance
+  identity?: IdentityInstance
   headsStorage?: StorageInstance
   entryStorage?: StorageInstance
   indexStorage?: StorageInstance
-  referencesCount?: number
-  syncAutomatically?: boolean
   onUpdate?: (entry: Entry.Instance<T>) => void
 }
 interface DatabaseInstance<T> {

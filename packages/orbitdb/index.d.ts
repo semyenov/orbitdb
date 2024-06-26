@@ -42,7 +42,7 @@ interface OrbitDBInstance {
   ): Promise<DatabaseTypeMap<T>[D]>
   stop(): Promise<void>
 }
-declare function OrbitDB(options: OrbitDBOptions): OrbitDBInstance
+declare function OrbitDB(options: OrbitDBOptions): Promise<OrbitDBInstance>
 
 export type {
   OrbitDBInstance,

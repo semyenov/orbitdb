@@ -18,10 +18,11 @@ interface AccessControllerInstance {
   canAppend(entry: Entry.Instance): Promise<boolean>
 }
 
-interface AccessController<
+// eslint-disable-next-line ts/consistent-type-definitions
+type AccessController<
   T extends string,
   U extends AccessControllerInstance,
-> {
+> = {
   type: T
   (options: AccessControllerOptions): Promise<U>
 }
@@ -31,7 +32,6 @@ interface IPFSAccessControllerInstance extends AccessControllerInstance {
   address: string
   write: string[]
 }
-
 declare const IPFSAccessController: (
   options?: CreateAccessControllerOptions,
 ) => AccessController<'ipfs', IPFSAccessControllerInstance>

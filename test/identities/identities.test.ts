@@ -337,7 +337,7 @@ describe('Identities', () => {
     it('sign data', async () => {
       const signingKey = await keystore.getKey(identity.id)
       const expectedSignature = await signMessage(signingKey, data)
-      const signature = await identities.sign(identity, data, keystore)
+      const signature = await identities.sign(identity, data)
       assert.strictEqual(signature, expectedSignature)
     })
 
@@ -354,7 +354,7 @@ describe('Identities', () => {
       let signature: string | undefined
       let err: string | undefined
       try {
-        signature = await identities.sign(modifiedIdentity, data, keystore)
+        signature = await identities.sign(modifiedIdentity, data)
       }
       catch (e) {
         err = (e as Error).toString()
@@ -390,7 +390,7 @@ describe('Identities', () => {
     beforeEach(async () => {
       identities = await Identities({ keystore })
       identity = await identities.createIdentity({ id })
-      signature = await identities.sign(identity, data, keystore)
+      signature = await identities.sign(identity, data)
     })
 
     it('verifies that the signature is valid', async () => {
