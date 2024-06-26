@@ -26,6 +26,7 @@ import type {
 const keysPath = './testkeys'
 describe('KeyValueIndexed Database Replication', function () {
   // eslint-disable-next-line ts/no-invalid-this
+  // @ts-ignore
   this.timeout(30000)
 
   let ipfs1: IPFS, ipfs2: IPFS

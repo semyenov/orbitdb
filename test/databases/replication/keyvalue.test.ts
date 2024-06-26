@@ -25,6 +25,7 @@ import type {
 
 const keysPath = './testkeys'
 describe('KeyValue Database Replication', function () {
+  // @ts-ignore
   this.timeout(30000)
 
   let ipfs1: IPFS, ipfs2: IPFS

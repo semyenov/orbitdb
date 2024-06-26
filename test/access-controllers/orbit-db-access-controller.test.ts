@@ -5,7 +5,7 @@ import {
   KeyStore,
   createOrbitDB as OrbitDB,
   OrbitDBAccessController,
-  createOrbitDB,
+  createOrbitDB, Entry,
 } from '@orbitdb/core'
 import { after, before, describe, it } from 'node:test'
 import { rimraf } from 'rimraf'
@@ -17,7 +17,7 @@ import type {
   IPFS,
   IdentitiesInstance,
   IdentityInstance,
-  LogEntry,
+  Entry as LogEntry,
   OrbitDBAccessControllerInstance,
   OrbitDBInstance,
 } from '@orbitdb/core'
@@ -185,11 +185,11 @@ describe('OrbitDBAccessController', () => {
 
       const mockEntry1 = {
         identity: testIdentity1.hash,
-      } as LogEntry
+      } as Entry.Instance
 
       const mockEntry2 = {
         identity: testIdentity2.hash,
-      } as LogEntry
+      } as Entry.Instance
 
       const canAppend1 = await accessController.canAppend(mockEntry1)
 

@@ -2,19 +2,20 @@ import type {
   AccessController,
   AccessControllerInstance,
 } from './access-controller'
-import type { DatabaseType, DatabaseTypeMap } from './databases'
+import type {  DatabaseTypeMap, Databases } from './databases'
 import type { IdentitiesInstance, IdentityInstance } from './identities'
 import type { KeyStoreInstance } from './key-store'
 import type { StorageInstance } from './storage'
 import type { IPFS, PeerId } from './vendor'
+import {DatabaseInstance} from "./database";
 
-interface OrbitDBOpenOptions<T, D extends DatabaseType> {
+interface OrbitDBOpenOptions<T, D extends keyof DatabaseTypeMap> {
   type?: D
   meta?: any
   sync?: boolean
   referencesCount?: number
 
-  Database?: DatabaseTypeMap<T>[D]
+  Database?: Databases<keyof DatabaseTypeMap, DatabaseInstance>
   AccessController?: AccessController<string, AccessControllerInstance>
 
   headsStorage?: StorageInstance
@@ -37,7 +38,7 @@ interface OrbitDBInstance {
   identity: IdentityInstance
   peerId: PeerId
 
-  open<T, D extends DatabaseType>(
+  open<T, D extends keyof DatabaseTypeMap>(
     address: string,
     options?: OrbitDBOpenOptions<T, D>,
   ): Promise<DatabaseTypeMap<T>[D]>
@@ -74,7 +75,6 @@ export type { DatabaseInstance, DatabaseOptions } from './database'
 export { Database } from './database'
 
 export type {
-  DatabaseType,
   DatabaseTypeMap,
   DocumentsDoc,
   DocumentsInstance,

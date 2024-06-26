@@ -21,7 +21,7 @@ interface DatabaseOptions<T> {
   syncAutomatically?: boolean
   onUpdate?: (entry: Entry.Instance<T>) => void
 }
-interface DatabaseInstance<T> {
+interface DatabaseInstance<T = unknown> {
   name?: string
   address?: string
   peers: Set<PeerId>
