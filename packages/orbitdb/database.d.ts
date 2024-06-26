@@ -22,11 +22,11 @@ interface DatabaseOptions<T> {
   onUpdate?: (entry: Entry.Instance<T>) => void
 }
 interface DatabaseInstance<T = unknown> {
-  name?: string
   address?: string
+  name?: string
+  type: string
   peers: Set<PeerId>
   indexBy: keyof T
-  type: string
   meta: any
 
   events: DatabaseEvents<T>

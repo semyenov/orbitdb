@@ -8,7 +8,7 @@ interface StorageInstance {
   merge(other: StorageInstance): Promise<void>
 }
 
-interface ComposedStorageInstance extends StorageInstance { }
+interface ComposedStorageInstance extends StorageInstance {}
 declare function ComposedStorage(
   storage1: StorageInstance,
   storage2: StorageInstance,
@@ -29,7 +29,7 @@ declare function IPFSBlockStorage(
 interface LRUStorageOptions {
   size?: string
 }
-interface LRUStorageInstance extends StorageInstance { }
+interface LRUStorageInstance extends StorageInstance {}
 declare function LRUStorage(
   options?: LRUStorageOptions,
 ): Promise<LRUStorageInstance>
@@ -38,12 +38,12 @@ interface LevelStorageOptions {
   path?: string
   valueEncoding?: string
 }
-interface LevelStorageInstance extends StorageInstance { }
+interface LevelStorageInstance extends StorageInstance {}
 declare function LevelStorage(
   options?: LevelStorageOptions,
 ): Promise<LevelStorageInstance>
 
-interface MemoryStorageInstance extends StorageInstance { }
+interface MemoryStorageInstance extends StorageInstance {}
 declare function MemoryStorage(): Promise<MemoryStorageInstance>
 
 interface StorageTypeMap {

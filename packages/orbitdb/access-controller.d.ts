@@ -37,6 +37,8 @@ declare const IPFSAccessController: (
 ) => AccessController<'ipfs', IPFSAccessControllerInstance>
 
 interface OrbitDBAccessControllerInstance extends AccessControllerInstance {
+  events: DatabaseEvents
+
   close(): Promise<void>
   drop(): Promise<void>
   capabilities(): Promise<string[]>
@@ -44,7 +46,6 @@ interface OrbitDBAccessControllerInstance extends AccessControllerInstance {
   grant(capability: string, key: string): Promise<void>
   hasCapability(capability: string, key: string): Promise<boolean>
   revoke(capability: string, key: string): Promise<void>
-  events: DatabaseEvents
 }
 
 declare const OrbitDBAccessController: (
