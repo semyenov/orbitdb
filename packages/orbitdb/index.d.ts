@@ -48,8 +48,6 @@ declare function OrbitDB(options: OrbitDBOptions): OrbitDBInstance
 export type { OrbitDBOptions as CreateOrbitDBOptions, OrbitDBInstance, OrbitDBOpenOptions }
 export { OrbitDB as createOrbitDB }
 
-export type { IPFS, PeerId } from './vendor'
-
 export type {
   KeyStoreInstance,
   PrivateKeys,
@@ -81,9 +79,9 @@ export type {
   KeyValueDoc,
   KeyValueIndexedInstance,
   KeyValueInstance,
-  useDatabaseType,
+
 } from './databases'
-export { Documents, Events, KeyValue, KeyValueIndexed } from './databases'
+export { Documents, Events, KeyValue, KeyValueIndexed, useDatabaseType } from './databases'
 
 export type {
   IdentitiesInstance,
@@ -105,14 +103,18 @@ export {
 
 export { Entry, Log } from './log'
 
+export type {
+  StorageInstance,
+}
 export {
   ComposedStorage,
   IPFSBlockStorage,
   LevelStorage,
   LRUStorage,
   MemoryStorage,
-  StorageInstance,
 } from './storage'
 
 export type { OrbitDBAddress } from './utils'
 export { isValidAddress, parseAddress } from './utils'
+
+export type { IPFS, PeerId } from './vendor'

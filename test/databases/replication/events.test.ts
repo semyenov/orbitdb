@@ -15,18 +15,19 @@ import createHelia from '../../utils/create-helia.js'
 import waitFor from '../../utils/wait-for.js'
 
 import type {
+  Entry,
   EventsDoc,
   EventsInstance,
   IPFS,
   IdentitiesInstance,
   IdentityInstance,
   KeyStoreInstance,
-  LogEntry,
 } from '@orbitdb/core'
 
 const keysPath = './testkeys'
 
 describe('Events Database Replication', function () {
+  // eslint-disable-next-line ts/no-invalid-this
   this.timeout(30000)
 
   let ipfs1: IPFS, ipfs2: IPFS
@@ -38,7 +39,7 @@ describe('Events Database Replication', function () {
   const databaseId = 'events-AAA'
 
   const accessController = {
-    canAppend: async (entry: LogEntry) => {
+    canAppend: async (entry: Entry.Instance) => {
       const identity = await identities.getIdentity(entry.identity)
 
       return identity.id === testIdentity1.id
@@ -124,12 +125,10 @@ describe('Events Database Replication', function () {
     })
 
     db2.events.on('join', (peerId, heads) => {
-      replicated = expectedEntryHash !== null
-      && heads.map(e => e.hash).includes(expectedEntryHash)
+      replicated = expectedEntryHash !== null && heads.map(e => e.hash).includes(expectedEntryHash)
     })
     db2.events.on('update', (entry) => {
-      replicated = expectedEntryHash !== null
-      && entry.hash === expectedEntryHash
+      replicated = expectedEntryHash !== null && entry.hash === expectedEntryHash
     })
 
     db2.events.on('error', onError)
@@ -176,12 +175,10 @@ describe('Events Database Replication', function () {
     })
 
     db2.events.on('join', (peerId, heads) => {
-      replicated = expectedEntryHash !== null
-      && heads.map(e => e.hash).includes(expectedEntryHash)
+      replicated = expectedEntryHash !== null && heads.map(e => e.hash).includes(expectedEntryHash)
     })
     db2.events.on('update', (entry) => {
-      replicated = expectedEntryHash !== null
-      && entry.hash === expectedEntryHash
+      replicated = expectedEntryHash !== null && entry.hash === expectedEntryHash
     })
 
     db2.events.on('error', (err) => {

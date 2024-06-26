@@ -26,6 +26,7 @@ import type {
 const keysPath = './testkeys'
 
 describe('Documents Database Replication', function () {
+  // eslint-disable-next-line ts/no-invalid-this
   this.timeout(30000)
 
   let ipfs1: IPFS, ipfs2: IPFS
@@ -109,10 +110,10 @@ describe('Documents Database Replication', function () {
     let connected1 = false
     let connected2 = false
 
-    db1.events.on('join', async (peerId, heads) => {
+    db1.events.on('join', async (_peerId, _heads) => {
       connected1 = true
     })
-    db2.events.on('join', async (peerId, heads) => {
+    db2.events.on('join', async (_peerId, _heads) => {
       connected2 = true
     })
 

@@ -35,7 +35,7 @@ interface DocumentsInstance<T = unknown> extends DatabaseInstance<T> {
   del(key: string): Promise<string>
   get(key: string): Promise<DocumentsDoc<T> | null>
   iterator(
-    filters?: DocumentsIteratorOptions,
+    options?: DocumentsIteratorOptions,
   ): AsyncGenerator<DocumentsDoc<T>, string>
   put(doc: T): Promise<string>
   query(findFn: (doc: T) => boolean): Promise<T[]>
