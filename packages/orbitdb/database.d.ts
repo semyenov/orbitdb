@@ -22,7 +22,7 @@ interface DatabaseOptions<T> {
   indexStorage?: StorageInstance
   onUpdate?: (entry: Entry.Instance<T>) => void
 }
-interface DatabaseInstance<T> {
+interface DatabaseInstance<T = unknown> {
   address?: string
   name?: string
   type: string

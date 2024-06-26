@@ -22,13 +22,13 @@ import type {
   IPFS,
   IdentitiesInstance,
   IdentityInstance,
-  KeyStoreInstance,
-  LogEntry,
+  KeyStoreInstance
 } from '@orbitdb/core'
 
 const keysPath = './testkeys'
 
 describe('Database', function () {
+  // @ts-ignore
   this.timeout(30000)
 
   let ipfs: IPFS
@@ -40,7 +40,7 @@ describe('Database', function () {
   const databaseId = 'database-AAA'
 
   const accessController = {
-    canAppend: async (entry: LogEntry) => {
+    canAppend: async (entry: Entry.Instance) => {
       const identity1 = await identities.getIdentity(entry.identity)
 
       return identity1.id === testIdentity.id

@@ -55,7 +55,7 @@ describe('KeyStore', () => {
       try {
         await keystore.createKey(null as unknown as string)
       }
-      catch (e) {
+      catch (e: any) {
         err = e.toString()
       }
 
@@ -68,7 +68,7 @@ describe('KeyStore', () => {
       try {
         await keystore.createKey(null as unknown as string)
       }
-      catch (e) {
+      catch (e: any) {
         err = e.toString()
       }
 
@@ -94,7 +94,7 @@ describe('KeyStore', () => {
       try {
         await keystore.hasKey(null as unknown as string)
       }
-      catch (e) {
+      catch (e: any) {
         err = e.toString()
       }
       strictEqual(err, 'Error: id needed to check a key')
@@ -117,7 +117,7 @@ describe('KeyStore', () => {
       try {
         await keystore.getKey(null as unknown as string)
       }
-      catch (e) {
+      catch (e: any) {
         err = e.toString()
       }
 
@@ -133,7 +133,7 @@ describe('KeyStore', () => {
       try {
         await keystore.getKey(null as unknown as string)
       }
-      catch (e) {
+      catch (e: any) {
         err = e.toString()
       }
 
@@ -155,7 +155,7 @@ describe('KeyStore', () => {
       try {
         await keystore.createKey(id)
       }
-      catch (e) {
+      catch (e: any) {
         err = e.toString()
       }
 
@@ -287,7 +287,7 @@ describe('KeyStore', () => {
             'data data data',
           )
         }
-        catch (e) {
+        catch (e: any) {
           err = e.toString()
         }
 
@@ -300,7 +300,7 @@ describe('KeyStore', () => {
         try {
           await signMessage(key, null as unknown as string)
         }
-        catch (e) {
+        catch (e: any) {
           err = e.toString()
         }
 
@@ -334,7 +334,7 @@ describe('KeyStore', () => {
         try {
           await keystore.getPublic(null as unknown as PrivateKeys)
         }
-        catch (e) {
+        catch (e: any) {
           strictEqual(true, true)
         }
       })
@@ -343,7 +343,7 @@ describe('KeyStore', () => {
         try {
           await keystore.getPublic(key, { format: 'foo' as 'hex' })
         }
-        catch (e) {
+        catch (e: any) {
           strictEqual(true, true)
         }
       })

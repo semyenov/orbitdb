@@ -20,6 +20,7 @@ import createHelia from './utils/create-helia.js'
 const keysPath = './testkeys'
 
 describe('Database', function () {
+  // @ts-ignore
   this.timeout(30000)
 
   let ipfs
