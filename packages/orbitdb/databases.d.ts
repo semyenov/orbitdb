@@ -2,8 +2,8 @@ import type { AccessControllerInstance } from './access-controller'
 import type { DatabaseInstance } from './database'
 import type { IdentitiesInstance, IdentityInstance } from './identities'
 import type { OrbitDBInstance } from './index'
-import type { IPFS } from './ipfs'
 import type { StorageInstance } from './storage'
+import type { IPFS } from './vendor'
 
 interface DatabaseOptions {
   ipfs?: IPFS
@@ -94,7 +94,7 @@ declare function KeyValue<T>(): (
 interface KeyValueIndexedOptions {
   storage?: StorageInstance
 }
-interface KeyValueIndexedInstance<T = unknown> extends KeyValueInstance<T> {}
+interface KeyValueIndexedInstance<T = unknown> extends KeyValueInstance<T> { }
 declare function KeyValueIndexed<T>(
   keyValueIndexedOptions?: KeyValueIndexedOptions,
 ): (options: DatabaseOptions) => Promise<KeyValueIndexedInstance<T>>

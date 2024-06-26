@@ -1,6 +1,6 @@
 import type { DatabaseType } from './databases'
-import type { IPFS } from './ipfs'
 import type { StorageInstance } from './storage'
+import type { IPFS } from './vendor'
 
 interface Manifest {
   name: string

@@ -1,11 +1,10 @@
 import type { AccessControllerInstance } from './access-controller'
 import type { DatabaseEvents } from './events'
 import type { IdentityInstance } from './identities'
-import type { IPFS } from './ipfs'
 import type { Entry, LogInstance } from './log'
 import type { StorageInstance } from './storage'
 import type { SyncInstance } from './sync'
-import type { PeerId } from '@libp2p/interface'
+import type { IPFS, PeerId } from './vendor'
 
 interface DatabaseOptions<T> {
   ipfs: IPFS

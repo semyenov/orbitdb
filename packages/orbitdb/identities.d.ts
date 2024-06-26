@@ -1,6 +1,6 @@
-import type { IPFS } from './ipfs'
 import type { KeyStoreInstance } from './key-store'
 import type { StorageInstance } from './storage'
+import type { IPFS } from './vendor'
 
 interface IdentityOptions {
   id?: string

@@ -1,7 +1,7 @@
 import type { AccessControllerInstance } from './access-controller'
 import type { IdentityInstance } from './identities'
-import type { IPFS } from './ipfs'
 import type { StorageInstance } from './storage'
+import type { IPFS } from './vendor'
 
 interface Clock {
   id: string

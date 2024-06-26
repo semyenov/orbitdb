@@ -1,6 +1,6 @@
 import type { SyncEvents } from './events'
-import type { IPFS, PeerId } from './ipfs'
 import type { Entry, LogInstance } from './log'
+import type { IPFS, PeerId } from './vendor'
 
 interface SyncOptions<T> {
   ipfs: IPFS

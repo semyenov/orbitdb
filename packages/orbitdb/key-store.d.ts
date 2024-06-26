@@ -1,5 +1,5 @@
-import type { PrivateKeys, Secp256k1PrivateKey } from './ipfs'
 import type { StorageInstance } from './storage'
+import type { PrivateKeys, Secp256k1PrivateKey } from './vendor'
 
 interface KeyObject {
   publicKey: Uint8Array

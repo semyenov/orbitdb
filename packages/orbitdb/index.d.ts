@@ -4,9 +4,9 @@ import type {
 } from './access-controller'
 import type { DatabaseType, DatabaseTypeMap } from './databases'
 import type { IdentitiesInstance, IdentityInstance } from './identities'
-import type { IPFS, PeerId } from './ipfs'
 import type { KeyStoreInstance } from './key-store'
 import type { StorageInstance } from './storage'
+import type { IPFS, PeerId } from './vendor'
 
 interface OrbitDBOpenOptions<T, D extends DatabaseType> {
   type?: D
@@ -48,7 +48,7 @@ declare function OrbitDB(options: OrbitDBOptions): OrbitDBInstance
 export type { OrbitDBOptions as CreateOrbitDBOptions, OrbitDBInstance, OrbitDBOpenOptions }
 export { OrbitDB as createOrbitDB }
 
-export type { IPFS, PeerId } from './ipfs'
+export type { IPFS, PeerId } from './vendor'
 
 export type {
   KeyStoreInstance,
