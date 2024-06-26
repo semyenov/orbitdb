@@ -21,8 +21,7 @@ interface OrbitDBOpenOptions<T, D extends DatabaseType> {
   entryStorage?: StorageInstance
   indexStorage?: StorageInstance
 }
-
-interface CreateOrbitDBOptions {
+interface OrbitDBOptions {
   id?: string
   ipfs: IPFS
   identity?: IdentityInstance
@@ -44,10 +43,9 @@ interface OrbitDBInstance {
   ): Promise<DatabaseTypeMap<T>[D]>
   stop(): Promise<void>
 }
+declare function OrbitDB(options: OrbitDBOptions): OrbitDBInstance
 
-declare function OrbitDB(options: CreateOrbitDBOptions): OrbitDBInstance
-
-export type { CreateOrbitDBOptions, OrbitDBInstance, OrbitDBOpenOptions }
+export type { OrbitDBOptions as CreateOrbitDBOptions, OrbitDBInstance, OrbitDBOpenOptions }
 export { OrbitDB as createOrbitDB }
 
 export type { IPFS, PeerId } from './ipfs'
