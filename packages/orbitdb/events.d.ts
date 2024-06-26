@@ -22,4 +22,4 @@ interface DatabaseEvents<T = unknown> extends EventEmitter {
   on(event: 'update', listener: (entry: Entry.Instance<T>) => void): this
 }
 
-export { DatabaseEvents, SyncEvents }
+export type { DatabaseEvents, SyncEvents }

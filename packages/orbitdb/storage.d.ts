@@ -66,7 +66,6 @@ export type {
   StorageType,
   StorageTypeMap,
 }
-
 export {
   ComposedStorage,
   IPFSBlockStorage,

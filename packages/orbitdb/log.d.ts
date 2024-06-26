@@ -1,5 +1,5 @@
 import type { AccessControllerInstance } from './access-controller'
-import type { IdentityInstance } from './identities'
+import type { IdentitiesInstance, IdentityInstance } from './identities'
 import type { StorageInstance } from './storage'
 import type { IPFS } from './vendor'
 
@@ -29,13 +29,13 @@ export namespace Entry {
   export function create<T>(
     identity: IdentityInstance,
     id: string,
-    payload: any,
-    clock?: any,
+    payload: T,
+    clock?: Clock,
     next?: Array<string | Instance<T>>,
     refs?: Array<string | Instance<T>>,
   ): Promise<Instance<T>>
   export function verify<T>(
-    identities: IdentityInstance,
+    identities: IdentitiesInstance,
     entry: Instance<T>,
   ): Promise<boolean>
   export function isEntry(obj: unknown): boolean

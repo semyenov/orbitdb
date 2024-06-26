@@ -21,5 +21,4 @@ interface SyncInstance<T> {
 declare function Sync<T>(options: SyncOptions<T>): Promise<SyncInstance<T>>
 
 export type { SyncInstance, SyncOptions }
-
 export { Sync }
