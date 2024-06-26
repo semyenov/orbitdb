@@ -1,10 +1,10 @@
-import type { DatabaseTypeMap } from './databases'
+import type { DatabasesTypeMap } from './databases'
 import type { StorageInstance } from './storage'
 import type { IPFS } from './vendor'
 
 interface Manifest {
   name: string
-  type: keyof DatabaseTypeMap
+  type: keyof DatabasesTypeMap
   accessController: string
   meta?: any
 }

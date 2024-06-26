@@ -1,9 +1,9 @@
-import type {AccessControllerInstance} from './access-controller'
-import type {DatabaseInstance} from './database'
-import type {IdentitiesInstance, IdentityInstance} from './identities'
-import type {OrbitDBInstance} from './index'
-import type {StorageInstance} from './storage'
-import type {IPFS} from './vendor'
+import type { AccessControllerInstance } from './access-controller'
+import type { DatabaseInstance } from './database'
+import type { IdentitiesInstance, IdentityInstance } from './identities'
+import type { OrbitDBInstance } from './index'
+import type { StorageInstance } from './storage'
+import type { IPFS } from './vendor'
 
 interface DatabaseOptions {
   ipfs?: IPFS
@@ -107,13 +107,19 @@ interface KeyValueIndexedOptions {
 interface KeyValueIndexedInstance<T = unknown> extends KeyValueInstance<T> {
 }
 
-interface Databases<
-  D extends keyof DatabaseTypeMap,
-  R extends DatabaseInstance,
-> {
-  type: D
+interface DatabasesTypeMap<T = unknown> {
+  documents: DocumentsInstance<T>
+  events: EventsInstance<T>
+  keyvalue: KeyValueInstance<T> | KeyValueIndexedInstance<T>
+}
+// eslint-disable-next-line ts/consistent-type-definitions
+type Databases<
+  T extends keyof DatabasesTypeMap,
+  U extends DatabaseInstance,
+> = {
+  type: T
 
-  (options: DatabaseOptions): Promise<R>
+  (options: DatabaseOptions): Promise<U>
 }
 
 declare const Documents: <T = unknown>(
@@ -123,20 +129,13 @@ declare const Documents: <T = unknown>(
 declare const Events: () => Databases<'events', EventsInstance>
 declare const KeyValue: () => Databases<'keyvalue', KeyValueInstance>
 
-declare const KeyValueIndexed: <T = unknown>(
+declare const KeyValueIndexed: (
   options?: KeyValueIndexedOptions,
 ) => Databases<'keyvalue', KeyValueIndexedInstance>
 
-
-interface DatabaseTypeMap<T = unknown> {
-  documents: DocumentsInstance<T>
-  events: EventsInstance<T>
-  keyvalue: KeyValueInstance<T> | KeyValueIndexedInstance<T>
-}
-
 export type {
   Databases,
-  DatabaseTypeMap,
+  DatabasesTypeMap,
   DocumentsDoc,
   DocumentsInstance,
   DocumentsIteratorOptions,
@@ -149,8 +148,8 @@ export type {
   KeyValueInstance,
   KeyValueIteratorOptions,
 }
-export {Documents, Events, KeyValue, KeyValueIndexed}
+export { Documents, Events, KeyValue, KeyValueIndexed }
 
 export function useDatabaseType<T = unknown>(
-  database: Databases<keyof DatabaseTypeMap, DatabaseInstance>
+  database: Databases<keyof DatabasesTypeMap, DatabaseInstance>
 ): void
