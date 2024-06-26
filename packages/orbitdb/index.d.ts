@@ -45,7 +45,11 @@ interface OrbitDBInstance {
 }
 declare function OrbitDB(options: OrbitDBOptions): OrbitDBInstance
 
-export type { OrbitDBOptions as CreateOrbitDBOptions, OrbitDBInstance, OrbitDBOpenOptions }
+export type {
+  OrbitDBInstance,
+  OrbitDBOpenOptions,
+  OrbitDBOptions as CreateOrbitDBOptions,
+}
 export { OrbitDB as createOrbitDB }
 
 export type {
@@ -79,9 +83,14 @@ export type {
   KeyValueDoc,
   KeyValueIndexedInstance,
   KeyValueInstance,
-
 } from './databases'
-export { Documents, Events, KeyValue, KeyValueIndexed, useDatabaseType } from './databases'
+export {
+  Documents,
+  Events,
+  KeyValue,
+  KeyValueIndexed,
+  useDatabaseType,
+} from './databases'
 
 export type {
   IdentitiesInstance,
@@ -103,9 +112,7 @@ export {
 
 export { Entry, Log } from './log'
 
-export type {
-  StorageInstance,
-}
+export type { StorageInstance }
 export {
   ComposedStorage,
   IPFSBlockStorage,
