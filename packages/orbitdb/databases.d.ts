@@ -120,8 +120,8 @@ declare const Documents: <T = unknown>(
   documentsOptions?: DocumentsOptions<T>,
 ) => Databases<'documents', DocumentsInstance>
 
-declare const Events: <T = unknown>() => Databases<'events', EventsInstance>
-declare const KeyValue: <T = unknown>() => Databases<'keyvalue', KeyValueInstance>
+declare const Events: () => Databases<'events', EventsInstance>
+declare const KeyValue: () => Databases<'keyvalue', KeyValueInstance>
 
 declare const KeyValueIndexed: <T = unknown>(
   options?: KeyValueIndexedOptions,
