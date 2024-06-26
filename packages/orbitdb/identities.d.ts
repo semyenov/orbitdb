@@ -58,14 +58,13 @@ interface IdentitiesInstance {
   verifyIdentity: (identity: IdentityInstance) => Promise<boolean>
   keystore: KeyStoreInstance
   sign: (
-    identities: IdentityInstance,
-    data: string,
-    keystore: KeyStoreInstance,
+    identity: IdentityInstance,
+    data: string | Uint8Array,
   ) => Promise<string>
   verify: (
     signature: string,
     publickey: string,
-    data: string,
+    data: string | Uint8Array,
   ) => Promise<boolean>
 }
 declare function Identities(
@@ -84,9 +83,9 @@ export { Identities, Identity, PublicKeyIdentityProvider }
 
 export function getIdentityProvider(type: string): IdentityProviderInstance
 export function useIdentityProvider(identityProvider: IdentityProvider): void
+export function decodeIdentity(bytes: Uint8Array): Promise<IdentityInstance>
+export function isIdentity(identity: any): boolean
 export function isEqual(
   identity1: IdentityInstance,
   identity2: IdentityInstance,
 ): boolean
-export function isIdentity(identity: any): boolean
-export function decodeIdentity(bytes: Uint8Array): Promise<IdentityInstance>

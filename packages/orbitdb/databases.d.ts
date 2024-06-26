@@ -15,16 +15,15 @@ interface DatabaseOptions {
   directory?: string
 }
 
+// documents
 interface DocumentsDoc<T = unknown> {
   hash: string
   key: string
   value: T
 }
-
 interface DocumentsIteratorOptions {
   amount?: number
 }
-
 interface DocumentsOptions<T> {
   indexBy?: keyof T
 }
@@ -44,6 +43,7 @@ declare function Documents<T>(
   documentsOptions?: DocumentsOptions<T>,
 ): (options: DatabaseOptions) => Promise<DocumentsInstance<T>>
 
+// events
 interface EventsDoc<T = unknown> {
   key: string
   value: T
@@ -67,6 +67,7 @@ declare function Events<T>(): (
   options: DatabaseOptions,
 ) => Promise<EventsInstance<T>>
 
+// keyvalue
 interface KeyValueDoc<T = unknown> {
   hash: string
   key: string
@@ -91,10 +92,11 @@ declare function KeyValue<T>(): (
   options: DatabaseOptions,
 ) => Promise<KeyValueInstance<T>>
 
+// keyvalue-indexed
 interface KeyValueIndexedOptions {
   storage?: StorageInstance
 }
-interface KeyValueIndexedInstance<T = unknown> extends KeyValueInstance<T> { }
+interface KeyValueIndexedInstance<T = unknown> extends KeyValueInstance<T> {}
 declare function KeyValueIndexed<T>(
   keyValueIndexedOptions?: KeyValueIndexedOptions,
 ): (options: DatabaseOptions) => Promise<KeyValueIndexedInstance<T>>

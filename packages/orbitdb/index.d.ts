@@ -8,7 +8,7 @@ import type { KeyStoreInstance } from './key-store'
 import type { StorageInstance } from './storage'
 import type { IPFS, PeerId } from './vendor'
 
-interface OrbitDBOpenOptions<T, D extends DatabaseType> {
+interface OrbitDBOpenOptions<T, D extends DatabaseType = 'events'> {
   type?: D
   meta?: any
   sync?: boolean
@@ -28,7 +28,6 @@ interface OrbitDBOptions {
   identities?: IdentitiesInstance
   directory?: string
 }
-
 interface OrbitDBInstance {
   id: string
   ipfs: IPFS
